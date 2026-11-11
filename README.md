@@ -68,10 +68,10 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 
 ## Deploys
 
-**Demo:** https://belgian-motorsport-demo.stijn-vogels.workers.dev, a second copy of the Worker on
-workers.dev without the domain, built with `PUBLIC_DEMO=1` (a preview bar, `noindex`, the contact form
-switched off). `npm run deploy:demo` builds and deploys it from this machine (`env.demo` in
-`wrangler.jsonc`). Search engines are told to stay out.
+**Demo:** https://stijn.github.io/belgian-motorsport/, built by `.github/workflows/pages.yml` on every
+push to `main` with `SITE`, `BASE` and `PUBLIC_DEMO=1`: a preview bar, `noindex`, and the contact form
+switched off (GitHub Pages has no server side). `npm run deploy:demo` can put the same demo on
+workers.dev, where the Worker runs too.
 
 **Live:** Cloudflare Workers Builds watches `main`: build command `npm run build`, deploy command
 `npx wrangler deploy`. GitHub Actions (`.github/workflows/ci.yml`) runs the checks, tests and a build
@@ -80,6 +80,8 @@ on every push and pull request. Releases: bump `version` in `package.json`, add 
 
 ## Rights
 
-Photos, films and the BM logo © Belgian Motorsport, all rights reserved. Icons by
+The repository is public so the demo can run on GitHub Pages. Photos, films and the BM logo
+© Belgian Motorsport, all rights reserved: they may not be reused. The code is here to read and learn
+from, not packaged as a template. Icons by
 [Font Awesome](https://fontawesome.com) (CC BY 4.0); fonts Barlow and Barlow Condensed (OFL) via
 [Fontsource](https://fontsource.org).

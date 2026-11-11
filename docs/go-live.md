@@ -27,9 +27,8 @@ For each of `belgian-motorsport.com` and `belgianmotorsport.com`:
 
 ## 2. Deploy the Worker from GitHub
 
-The demo already runs as `belgian-motorsport-demo` on workers.dev (`npm run deploy:demo` from this
-machine, Stijn's Wrangler login). The live site is the same Worker without `--env demo`, and the step
-below makes GitHub deploy it instead of a laptop.
+The demo is on GitHub Pages (static only). The live site is the Worker in `wrangler.jsonc`;
+`npm run deploy` from this machine works, and the step below makes GitHub deploy it instead.
 
 1. Workers & Pages → Create → **Import a repository** → `stijn/belgian-motorsport`.
 2. Build command `npm run build`, deploy command `npx wrangler deploy`. Node 24 comes from
