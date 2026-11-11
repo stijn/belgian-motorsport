@@ -140,11 +140,10 @@ Open:
   The `A` records for `@` and `www` in the Cloudflare zone still carry 67.205.1.0: harmless (the Worker
   answers first); swap them for `AAAA 100::` at leisure. `blog.belgian-motorsport.com` is still a
   Dreamhost-hosted site; delete it there when he agrees.
-- Registrations: both domains are still registered at Dreamhost (belgianmotorsport.com until
-  2027-04-07, belgian-motorsport.com until 2027-09-03, auto-renew on). Moving them to Cloudflare
-  Registrar costs about USD 10.5 per year each (at cost) instead of Dreamhost's renewal price, and a
-  transfer adds a year. Steps, per domain, in Dreamhost → Domains → Registrations → Manage: switch off
-  the registrar lock, note the authorization (EPP) code; in Cloudflare → Domain Registration →
-  Transfer: pick the domain, enter that code, pay one year. Dreamhost emails a confirmation; approve it
-  and the transfer completes within five days. The DNS stays as it is throughout.
+- Registrations: both transfers to Cloudflare Registrar were submitted on 2026-11-12 (USD 11.17 each,
+  one year added; the registry shows `pendingTransfer`). Dreamhost emails a confirmation per domain:
+  approving it completes the transfer at once, otherwise it completes by itself after five days. Once
+  they land, the Dreamhost DNS zone (with its bridge records) goes away with the registration, and
+  Cloudflare's zone, already authoritative, is all there is. Then cancel the Dreamhost hosting plan
+  (the `blog` site is the last thing on it).
 - Search Console (step 5) and the Dreamhost cancellation (step 6).
