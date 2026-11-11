@@ -67,11 +67,12 @@ Sending would do the same without a third party, but needs the Workers Paid plan
 the Worker still supports it: without `RESEND_API_KEY` it uses the `EMAIL` binding.
 
 1. Create a Resend account (resend.com, "Sign up", with his or Stijn's Google account). Nothing to pay.
-2. Domains → Add domain → `belgian-motorsport.com`, region Europe (Ireland). Resend shows three DNS
-   records: a `TXT resend._domainkey` (DKIM), and for the `send` subdomain an `MX` and a `TXT`
-   (SPF, `v=spf1 include:amazonses.com ~all`). Add them in Cloudflare → belgian-motorsport.com → DNS,
-   all **DNS only** (grey cloud). They live on their own names, so Google's SPF on `@` stays as it is.
-   Optional but good: `TXT _dmarc` with `v=DMARC1; p=none;`. Then "Verify" in Resend.
+2. Domains → Add domain → `belgian-motorsport.com`, region Europe (Ireland), tracking off, Manual
+   setup. Done on 2026-11-11; the records now in Cloudflare, all **DNS only** (grey cloud):
+   `TXT resend._domainkey` (the DKIM key), `CNAME rsend → rsend-euw1.forge.rmta.net`,
+   `CNAME send → send.forge.rmta.net` (the SPF for the return path), `TXT _dmarc = v=DMARC1; p=none;`.
+   Resend also lists `MX @ receive-euw1.forge.rmta.net`: that is for *receiving* mail through Resend
+   and would replace Google's MX. Never add it. Google's mail records stay as they were.
 3. API keys → Create: name `belgian-motorsport worker`, permission **Sending access**, domain
    `belgian-motorsport.com` only. Copy it once, then on the Mac, in the project:
    ```bash
