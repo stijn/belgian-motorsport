@@ -31,6 +31,9 @@
 - Contact: the recipient is set as the `CONTACT_TO` secret on the demo Worker; the GitHub Pages demo
   posts to that Worker (CORS from the demo origin), so the form is live there too. Until the domain is
   onboarded to Email Sending the Worker says so instead of "try again". The placeholder note is gone.
+- Flickr by the real numbers: 430 albums (the Events section shows the newest 25; the link says
+  "430+ albums") and a sixth counter, 5.7M+ photo views on Flickr. `npm run sync` prints the totals.
+- About: the network icons are plain white; the footer keeps the brand colours.
 - Tooltips on every icon-only control: back to top, the scroll cue, the hero bars, the language
   button, the play buttons, the lightbox buttons, the footer network dots.
 

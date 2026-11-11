@@ -54,7 +54,7 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
 
     <p class="more rv">
       <a class="link-arrow" data-replay href={flickr.url} target="_blank" rel="me noopener">
-        <SocialIcon network="flickr" /> {fill(d.events.all, { photos, albums: albums.length })} <LineMd name="arrow-right" />
+        <SocialIcon network="flickr" /> {fill(d.events.all, { photos, albums: stats.albums })} <LineMd name="arrow-right" />
       </a>
     </p>
   </div>

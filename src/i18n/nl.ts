@@ -38,6 +38,7 @@ export const nl: Dict = {
     views: 'videoweergaven',
     films: 'films',
     photos: 'foto’s op Flickr',
+    photoViews: 'fotoweergaven op Flickr',
   },
   gallery: {
     eyebrow: 'Foto’s',

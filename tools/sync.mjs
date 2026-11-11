@@ -111,7 +111,14 @@ async function flickr() {
     });
   }
   await writeFile(join(root, 'src/data/albums.json'), JSON.stringify(albums, null, 2) + '\n');
-  console.log(`Flickr: ${albums.length} albums, newest "${albums[0]?.title}"`);
+  // The totals, for the numbers in src/data/site.ts (stats.albums, the photos and photo views).
+  const total = m['sets-models'][0].albumsList.totalItems;
+  let views = '';
+  try {
+    const people = await text(`https://www.flickr.com/people/${FLICKR_PATH_ALIAS}/`);
+    views = people.match(/"totalViews":(\d+)/)?.[1] ?? '';
+  } catch {}
+  console.log(`Flickr: newest ${albums.length} of ${total} albums (newest "${albums[0]?.title}")${views ? `, ${Number(views).toLocaleString('en')} photo views` : ''}: update stats in src/data/site.ts if they moved`);
 }
 
 const what = process.argv.slice(2);

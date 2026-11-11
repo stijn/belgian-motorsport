@@ -75,7 +75,10 @@ export const stats = {
     { key: 'views', value: '62M', icon: 'play' },
     { key: 'films', value: '2,750', icon: 'youtube' },
     { key: 'photos', value: '9,500', icon: 'camera' },
+    { key: 'photoViews', value: '5.7M', icon: 'image' },
   ],
+  /** Albums on Flickr (the Events section shows the newest; `npm run sync` prints the current total). */
+  albums: '430',
 } as const;
 
 /** Icons (Font Awesome) for the four services; the words are in src/i18n/ (about.services). */

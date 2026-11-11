@@ -38,6 +38,7 @@ export const en = {
     views: 'video views',
     films: 'films',
     photos: 'photos on Flickr',
+    photoViews: 'photo views on Flickr',
   },
   gallery: {
     eyebrow: 'Photos',
