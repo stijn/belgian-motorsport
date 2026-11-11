@@ -1,6 +1,6 @@
 ---
 // About him and what he can be booked for. The words live in src/i18n/. His portraits come from
-// src/assets/portrait/ (1.jpg, 2.jpg, 3.jpg: cropped to 3:2, cross-fading with a slow zoom); with none
+// src/assets/portrait/ (1.jpg, 2.jpg, 3.jpg: cropped to 3:2, cross-fading with a slow drift); with none
 // there, a placeholder frame holds the spot.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -170,17 +170,25 @@ const portraits = Object.keys(found)
   }
   .shot {
     opacity: 0;
-    transition: opacity 1.2s var(--ease);
+    transition: opacity 1.4s ease-in-out;
   }
   .shot.active {
     opacity: 1;
   }
-  :global(.js-motion) .shot.active :global(img) {
-    animation: drift 6.2s linear forwards;
+  /* The drift keeps running while a photo fades out (.leaving), so it never snaps back mid-fade; it
+     outlasts the time a photo shows, and the image is kept on its own layer so the motion is smooth. */
+  .shot :global(img) {
+    will-change: transform;
+    backface-visibility: hidden;
+    transform-origin: 60% 50%;
+  }
+  :global(.js-motion) .shot.active :global(img),
+  :global(.js-motion) .shot.leaving :global(img) {
+    animation: drift 9s cubic-bezier(0.3, 0, 0.7, 1) forwards;
   }
   @keyframes drift {
-    from { transform: scale(1); }
-    to { transform: scale(1.08); }
+    from { transform: scale(1) translate3d(0, 0, 0); }
+    to { transform: scale(1.18) translate3d(-2%, -1%, 0); }
   }
   .portrait::before {
     content: '';

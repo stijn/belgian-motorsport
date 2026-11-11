@@ -13,6 +13,11 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.5.3 (2026-11-11)
+
+- About: the portraits drift further (scale 1 to 1.18 over nine seconds) and no longer snap back while
+  fading out: the outgoing photo keeps its drift for the length of the fade, on its own layer.
+
 ## 1.5.2 (2026-11-11)
 
 - The tricolour line sits on the page, not the sticky header: it shows at the top and scrolls away.
