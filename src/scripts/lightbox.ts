@@ -23,9 +23,9 @@ if (buttons.length && tpl) {
       <img alt="" decoding="async" />
       <p class="lb-caption"><span></span></p>
     </div>
-    <button type="button" class="lb-btn lb-prev" aria-label="${L.prev}" data-replay></button>
-    <button type="button" class="lb-btn lb-next" aria-label="${L.next}" data-replay></button>
-    <button type="button" class="lb-btn lb-close" aria-label="${L.close}" data-replay></button>
+    <button type="button" class="lb-btn lb-prev" aria-label="${L.prev}" data-tip="${L.prev}" data-replay></button>
+    <button type="button" class="lb-btn lb-next" aria-label="${L.next}" data-tip="${L.next}" data-replay></button>
+    <button type="button" class="lb-btn lb-close tip-left" aria-label="${L.close}" data-tip="${L.close}" data-replay></button>
     <p class="lb-count" aria-live="polite"></p>`;
   for (const [name, sel] of [['prev', '.lb-prev'], ['next', '.lb-next'], ['close', '.lb-close']] as const) {
     const svg = iconFor(name);

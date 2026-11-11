@@ -29,6 +29,7 @@ export const nl: Dict = {
     sub: 'Autosportfotografie en -film uit België & Europa. Spa, Zolder, de Nürburgring en de rallyproeven daartussen, sinds 2006.',
     seePhotos: 'Bekijk de foto’s',
     watchFilms: 'Bekijk de films',
+    photos: 'Foto’s in de header',
     scroll: 'Scroll naar beneden',
   },
   stats: {
@@ -82,8 +83,9 @@ export const nl: Dict = {
       { title: 'Autoportretten en collecties', text: 'Stilstaande en rijdende opnames van wegauto’s, klassiekers en supercars, op locatie.' },
       { title: 'Film met echt geluid', text: 'Flybys, on-boards en acceleraties, gemonteerd op het geluid van de motor in plaats van op een soundtrack.' },
     ],
+    counts: { youtube: '{n}+ abonnees', instagram: '{n}+ volgers', facebook: '{n}+ volgers', flickr: '{n}+ foto’s' },
     portraitSoon: 'Portret volgt',
-    portraitAlt: 'Een plaatshouder voor het portret van de fotograaf.',
+    portraitAlt: 'De fotograaf aan het hek, camera in aanslag, terwijl een racewagen passeert.',
   },
   contact: {
     eyebrow: 'Contact',
@@ -104,7 +106,6 @@ export const nl: Dict = {
       offline: 'Je bent offline. Probeer opnieuw zodra je verbinding hebt.',
       privacy: 'Rechtstreeks per e-mail naar mijn inbox, nergens anders bewaard.',
       privacyLink: 'Privacy',
-      demo: 'Dit is de preview: het formulier staat uit tot de site op zijn domein staat. Al de rest is definitief.',
     },
   },
   footer: {

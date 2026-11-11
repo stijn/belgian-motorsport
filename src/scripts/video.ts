@@ -9,7 +9,7 @@ if (cards.length) {
   const dlg = makeDialog('lightbox-film');
   dlg.innerHTML = `
     <div class="lb-stage"></div>
-    <button type="button" class="lb-btn lb-close" aria-label="${tpl?.dataset.close ?? 'Close'}" data-replay></button>`;
+    <button type="button" class="lb-btn lb-close tip-left" aria-label="${tpl?.dataset.close ?? 'Close'}" data-tip="${tpl?.dataset.close ?? 'Close'}" data-replay></button>`;
   const svg = tpl?.content.querySelector('[data-icon="close"] svg')?.cloneNode(true);
   if (svg) dlg.querySelector('.lb-close')!.replaceChildren(svg);
   const stage = dlg.querySelector<HTMLElement>('.lb-stage')!;

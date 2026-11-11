@@ -13,9 +13,10 @@
   --text: #f3f2ef;
   --text-2: #b9b5ad;
   --text-3: #a29e97; /* 7.3:1 on --bg, 7.0:1 on --bg-2: AAA for small text */
-  --red: #e10600; /* the brand red: surfaces and lines, never small text */
-  --red-2: #ff2a20;
-  --red-ink: #ff746d; /* red as text: 7.3:1 on --bg (AAA) */
+  /* One red, the hero button's: used for surfaces, lines, plates and icons, never as the colour of
+     running text (on this dark it would read at 3.9:1). A red word in a headline is white on a red
+     plate; bold text on it is "large" for WCAG, where white on this red is 5:1. */
+  --red: #e10600;
   /* The hero's text panel over a photo: dark enough that even a white photo behind it keeps
      --text-2 above 7:1 (tests/contrast.test.ts checks the worst case). */
   --scrim: rgb(11 11 12 / 0.9);
@@ -103,10 +104,15 @@ a:hover {
   color: #fff;
 }
 
-/* The one red word in a headline (src/lib/accent.ts). */
+/* The one red word in a headline (src/lib/accent.ts): a plate, like a race number. */
 .accent {
   font-style: normal;
-  color: var(--red-ink);
+  color: #fff;
+  background: var(--red);
+  padding: 0 0.14em;
+  margin: 0 -0.02em;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
 h1,
@@ -170,10 +176,14 @@ button {
   font-size: 0.95rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--red-ink);
+  color: var(--text-2);
   display: flex;
   align-items: center;
   gap: 0.7em;
+}
+
+.eyebrow .icon-line {
+  color: var(--red);
 }
 
 .eyebrow .icon-line {
@@ -288,7 +298,7 @@ button {
 }
 
 .btn-red:hover {
-  --btn-bg: #c50500; /* darker on hover: white stays above 4.5:1 */
+  filter: brightness(0.88); /* the same red, a touch deeper: white stays above 4.5:1 */
 }
 
 .btn-ghost {
@@ -392,6 +402,54 @@ button {
   opacity: 1;
 }
 
+/* Captions under photos, films and albums: the title, then a row with the context on the left
+   and the link to the source on the right. */
+
+.cap {
+  display: grid;
+  gap: 0.15rem;
+  font-size: 0.9rem;
+  line-height: 1.3;
+}
+
+.cap-t {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.cap-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem var(--s3);
+  margin: 0;
+  color: var(--text-3);
+}
+
+.cap-row a {
+  color: var(--text-3);
+  text-decoration: underline;
+  text-decoration-color: var(--line-2);
+  text-underline-offset: 0.2em;
+  transition: color 0.2s, text-decoration-color 0.2s;
+}
+
+.cap-row a:hover {
+  color: var(--text);
+  text-decoration-color: currentColor;
+}
+
+.cap-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  white-space: nowrap;
+}
+
+.cap-link .icon {
+  font-size: 0.9em;
+}
+
 /* Forms ----------------------------------------------------------------- */
 
 .field {
@@ -430,7 +488,7 @@ button {
 
 .field input:user-invalid,
 .field textarea:user-invalid {
-  border-color: var(--red-ink);
+  border-color: var(--red);
 }
 
 .field textarea {
@@ -441,6 +499,51 @@ button {
 .field .hint {
   font-size: 0.9rem;
   color: var(--text-3);
+}
+
+/* Tooltips: [data-tip] shows its text above the element on hover and keyboard focus. */
+
+[data-tip] {
+  position: relative;
+}
+
+[data-tip]::after {
+  content: attr(data-tip);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 0.5rem);
+  transform: translate(-50%, 4px);
+  padding: 0.35rem 0.6rem;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+  white-space: nowrap;
+  border-radius: 3px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s var(--ease);
+  z-index: 120;
+}
+
+[data-tip]:hover::after,
+[data-tip]:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+[data-tip].tip-left::after {
+  left: auto;
+  right: 0;
+  transform: translate(0, 4px);
+}
+
+[data-tip].tip-left:hover::after,
+[data-tip].tip-left:focus-visible::after {
+  transform: translate(0, 0);
 }
 
 /* Utilities -------------------------------------------------------------- */
@@ -535,9 +638,38 @@ button {
   clip-path: none;
 }
 
-/* Cross-fade between pages (same-document view transitions where supported). */
+/* Page to page, language to language: the header stays, the page slides up into the next.
+   (Cross-document view transitions; browsers without them just load the page.) */
 @view-transition {
   navigation: auto;
+}
+
+main {
+  view-transition-name: page;
+}
+
+::view-transition-old(page) {
+  animation: vt-out 0.25s ease-in both;
+}
+
+::view-transition-new(page) {
+  animation: vt-in 0.4s var(--ease) both;
+}
+
+@keyframes vt-out {
+  to { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes vt-in {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

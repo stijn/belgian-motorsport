@@ -23,6 +23,7 @@ jobs:
       SITE: https://stijn.github.io
       BASE: /belgian-motorsport
       PUBLIC_DEMO: '1'
+      PUBLIC_API_ORIGIN: https://belgian-motorsport-demo.stijn-vogels.workers.dev
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-node@v5

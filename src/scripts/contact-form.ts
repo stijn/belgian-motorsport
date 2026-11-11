@@ -2,7 +2,7 @@
 // the Worker answers with a redirect to /thanks/. The messages come from the form's data attributes,
 // in the page's language.
 const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
-if (form && !('demo' in form.dataset)) {
+if (form) {
   const status = form.querySelector<HTMLElement>('[data-status]')!;
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   const started = form.querySelector<HTMLInputElement>('input[name="started"]');

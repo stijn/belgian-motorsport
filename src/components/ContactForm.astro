@@ -6,7 +6,7 @@ import Fa from './Fa.astro';
 import LineMd from './LineMd.astro';
 import { faFlagCheckered, faLock, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
 import { contact } from '../data/site';
-import { href, demo } from '../lib/url';
+import { href } from '../lib/url';
 import { t, type Lang } from '../i18n';
 
 interface Props {
@@ -21,14 +21,12 @@ const turnstile = contact.turnstileSiteKey;
   method="post"
   action={contact.endpoint}
   data-contact-form
-  data-demo={demo ? '' : undefined}
   data-msg-sending={f.sending}
   data-msg-sent={f.sent}
   data-msg-fail={f.fail}
   data-msg-offline={f.offline}
   novalidate
 >
-  {demo && <p class="demo-note">{f.demo}</p>}
   <div class="two">
     <div class="field" data-replay>
       <label for="cf-name"><LineMd name="account" /><span>{f.name}</span></label>
@@ -52,7 +50,7 @@ const turnstile = contact.turnstileSiteKey;
   <input type="hidden" name="started" value="" />
   {turnstile && <div class="cf-turnstile" data-sitekey={turnstile} data-theme="dark" data-size="flexible"></div>}
   <div class="actions">
-    <button class="btn btn-red" type="submit" disabled={demo || undefined}><Fa icon={faFlagCheckered} class="flag" />{f.send}</button>
+    <button class="btn btn-red" type="submit"><Fa icon={faFlagCheckered} class="flag" />{f.send}</button>
     <p class="status" role="status" aria-live="polite" data-status></p>
   </div>
   <p class="privacy">
@@ -90,7 +88,7 @@ const turnstile = contact.turnstileSiteKey;
     gap: 0.45em;
   }
   .field label .icon-line {
-    color: var(--red-ink);
+    color: var(--red);
     font-size: 1.2em;
   }
   .hp {
@@ -131,8 +129,8 @@ const turnstile = contact.turnstileSiteKey;
   .status[data-kind='ok'] {
     color: #7ed9a0;
   }
-  .status[data-kind='error'] {
-    color: var(--red-ink);
+  .status[data-kind='error'] .icon-line {
+    color: var(--red);
   }
   .sent .two,
   .sent .field,
@@ -160,12 +158,5 @@ const turnstile = contact.turnstileSiteKey;
   }
   .privacy a {
     color: var(--text-2);
-  }
-  .demo-note {
-    padding: 0.75rem 1rem;
-    border: 1px dashed var(--line-2);
-    border-radius: var(--radius);
-    color: var(--text-2);
-    font-size: 0.95rem;
   }
 </style>

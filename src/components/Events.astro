@@ -3,11 +3,9 @@
 // full album in a new window. A wrapping grid, so the page scrolls the way the rest of it does.
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
-import Fa from './Fa.astro';
 import LineMd from './LineMd.astro';
 import SocialIcon from './SocialIcon.astro';
 import SectionHead from './SectionHead.astro';
-import { faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import albums from '../data/albums.json';
 import { socials, stats } from '../data/site';
 import { fill, t, type Lang } from '../i18n';
@@ -36,13 +34,18 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
         <ul class="row" data-stagger>
           {albums.map((a) => (
             <li class="rv">
-              <a class="album" href={a.url} target="_blank" rel="noopener">
-                <span class="cover ph">
+              <div class="album">
+                <a class="cover ph" href={a.url} target="_blank" rel="noopener" aria-label={a.title}>
                   <Picture src={a.img!} alt="" widths={[320, 480, 640]} sizes="(min-width: 900px) 300px, (min-width: 500px) 45vw, 100vw" formats={['avif', 'webp']} quality={62} loading="lazy" />
+                </a>
+                <span class="cap">
+                  <a class="cap-t album-title" href={a.url} target="_blank" rel="noopener">{a.title}</a>
+                  <span class="cap-row">
+                    <span>{a.photos ? fill(d.events.photos, { n: a.photos }) : d.events.album}</span>
+                    <a class="cap-link" href={a.url} target="_blank" rel="noopener"><SocialIcon network="flickr" /> {d.gallery.seeOnFlickr}</a>
+                  </span>
                 </span>
-                <span class="album-title">{a.title}</span>
-                <span class="album-meta">{a.photos ? fill(d.events.photos, { n: a.photos }) : d.events.album} · Flickr <Fa icon={faArrowUpRightFromSquare} class="ext" /></span>
-              </a>
+              </div>
             </li>
           ))}
         </ul>
@@ -90,11 +93,10 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
   }
   .album {
     display: grid;
-    gap: 0.5rem;
-    text-decoration: none;
-    color: var(--text);
+    gap: 0.6rem;
   }
   .cover {
+    display: block;
     aspect-ratio: 3 / 2;
     border-radius: var(--radius);
   }
@@ -114,16 +116,14 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
     line-height: 1.1;
     text-transform: uppercase;
     letter-spacing: 0.02em;
+    color: var(--text);
+    text-decoration: none;
   }
-  .album:hover .album-title {
-    color: var(--red-ink);
-  }
-  .album-meta {
-    font-size: 0.85rem;
-    color: var(--text-3);
-  }
-  .ext {
-    font-size: 0.75em;
+  .album-title:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--red);
+    text-underline-offset: 0.15em;
   }
   .more {
     margin-top: var(--s5);

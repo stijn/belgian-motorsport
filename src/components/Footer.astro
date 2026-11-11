@@ -31,7 +31,7 @@ const [before, after] = d.footer.rightsText.split('{link}');
       <ul class="networks">
         {socials.map((s) => (
           <li>
-            <a href={s.url} target="_blank" rel="me noopener" style={`--brand:${s.color}`}>
+            <a href={s.url} target="_blank" rel="me noopener" style={`--brand:${s.color}`} data-tip={s.handle}>
               <span class="dot"><SocialIcon network={s.key} /></span>
               <span>{s.label}</span>
             </a>

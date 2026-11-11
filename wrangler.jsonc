@@ -30,8 +30,8 @@
   //   TURNSTILE_SECRET  optional; switches on Cloudflare Turnstile checks
   "observability": { "enabled": true },
   "routes": [{ "pattern": "belgian-motorsport.com", "custom_domain": true }],
-  // The demo: the same Worker on workers.dev, no custom domain, built with PUBLIC_DEMO=1
-  // (preview bar, noindex, form switched off). `npm run deploy:demo`.
+  // The demo Worker on workers.dev: the GitHub Pages demo posts its contact form here
+  // (DEMO_ORIGIN allows it). `npm run deploy:demo`; secrets with `--env demo`.
   "env": {
     "demo": {
       "name": "belgian-motorsport-demo",
@@ -42,7 +42,8 @@
       "vars": {
         "CONTACT_FROM": "contact@belgian-motorsport.com",
         "CONTACT_FROM_NAME": "Belgian Motorsport website (demo)",
-        "SITE_ORIGIN": "https://belgian-motorsport-demo.stijn-vogels.workers.dev"
+        "SITE_ORIGIN": "https://belgian-motorsport-demo.stijn-vogels.workers.dev",
+        "DEMO_ORIGIN": "https://stijn.github.io"
       }
     }
   }

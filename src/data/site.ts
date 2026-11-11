@@ -12,7 +12,8 @@ export const site = {
   themeColor: '#0b0b0c',
 } as const;
 
-/** The four places his work lives, with the labels from the old footer. Order as on the old site. */
+/** The four places his work lives, with the labels from the old footer. Order as on the old site.
+ *  `count` is the following there, rounded down, read on stats.asOf; the words are in src/i18n/ (about.counts). */
 export const socials = [
   {
     key: 'youtube',
@@ -21,6 +22,7 @@ export const socials = [
     handle: '@Belgian-Motorsport',
     url: 'https://www.youtube.com/@Belgian-Motorsport',
     color: '#ff0000',
+    count: '125K',
   },
   {
     key: 'instagram',
@@ -29,6 +31,7 @@ export const socials = [
     handle: '@belgianmotorsport',
     url: 'https://www.instagram.com/belgianmotorsport/',
     color: '#e1306c',
+    count: '23K',
   },
   {
     key: 'facebook',
@@ -37,6 +40,7 @@ export const socials = [
     handle: 'Belgian.Motorsport',
     url: 'https://www.facebook.com/Belgian.Motorsport',
     color: '#1877f2',
+    count: '11K',
   },
   {
     key: 'flickr',
@@ -45,6 +49,7 @@ export const socials = [
     handle: 'belgian-motorsport',
     url: 'https://www.flickr.com/photos/belgian-motorsport/albums/',
     color: '#ff0084',
+    count: '9,500',
   },
 ] as const;
 
@@ -86,8 +91,9 @@ export const sections = [
 ] as const;
 
 export const contact = {
-  /** The form posts here; a Cloudflare Worker sends it on by email. His address is a secret on the Worker. */
-  endpoint: '/api/contact',
+  /** The form posts here; a Cloudflare Worker sends it on by email. His address is a secret on the
+   *  Worker. On the GitHub Pages demo (no Worker there) PUBLIC_API_ORIGIN points at the demo Worker. */
+  endpoint: `${import.meta.env.PUBLIC_API_ORIGIN ?? ''}/api/contact`,
   /** Cloudflare Turnstile site key. Leave empty to run without it (the honeypot and rate limit stay). */
   turnstileSiteKey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '',
 } as const;

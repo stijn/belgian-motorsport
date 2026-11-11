@@ -9,7 +9,7 @@ import Fa from './Fa.astro';
 import LineMd from './LineMd.astro';
 import SocialIcon from './SocialIcon.astro';
 import SectionHead from './SectionHead.astro';
-import { faExpand, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
+import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import gallery from '../data/gallery.json';
 import { accounts, socials } from '../data/site';
 import { t, type Lang } from '../i18n';
@@ -38,7 +38,7 @@ const items = await Promise.all(
     <SectionHead icon="camera" eyebrow={d.gallery.eyebrow} heading={d.gallery.heading} lead={d.gallery.lead} />
 
     <ul class="grid" data-stagger>
-      {items.map((g, i) => (
+      {items.map((g) => (
         <li class:list={['tile rv', { featured: g.featured }]}>
           <figure>
             <button
@@ -62,11 +62,11 @@ const items = await Promise.all(
               />
               <span class="zoom" aria-hidden="true"><Fa icon={faExpand} /></span>
             </button>
-            <figcaption>
-              <span class="t">{g.title}</span>
-              <span class="links">
-                <a class="e" href={g.albumUrl} target="_blank" rel="noopener">{g.event}</a>
-                <a class="f" href={g.photoUrl} target="_blank" rel="noopener"><SocialIcon network="flickr" /> {d.gallery.seeOnFlickr} <Fa icon={faArrowUpRightFromSquare} class="ext" /></a>
+            <figcaption class="cap">
+              <span class="cap-t">{g.title}</span>
+              <span class="cap-row">
+                <a href={g.albumUrl} target="_blank" rel="noopener">{g.event}</a>
+                <a class="cap-link" href={g.photoUrl} target="_blank" rel="noopener"><SocialIcon network="flickr" /> {d.gallery.seeOnFlickr}</a>
               </span>
             </figcaption>
           </figure>
@@ -174,44 +174,10 @@ const items = await Promise.all(
     transform: none;
   }
   figcaption {
-    display: grid;
-    gap: 0.15rem;
-    font-size: 0.9rem;
-    line-height: 1.3;
     transition: transform 0.5s var(--ease);
   }
   .tile:hover figcaption {
     transform: translateX(4px);
-  }
-  .t {
-    font-weight: 500;
-  }
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.25rem var(--s3);
-    color: var(--text-3);
-  }
-  .links a {
-    text-decoration: none;
-    color: var(--text-3);
-  }
-  .links a:hover {
-    color: var(--text);
-    text-decoration: underline;
-  }
-  .f {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35em;
-    white-space: nowrap;
-  }
-  .f .icon {
-    font-size: 0.9em;
-  }
-  .f .ext {
-    font-size: 0.7em;
   }
   .more {
     margin-top: var(--s5);

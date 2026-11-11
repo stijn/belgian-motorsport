@@ -29,6 +29,7 @@ export const en = {
     sub: 'Motorsport photography and film from Belgium & Europe. Spa, Zolder, the Nürburgring and the rally stages in between, since 2006.',
     seePhotos: 'See the photos',
     watchFilms: 'Watch the films',
+    photos: 'Photos in the header',
     scroll: 'Scroll down',
   },
   stats: {
@@ -82,8 +83,9 @@ export const en = {
       { title: 'Car portraits and collections', text: 'Static and rolling shots of road cars, classics and supercars, on location.' },
       { title: 'Film with real sound', text: 'Flybys, on-boards and accelerations, cut to the sound of the engine rather than a soundtrack.' },
     ],
+    counts: { youtube: '{n}+ subscribers', instagram: '{n}+ followers', facebook: '{n}+ followers', flickr: '{n}+ photos' },
     portraitSoon: 'Portrait coming',
-    portraitAlt: 'A placeholder for the photographer’s portrait.',
+    portraitAlt: 'The photographer at the fence, camera up, as a race car passes.',
   },
   contact: {
     eyebrow: 'Contact',
@@ -104,7 +106,6 @@ export const en = {
       offline: 'You’re offline. Try again when you have a connection.',
       privacy: 'Straight to my inbox by email, stored nowhere else.',
       privacyLink: 'Privacy',
-      demo: 'This is the preview: the form is switched off until the site is on its domain. Everything else about it is final.',
     },
   },
   footer: {

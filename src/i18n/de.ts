@@ -29,6 +29,7 @@ export const de: Dict = {
     sub: 'Motorsportfotografie und -film aus Belgien & Europa. Spa, Zolder, der Nürburgring und die Rallyeprüfungen dazwischen, seit 2006.',
     seePhotos: 'Zu den Fotos',
     watchFilms: 'Zu den Filmen',
+    photos: 'Fotos im Kopfbereich',
     scroll: 'Nach unten scrollen',
   },
   stats: {
@@ -82,8 +83,9 @@ export const de: Dict = {
       { title: 'Autoporträts und Sammlungen', text: 'Stand- und Fahraufnahmen von Straßenautos, Klassikern und Supersportwagen, vor Ort.' },
       { title: 'Film mit echtem Sound', text: 'Vorbeifahrten, Onboards und Beschleunigungen, geschnitten auf den Klang des Motors statt auf einen Soundtrack.' },
     ],
+    counts: { youtube: '{n}+ Abonnenten', instagram: '{n}+ Follower', facebook: '{n}+ Follower', flickr: '{n}+ Fotos' },
     portraitSoon: 'Porträt folgt',
-    portraitAlt: 'Ein Platzhalter für das Porträt des Fotografen.',
+    portraitAlt: 'Der Fotograf am Zaun, Kamera im Anschlag, während ein Rennwagen vorbeifährt.',
   },
   contact: {
     eyebrow: 'Kontakt',
@@ -104,7 +106,6 @@ export const de: Dict = {
       offline: 'Ihr seid offline. Versucht es wieder, sobald ihr Verbindung habt.',
       privacy: 'Direkt per E-Mail in mein Postfach, nirgendwo sonst gespeichert.',
       privacyLink: 'Datenschutz',
-      demo: 'Das ist die Vorschau: das Formular ist aus, bis die Seite auf ihrer Domain läuft. Alles andere ist final.',
     },
   },
   footer: {

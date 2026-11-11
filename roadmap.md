@@ -11,6 +11,29 @@
 - His portrait in About, when he sends one (replace the placeholder frame).
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.4.0 (2026-11-11)
+
+- One red, the hero button's. It is a surface everywhere (buttons, lines, icons, markers), never the
+  colour of running text: the tagline sits on a red plate, and the red word in a headline is white on a
+  red plate, like a race number. The contrast test now also fails on a second red token.
+- Language menu in alphabetical order of the names, hover and current item white on red (bold, large).
+- Hero: each photo gets a slow Ken Burns drift into the car; three bars fill while a photo shows and
+  jump to it when pressed; the clock pauses in a hidden tab and stops with reduced motion.
+- Pages and languages slide into each other (cross-document view transitions); the header stays put.
+- Captions alike for photos, films and albums: title, then the context left and the source right
+  ("See on Flickr", "Watch on YouTube"), underlined quietly, no external-link arrows. Albums got
+  "See on Flickr" too.
+- About: his portraits cross-fade with a slow zoom once they sit in `src/assets/portrait/` (1.jpg,
+  2.jpg, 3.jpg; cropped to 3:2 at build time); until then the frame holds the spot. The network chips
+  carry their icon and the following (125K+ YouTube subscribers, 23K+
+  Instagram, 11K+ Facebook, 9,500+ photos on Flickr); the portrait frame is landscape, so "Available
+  for" lines up with the bottom of the text column.
+- Contact: the recipient is set as the `CONTACT_TO` secret on the demo Worker; the GitHub Pages demo
+  posts to that Worker (CORS from the demo origin), so the form is live there too. Until the domain is
+  onboarded to Email Sending the Worker says so instead of "try again". The placeholder note is gone.
+- Tooltips on every icon-only control: back to top, the scroll cue, the hero bars, the language
+  button, the play buttons, the lightbox buttons, the footer network dots.
+
 ## 1.3.1 (2026-11-11)
 
 - The phone menu opens full-screen again: the header's blur had made it the menu's containing block

@@ -29,6 +29,7 @@ export const it: Dict = {
     sub: 'Fotografia e film di motorsport dal Belgio e dall’Europa. Spa, Zolder, il Nürburgring e le prove speciali di rally nel mezzo, dal 2006.',
     seePhotos: 'Guarda le foto',
     watchFilms: 'Guarda i film',
+    photos: 'Foto in testata',
     scroll: 'Scorri in basso',
   },
   stats: {
@@ -82,8 +83,9 @@ export const it: Dict = {
       { title: 'Ritratti di auto e collezioni', text: 'Scatti statici e in movimento di auto stradali, classiche e supercar, sul posto.' },
       { title: 'Film con il suono vero', text: 'Passaggi, camera car e accelerazioni, montati sul suono del motore e non su una colonna sonora.' },
     ],
+    counts: { youtube: '{n}+ iscritti', instagram: '{n}+ follower', facebook: '{n}+ follower', flickr: '{n}+ foto' },
     portraitSoon: 'Ritratto in arrivo',
-    portraitAlt: 'Un segnaposto per il ritratto del fotografo.',
+    portraitAlt: 'Il fotografo alla rete, macchina alzata, al passaggio di un’auto da corsa.',
   },
   contact: {
     eyebrow: 'Contatti',
@@ -104,7 +106,6 @@ export const it: Dict = {
       offline: 'Siete offline. Riprovate quando avete una connessione.',
       privacy: 'Dritto nella mia casella di posta, non conservato da nessun’altra parte.',
       privacyLink: 'Privacy',
-      demo: 'Questa è l’anteprima: il modulo è spento finché il sito non è sul suo dominio. Tutto il resto è definitivo.',
     },
   },
   footer: {

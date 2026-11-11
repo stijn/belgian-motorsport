@@ -1,7 +1,7 @@
 ---
-// Full-screen hero: three of his photos cross-fade with a slow drift (CSS only), the BM logo, the
-// name and the tagline from the old site. The photo stays in view: the words read through a dark halo
-// (text-shadow) and a shade that deepens towards the bottom-left, not a box over the picture.
+// Full-screen hero: three of his photos, each with a slow Ken Burns zoom into the car, cross-fading
+// every six seconds. Three progress bars show where the sequence is and jump to a photo when pressed
+// (src/scripts/hero.ts). The words read through a dark halo (text-shadow) over the photo, not a box.
 import { Image, Picture, getImage } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
 import LineMd from './LineMd.astro';
@@ -18,24 +18,24 @@ interface Props {
 const { lang } = Astro.props;
 const d = t(lang);
 
+// `focus` is where the car is: the zoom drifts into that point, and the photo is cropped around it.
 const slides = [
-  { src: porsche, alt: 'A yellow Porsche 911 RSR on the kerbs of the Raidillon at Spa-Francorchamps, the track empty behind it.', pos: '70% 50%' },
-  { src: bmw, alt: 'A white and red BMW M1 Procar panning past at speed, flames from the exhaust.', pos: '50% 60%' },
-  { src: aston, alt: 'A green and yellow Aston Martin DBR9 head-on through a corner.', pos: '50% 50%' },
+  { src: porsche, alt: 'A yellow Porsche 911 RSR on the kerbs of the Raidillon at Spa-Francorchamps, the track empty behind it.', focus: '76% 38%' },
+  { src: bmw, alt: 'A white and red BMW M1 Procar panning past at speed, flames from the exhaust.', focus: '48% 62%' },
+  { src: aston, alt: 'A green and yellow Aston Martin DBR9 head-on through a corner.', focus: '48% 55%' },
 ];
 const widths = [640, 960, 1280, 1600, 1920];
 const sizes = '100vw';
-// The first slide is the largest contentful paint: preload its AVIF set from the head.
 const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', quality: 60 });
 ---
 <Fragment slot="head">
   <link rel="preload" as="image" type="image/avif" imagesrcset={first.srcSet.attribute} imagesizes={sizes} fetchpriority="high" />
 </Fragment>
 
-<section class="hero" aria-label={site.name}>
+<section class="hero" aria-label={site.name} data-hero data-interval="6000">
   <div class="slides" aria-hidden="true">
     {slides.map((s, i) => (
-      <div class="slide" style={`--focus:${s.pos};--i:${i}`}>
+      <div class:list={['slide', { active: i === 0 }]} style={`--focus:${s.focus}`} data-slide>
         <Picture
           src={s.src}
           alt={i === 0 ? s.alt : ''}
@@ -56,19 +56,30 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     <Image src={logo} alt="BM" width="420" height="156" densities={[1, 2]} loading="eager" class="logo hv" data-hero-logo data-delight="rev" />
     <h1 class="title hv">
       <span class="name">{site.name}</span>
-      <span class="tagline">{site.tagline}</span>
+      <span class="tagline"><span class="plate">{site.tagline}</span></span>
     </h1>
     <p class="sub hv">{d.hero.sub}</p>
     <div class="cta hv">
       <a class="btn btn-red" href={href('/#work', lang)} data-replay><LineMd name="camera" />{d.hero.seePhotos}</a>
       <a class="btn btn-ghost" href={href('/#film', lang)} data-replay><LineMd name="play" />{d.hero.watchFilms}</a>
     </div>
+    {/* One bar per photo: it fills while that photo shows, and jumps to it when pressed. */}
+    <div class="bars hv" role="group" aria-label={d.hero.photos} data-bars>
+      {slides.map((s, i) => (
+        <button type="button" class:list={['bar', { active: i === 0 }]} aria-label={`${i + 1}/${slides.length}: ${s.alt}`} data-tip={`${i + 1} / ${slides.length}`} aria-pressed={i === 0 ? 'true' : 'false'} data-go={i}>
+          <span class="fill"></span>
+        </button>
+      ))}
+    </div>
   </div>
 
-  <a class="cue" href="#stats" aria-label={d.hero.scroll} data-replay>
+  <a class="cue tip-left" href="#stats" aria-label={d.hero.scroll} data-tip={d.hero.scroll} data-replay>
     <LineMd name="arrow-down" />
   </a>
 </section>
+<script>
+  import '../scripts/hero';
+</script>
 
 <style>
   .hero {
@@ -79,6 +90,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     isolation: isolate;
     overflow: clip;
     background: var(--bg);
+    --interval: 6s;
   }
   .slides {
     position: absolute;
@@ -96,38 +108,41 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     object-fit: cover;
     object-position: var(--focus);
     max-width: none;
+    transform-origin: var(--focus);
+    will-change: transform;
   }
   .slide {
     opacity: 0;
-    will-change: opacity, transform;
-    animation: slide 18s infinite var(--ease);
-    animation-delay: calc(var(--i) * 6s);
+    transition: opacity 1.2s var(--ease);
   }
-  @keyframes slide {
-    0% { opacity: 0; transform: scale(1.06); }
-    6% { opacity: 1; }
-    33.3% { opacity: 1; }
-    39.3% { opacity: 0; transform: scale(1.12); }
-    100% { opacity: 0; }
+  .slide.active {
+    opacity: 1;
+    z-index: 1;
   }
-  @media (prefers-reduced-motion: reduce) {
-    .slide { animation: none; }
-    .slide:first-child { opacity: 1; }
+  /* Ken Burns: a slow drift into the car for the length of the slide, held while the next fades in. */
+  .js-motion .slide.active :global(img) {
+    animation: kenburns calc(var(--interval) + 1.2s) linear forwards;
   }
-  /* The photo stays the picture; the shade only deepens where the words are. */
+  .js-motion .slide.leaving :global(img) {
+    transform: scale(1.14);
+  }
+  @keyframes kenburns {
+    from { transform: scale(1.02); }
+    to { transform: scale(1.14); }
+  }
   .shade {
     position: absolute;
     inset: 0;
+    z-index: 2;
     background:
       linear-gradient(180deg, rgb(0 0 0 / 0.3) 0%, transparent 30%, rgb(0 0 0 / 0.35) 60%, rgb(11 11 12 / 0.92) 100%),
       linear-gradient(90deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.2) 45%, transparent 75%);
   }
   .content {
-    padding-block: calc(var(--header-h) + var(--s5)) var(--s7);
+    padding-block: calc(var(--header-h) + var(--s5)) var(--s6);
     display: grid;
     gap: var(--s4);
     justify-items: start;
-    /* A dark halo around every letter: readable over any part of any photo. */
     --halo: 0 1px 2px rgb(0 0 0 / 0.95), 0 0 6px rgb(0 0 0 / 0.9), 0 2px 18px rgb(0 0 0 / 0.8), 0 0 40px rgb(0 0 0 / 0.6);
   }
   .logo {
@@ -138,7 +153,8 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   }
   .title {
     display: grid;
-    gap: 0.1em;
+    gap: 0.35em;
+    justify-items: start;
   }
   .name {
     font-size: clamp(3rem, 11vw, 9rem);
@@ -146,13 +162,18 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     letter-spacing: -0.015em;
     text-shadow: var(--halo);
   }
+  /* The tagline on a red plate, like a sticker on the bodywork: one red, white on it. */
   .tagline {
-    font-size: clamp(1.2rem, 2.4vw, 1.7rem);
+    font-size: clamp(1.2rem, 2.2vw, 1.6rem);
     font-weight: 700;
-    letter-spacing: 0.32em;
-    color: var(--red-ink);
-    padding-left: 0.2em;
-    text-shadow: var(--halo);
+    letter-spacing: 0.28em;
+  }
+  .plate {
+    display: inline-block;
+    padding: 0.3em 0.9em 0.3em 1.1em;
+    background: var(--red);
+    color: #fff;
+    clip-path: polygon(0.6rem 0, 100% 0, 100% calc(100% - 0.6rem), calc(100% - 0.6rem) 100%, 0 100%, 0 0.6rem);
   }
   .sub {
     font-size: clamp(1.1rem, 1.6vw, 1.35rem);
@@ -170,6 +191,52 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   }
   .cta .btn-ghost {
     background: rgb(11 11 12 / 0.6);
+  }
+  .bars {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: var(--s3);
+  }
+  .bar {
+    position: relative;
+    width: clamp(2.5rem, 6vw, 4rem);
+    height: 1.5rem;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+  }
+  .bar::before,
+  .fill {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 3px;
+    transform: translateY(-50%);
+    border-radius: 2px;
+  }
+  .bar::before {
+    background: rgb(255 255 255 / 0.3);
+  }
+  .fill {
+    right: auto;
+    width: 0;
+    background: #fff;
+  }
+  .bar.active .fill {
+    width: 100%;
+  }
+  .js-motion .bar.active .fill {
+    animation: fill var(--interval) linear forwards;
+  }
+  @keyframes fill {
+    from { width: 0; }
+    to { width: 100%; }
+  }
+  .bar:hover::before {
+    background: rgb(255 255 255 / 0.5);
   }
   .cue {
     font-size: 1.25rem;
@@ -194,21 +261,14 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(6px); }
   }
-  /* The entrance moves, it never hides: the words are the largest contentful paint, and an
-     element at opacity 0 doesn't count as painted. */
+  /* The entrance moves, it never hides: the words are the largest contentful paint. */
   .js-motion .hv {
     animation: rise 0.9s var(--ease) both;
   }
   .js-motion .hv:nth-child(2) { animation-delay: 0.1s; }
   .js-motion .hv:nth-child(3) { animation-delay: 0.2s; }
   .js-motion .hv:nth-child(4) { animation-delay: 0.3s; }
-  .js-motion .tagline {
-    animation: track 1.4s 0.3s var(--ease) both;
-  }
-  @keyframes track {
-    from { letter-spacing: 0.6em; opacity: 0; }
-    to { letter-spacing: 0.32em; opacity: 1; }
-  }
+  .js-motion .hv:nth-child(5) { animation-delay: 0.4s; }
   @keyframes rise {
     from { transform: translateY(20px); }
     to { transform: none; }
