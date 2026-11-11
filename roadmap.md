@@ -11,6 +11,15 @@
 - Dutch and French versions of the words, with hreflang.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.2.0 (2026-11-11)
+
+- Contrast to WCAG 2.2 AAA throughout: the hero's words sit on a dark panel with a red edge instead
+  of straight over the photo, the header has a dark backdrop from the first pixel, the muted grey and
+  the red used as text are lifted to 7:1 on every background, button text is large enough for white
+  on the brand red to count, and the lightbox buttons are solid. `tests/contrast.test.ts` reads the
+  tokens from the stylesheet and fails the build if any pair drops below AAA, including the panel over
+  a pure white photo.
+
 ## 1.1.0 (2026-11-11)
 
 - The header's logo stays hidden while the hero's big logo is on screen and fades in once it has

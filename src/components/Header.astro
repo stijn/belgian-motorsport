@@ -53,13 +53,11 @@ const { overHero = false } = Astro.props;
     border-bottom: 1px solid var(--line);
     transition: background 0.4s, border-color 0.4s;
   }
-  /* Over the hero the bar floats, transparent, until the page scrolls. */
+  /* Over the hero the bar floats on a dark backdrop (the links must read over any photo). */
   .site-header.over-hero:not(.scrolled) {
     position: fixed;
     inset-inline: 0;
-    background: linear-gradient(rgb(0 0 0 / 0.55), transparent);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
+    background: var(--scrim);
     border-color: transparent;
   }
   .site-header.over-hero.scrolled {

@@ -12,10 +12,13 @@
   --line-2: rgb(255 255 255 / 0.18);
   --text: #f3f2ef;
   --text-2: #b9b5ad;
-  --text-3: #85817a;
-  --red: #e10600;
+  --text-3: #a29e97; /* 7.3:1 on --bg, 7.0:1 on --bg-2: AAA for small text */
+  --red: #e10600; /* the brand red: surfaces and lines, never small text */
   --red-2: #ff2a20;
-  --red-ink: #ff5c55; /* red that reads as text on dark (4.5:1 on --bg) */
+  --red-ink: #ff746d; /* red as text: 7.3:1 on --bg (AAA) */
+  /* The hero's text panel over a photo: dark enough that even a white photo behind it keeps
+     --text-2 above 7:1 (tests/contrast.test.ts checks the worst case). */
+  --scrim: rgb(11 11 12 / 0.9);
   --focus: #ffd166;
   --font-display: 'Barlow Condensed', 'Arial Narrow', Impact, sans-serif;
   --font-text: 'Barlow', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -224,7 +227,8 @@ button {
   border-radius: var(--radius);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.05rem;
+  /* 19.2px bold: "large text" for WCAG, so white on the brand red (5:1) meets AAA. */
+  font-size: 1.2rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
@@ -269,7 +273,7 @@ button {
 }
 
 .btn-red:hover {
-  --btn-bg: var(--red-2);
+  --btn-bg: #c50500; /* darker on hover: white stays above 4.5:1 */
 }
 
 .btn-ghost {

@@ -45,6 +45,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   </div>
 
   <div class="wrap content">
+    <div class="panel">
     <Image src={logo} alt="BM" width="420" height="156" densities={[1, 2]} loading="eager" class="logo rv" data-hero-logo />
     <h1 class="title rv">
       <span class="name">{site.name}</span>
@@ -54,6 +55,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     <div class="cta rv">
       <a class="btn btn-red" href="#work">See the photos</a>
       <a class="btn btn-ghost" href="#film">Watch the films</a>
+    </div>
     </div>
   </div>
 
@@ -107,24 +109,28 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     .slide { animation: none; }
     .slide:first-child { opacity: 1; }
   }
+  /* The panel carries the text now; the shade only eases the photo into the page below. */
   .shade {
     position: absolute;
     inset: 0;
-    background:
-      linear-gradient(180deg, rgb(0 0 0 / 0.45) 0%, rgb(0 0 0 / 0.05) 35%, rgb(0 0 0 / 0.25) 60%, rgb(11 11 12 / 0.92) 100%),
-      linear-gradient(90deg, rgb(0 0 0 / 0.4), transparent 60%);
-  }
-  /* On a phone the text sits over the lower half; keep the top of the photo clear. */
-  @media (max-width: 700px) {
-    .shade {
-      background: linear-gradient(180deg, rgb(0 0 0 / 0.35) 0%, transparent 25%, rgb(0 0 0 / 0.3) 50%, rgb(11 11 12 / 0.94) 100%);
-    }
+    background: linear-gradient(180deg, rgb(0 0 0 / 0.2) 0%, transparent 30%, rgb(11 11 12 / 0.85) 100%);
   }
   .content {
     padding-block: calc(var(--header-h) + var(--s5)) var(--s7);
+  }
+  /* The words sit on a dark panel, so they read the same over any photo: a pit wall, not a haze. */
+  .panel {
     display: grid;
     gap: var(--s4);
     justify-items: start;
+    width: fit-content;
+    max-width: 100%;
+    padding: clamp(var(--s4), 4vw, var(--s5));
+    margin-left: calc(-1 * clamp(var(--s4), 4vw, var(--s5)));
+    background: var(--scrim);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-left: 4px solid var(--red);
   }
   .logo {
     width: clamp(180px, 28vw, 360px);
@@ -143,9 +149,9 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   }
   .tagline {
     font-size: clamp(1.1rem, 2.4vw, 1.7rem);
-    font-weight: 600;
+    font-weight: 700;
     letter-spacing: 0.32em;
-    color: var(--red-2);
+    color: var(--red-ink);
     padding-left: 0.2em;
   }
   .sub {
@@ -162,6 +168,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   }
   .cue {
     font-size: 1.25rem;
+    background: var(--scrim);
     position: absolute;
     right: var(--gutter);
     bottom: var(--s4);
@@ -184,12 +191,12 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     50% { transform: translateY(6px); }
   }
   /* The hero's own reveal: staggered, as soon as the page is up. */
-  .js-motion .content .rv {
+  .js-motion .panel .rv {
     animation: rise 0.9s var(--ease) both;
   }
-  .js-motion .content .rv:nth-child(2) { animation-delay: 0.15s; }
-  .js-motion .content .rv:nth-child(3) { animation-delay: 0.3s; }
-  .js-motion .content .rv:nth-child(4) { animation-delay: 0.45s; }
+  .js-motion .panel .rv:nth-child(2) { animation-delay: 0.15s; }
+  .js-motion .panel .rv:nth-child(3) { animation-delay: 0.3s; }
+  .js-motion .panel .rv:nth-child(4) { animation-delay: 0.45s; }
   /* The tagline settles from wide tracking into place. */
   .js-motion .tagline {
     animation: track 1.4s 0.3s var(--ease) both;

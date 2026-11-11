@@ -34,7 +34,7 @@ npm run dev        # http://localhost:4321
 npm run build      # dist/
 npm run preview    # build, then serve dist/ with the Worker through wrangler (http://localhost:8787)
 npm run check      # astro check + the Worker's types
-npm test           # vitest: form validation, email building, CSP hash
+npm test           # vitest: form validation, email building, CSP hash, AAA contrast of every colour pair
 npm run sync       # refresh films and albums from YouTube and Flickr
 npm run icons      # rebuild favicon and app icons from the logo
 npm run cards      # rebuild the share cards (public/og-*.jpg) from his photos, the logo and the site's fonts
