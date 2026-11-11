@@ -43,7 +43,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
           widths={widths}
           sizes={sizes}
           formats={['avif', 'webp']}
-          quality={60}
+          quality={55}
           loading={i === 0 ? 'eager' : 'lazy'}
           fetchpriority={i === 0 ? 'high' : 'low'}
           decoding={i === 0 ? 'sync' : 'async'}

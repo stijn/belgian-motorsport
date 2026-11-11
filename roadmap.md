@@ -11,6 +11,12 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.8.2 (2026-11-12)
+
+- Hero photos at AVIF quality 55 (was 60): a fifth smaller, no visible change under the halo and the
+  shade. Measured first on the 1280 px Porsche: effort 9 instead of 4 saves 2 percent for ten times the
+  encode time, so quality is the only dial worth turning; the gallery, events and portraits keep theirs.
+
 ## 1.8.1 (2026-11-12)
 
 - Cloudflare: Early Hints on, with a `Link` header per page (written at build time by
