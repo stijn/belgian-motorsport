@@ -11,6 +11,14 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.8.1 (2026-11-12)
+
+- Cloudflare: Early Hints on, with a `Link` header per page (written at build time by
+  `tools/postbuild.mjs`) naming the two fonts and, on the home pages, the hero photo, so the browser
+  fetches them before the page arrives. 0-RTT connection resumption on. Crawler Hints on, so search
+  engines hear about changes. Rocket Loader and Speed Brain stay off: the site ships its own scripts
+  and speculation rules.
+
 ## 1.8.0 (2026-11-11)
 
 - Contact: a subject menu (book a shoot, team or sponsor photography, prints and licensing, an
