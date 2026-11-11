@@ -1,5 +1,5 @@
 # The demo: the site built for https://stijn.github.io/belgian-motorsport/ on every push to main.
-# It carries a preview bar, a noindex tag and a switched-off contact form (PUBLIC_DEMO=1). The real
+# It carries a noindex tag and a switched-off contact form (PUBLIC_DEMO=1). The real
 # site goes to Cloudflare from the same code, without these flags (docs/go-live.md).
 name: Demo on GitHub Pages
 on:
