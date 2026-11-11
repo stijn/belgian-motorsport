@@ -12,7 +12,8 @@ const parse = (text: string) => {
 };
 const fmt = (n: number, group: boolean) => (group ? Math.round(n).toLocaleString('en-GB') : String(Math.round(n)));
 
-if (motion && 'IntersectionObserver' in window && els.length) {
+const returning = document.documentElement.classList.contains('js-return');
+if (motion && !returning && 'IntersectionObserver' in window && els.length) {
   const run = (el: HTMLElement) => {
     const p = parse(el.dataset.count ?? el.textContent ?? '');
     if (!p) return;

@@ -36,6 +36,13 @@ if (btn && menu) {
 }
 
 if (lang) {
+  // Switching language keeps the place on the page: the section in view goes into the link's hash.
+  lang.querySelectorAll<HTMLAnchorElement>('a[hreflang]').forEach((a) =>
+    a.addEventListener('click', () => {
+      const here = [...document.querySelectorAll<HTMLElement>('main section[id]')].filter((s) => s.getBoundingClientRect().top <= 120).pop();
+      a.hash = here && window.scrollY > 160 ? `#${here.id}` : '';
+    }),
+  );
   document.addEventListener('click', (e) => {
     if (lang.open && !lang.contains(e.target as Node)) lang.open = false;
   });
@@ -46,6 +53,17 @@ if (lang) {
     }
   });
 }
+
+// A page rendered ahead of time (speculation rules) is shown for the link's URL with its hash, but the
+// browser doesn't scroll to that hash on activation: do it here, instantly, and again if the hash changes.
+const toHash = () => {
+  const id = decodeURIComponent(location.hash.slice(1));
+  const el = id ? document.getElementById(id) : null;
+  if (el && Math.abs(el.getBoundingClientRect().top) > 150) el.scrollIntoView({ behavior: 'instant' as ScrollBehavior, block: 'start' });
+};
+const doc = document as Document & { prerendering?: boolean };
+if (doc.prerendering) document.addEventListener('prerenderingchange', toHash, { once: true });
+else toHash();
 
 // Underline the section in view (home page only: the links have hashes).
 const links = new Map(

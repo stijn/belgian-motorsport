@@ -46,7 +46,7 @@ for (const file of pages.sort()) {
   const html = await readFile(file, 'utf8');
   const rel = relative(DIST, file).replace(/index\.html$/, '');
   const name = '/' + rel;
-  const is404 = rel === '404/';
+  const is404 = /(^|\/)404\/$/.test(rel);
 
   const title = decode(html.match(/<title>([^<]*)<\/title>/)?.[1] ?? '');
   if (!title) say(name, 'no <title>');

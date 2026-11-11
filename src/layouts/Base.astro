@@ -11,6 +11,7 @@ import '../styles/global.css';
 import barlowCondensed800 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url';
 import barlow500 from '@fontsource/barlow/files/barlow-latin-500-normal.woff2?url';
 import Header from '../components/Header.astro';
+import FaSprite from '../components/FaSprite.astro';
 import Footer from '../components/Footer.astro';
 import ToTop from '../components/ToTop.astro';
 import { site, socials, stats } from '../data/site';
@@ -87,11 +88,15 @@ const website = {
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {/* JS and motion classes before the first paint. public/_headers allows this script by its hash;
+    {/* JS and motion classes before the first paint; js-return = arrived from another page of this
+        site, so the intros don't play again. public/_headers allows this script by its hash;
         tests/headers.test.ts checks the hash still matches whenever this line changes. */}
-    <script is:inline>document.documentElement.className=matchMedia('(prefers-reduced-motion: reduce)').matches?'js':'js js-motion'</script>
+    <script is:inline>document.documentElement.className=(matchMedia('(prefers-reduced-motion: reduce)').matches?'js':'js js-motion')+(document.referrer.indexOf(location.origin+'/')==0?' js-return':'')</script>
     {noindex || demo ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
     <link rel="canonical" href={canonical} />
+    {/* Browsers that support it render the next page in the background as soon as a link is hovered
+        or pressed (Chrome, Edge): a language switch or the contact page then opens at once. Pages only. */}
+    <script is:inline type="speculationrules">{"prerender":[{"where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":"/api/*"}},{"not":{"selector_matches":"[target=_blank]"}}]},"eagerness":"moderate"}]}</script>
     <link rel="preload" as="font" type="font/woff2" crossorigin href={barlowCondensed800} />
     <link rel="preload" as="font" type="font/woff2" crossorigin href={barlow500} />
     {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.url} />)}
@@ -138,6 +143,7 @@ const website = {
     <slot name="head" />
   </head>
   <body>
+    <FaSprite />
     <div class="tricolour" aria-hidden="true"></div>
     <a class="skip" href="#main">{d.nav.skip}</a>
     <Header lang={lang} path={path} overHero={overHero} />

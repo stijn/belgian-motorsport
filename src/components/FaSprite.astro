@@ -1,0 +1,11 @@
+---
+// The Font Awesome symbols, once per page (src/lib/fa-sprite.ts). Hidden; <use> draws them.
+import { spriteIcons, symbolId } from '../lib/fa-sprite';
+---
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true">
+  {spriteIcons.map((icon) => {
+    const [w, h, , , path] = icon.icon;
+    const paths = Array.isArray(path) ? path : [path];
+    return <symbol id={symbolId(icon)} viewBox={`0 0 ${w} ${h}`}>{paths.map((d) => <path fill="currentColor" d={d} />)}</symbol>;
+  })}
+</svg>

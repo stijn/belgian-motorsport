@@ -1,6 +1,9 @@
 ---
-// Font Awesome Free icon, rendered as inline SVG at build time (no runtime JS or webfont).
+// Font Awesome Free icon as inline SVG at build time (no runtime JS or webfont). Icons in the sprite
+// (src/lib/fa-sprite.ts) are drawn with <use>, so each page carries their paths once; any other icon
+// gets its path inline.
 import type { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { inSprite, symbolId } from '../lib/fa-sprite';
 
 interface Props {
   icon: IconDefinition;
@@ -11,6 +14,7 @@ interface Props {
 const { icon, class: cls, label } = Astro.props;
 const [w, h, , , path] = icon.icon;
 const paths = Array.isArray(path) ? path : [path];
+const sprite = inSprite(icon);
 ---
 <svg
   class:list={['icon', cls]}
@@ -21,4 +25,4 @@ const paths = Array.isArray(path) ? path : [path];
   aria-label={label}
   aria-hidden={label ? undefined : 'true'}
   focusable="false"
->{paths.map((d) => <path fill="currentColor" d={d} />)}</svg>
+>{sprite ? <use href={`#${symbolId(icon)}`} /> : paths.map((d) => <path fill="currentColor" d={d} />)}</svg>

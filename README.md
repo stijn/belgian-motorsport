@@ -20,7 +20,7 @@ for the move from Dreamhost to Cloudflare.
 | Design tokens and shared styles | `src/styles/global.css` |
 | Page shell, metadata, JSON-LD | `src/layouts/Base.astro` |
 | Sections of the home page | `src/components/` |
-| Pages | `src/views/` (one per page) rendered by `src/pages/` at the root (English) and `src/pages/[lang]/` (nl, fr, de, it, es); `404` and the manifest |
+| Pages | `src/views/` (one per page) rendered by `src/pages/` at the root (English) and `src/pages/[lang]/` (nl, fr, de, it, es); `404` (per language, moved to `/<lang>/404.html` by `tools/postbuild.mjs`) and the manifest |
 | Contact form server side | `worker/index.ts`, `worker/contact.ts` (+ tests) |
 | Security and caching headers, redirects, service worker, icons, share image | `public/` |
 | Scripts that build things | `tools/sync.mjs` (films, albums), `tools/icons.mjs` (icons), `tools/share-cards.mjs` (share cards) |

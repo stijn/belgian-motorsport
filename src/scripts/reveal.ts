@@ -12,7 +12,15 @@ if (root.classList.contains('js-motion') && 'IntersectionObserver' in window) {
     },
     { threshold: 0.12, rootMargin: '0px 0px -5% 0px' },
   );
+  // Arrived from another page of the site: what is already in view is simply there, no slide-in.
+  const returning = root.classList.contains('js-return');
   els.forEach((el) => {
+    if (returning && el.getBoundingClientRect().top < innerHeight) {
+      el.style.transition = 'none';
+      el.classList.add('in');
+      requestAnimationFrame(() => (el.style.transition = ''));
+      return;
+    }
     const group = el.closest<HTMLElement>('[data-stagger]');
     if (group) {
       const i = [...group.querySelectorAll('.rv')].indexOf(el);

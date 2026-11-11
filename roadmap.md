@@ -13,6 +13,18 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.6.0 (2026-11-11)
+
+- Switching language is quick: the next page is rendered ahead of time when a link is hovered or
+  pressed (speculation rules; Chrome and Edge, others fall back), the page opens at the section that was
+  on screen, nothing replays (hero intro, count-up, slide-ins already in view) when arriving from
+  another page of the site, and the crossfade between pages is 0.2 s.
+- Every Font Awesome icon is defined once per page as a symbol and drawn with `<use>`: 24 KB less
+  HTML on the home page. Image files are shared across languages and cached for a year, so a switch
+  downloads the HTML alone (34 KB compressed).
+- The 404 page in all six languages: Cloudflare serves the nearest `404.html`, so `/nl/404.html` and
+  the others are put in place after the build (`tools/postbuild.mjs`).
+
 ## 1.5.4 (2026-11-11)
 
 - Tooltips as on the Tofo site: a dark card with a thin border and plain light text, no shadow (the

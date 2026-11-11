@@ -653,6 +653,10 @@ button {
 
 /* Page to page, language to language: the header stays, the page slides up into the next.
    (Cross-document view transitions; browsers without them just load the page.) */
+::view-transition-old(*),
+::view-transition-new(*) {
+  animation-duration: 0.2s;
+}
 @view-transition {
   navigation: auto;
 }
