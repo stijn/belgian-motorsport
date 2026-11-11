@@ -31,6 +31,8 @@ export const nl: Dict = {
     watchFilms: 'Bekijk de films',
     photos: 'Foto’s in de header',
     scroll: 'Scroll naar beneden',
+    pause: 'Diavoorstelling pauzeren',
+    resume: 'Diavoorstelling hervatten',
   },
   stats: {
     years: 'jaar langs het circuit',

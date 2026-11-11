@@ -1,0 +1,30 @@
+---
+// The control under a slideshow: a pill with one dot per photo (the active dot stretches into a bar
+// that fills while its photo shows; a press jumps to that photo) and a round pause/play button.
+// src/scripts/slides.ts runs it. With motion reduced nothing plays by itself, so the pause button hides.
+import Fa from './Fa.astro';
+import { faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
+
+interface Props {
+  /** One accessible name per slide, in order. */
+  names: string[];
+  group: string;
+  pause: string;
+  resume: string;
+  small?: boolean;
+  class?: string;
+}
+const { names, group, pause, resume, small = false, class: cls } = Astro.props;
+---
+<div class:list={['slides-ctl', { small }, cls]} data-slides-ctl>
+  <div class="pill" role="group" aria-label={group}>
+    {names.map((name, i) => (
+      <button type="button" class:list={['dot', { active: i === 0 }]} aria-label={`${i + 1}/${names.length}: ${name}`} aria-pressed={i === 0 ? 'true' : 'false'} data-go={i}>
+        <span class="dot-i"><span class="fill"></span></span>
+      </button>
+    ))}
+  </div>
+  <button type="button" class="pp" aria-label={pause} aria-pressed="false" data-pp data-pause={pause} data-play={resume}>
+    <Fa icon={faPause} class="i-pause" /><Fa icon={faPlay} class="i-play" />
+  </button>
+</div>

@@ -11,6 +11,16 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.7.0 (2026-11-11)
+
+- About in balance: the words and the portrait side by side, centred on each other; "Available for"
+  full width underneath in two columns; the network chips last. On a phone the services now come
+  before the social links.
+- The slideshow control, as on apple.com: a dark pill with one dot per photo, the active dot stretched
+  into a bar that fills while its photo shows, and a round pause/play button. Under the hero (large)
+  and under the About portraits (small); a dot jumps, pause holds the photo and its drift. With that
+  both slideshows meet WCAG 2.2.2. One component (SlidesControl) and one script (slides.ts) for both.
+
 ## 1.6.3 (2026-11-11)
 
 - Added to a home screen, the app is called "Belgian Motorsport" on iOS (the Apple web-app title) and on

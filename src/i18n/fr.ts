@@ -31,6 +31,8 @@ export const fr: Dict = {
     watchFilms: 'Voir les films',
     photos: 'Photos de l’en-tête',
     scroll: 'Défiler vers le bas',
+    pause: 'Mettre le diaporama en pause',
+    resume: 'Reprendre le diaporama',
   },
   stats: {
     years: 'ans au bord de la piste',

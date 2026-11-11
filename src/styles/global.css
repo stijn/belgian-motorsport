@@ -715,3 +715,107 @@ main {
   box-shadow: 0 1px 0 rgb(255 255 255 / 0.14);
   pointer-events: none;
 }
+
+/* The slideshow control (SlidesControl.astro): a dark pill of dots, the active one a filling bar,
+   and a round pause/play button. --interval comes from the slideshow it sits in. */
+.slides-ctl {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.slides-ctl .pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0 0.6rem;
+  height: 2.75rem;
+  border-radius: 999px;
+  background: rgb(18 18 20 / 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.slides-ctl .dot {
+  display: grid;
+  place-items: center;
+  height: 2.75rem;
+  padding: 0 0.3rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: inherit;
+}
+.slides-ctl .dot-i {
+  position: relative;
+  display: block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.35);
+  overflow: hidden;
+  transition: width 0.4s var(--ease), background 0.2s;
+}
+.slides-ctl .dot:hover .dot-i {
+  background: rgb(255 255 255 / 0.55);
+}
+.slides-ctl .dot.active .dot-i {
+  width: 4rem;
+}
+.slides-ctl .fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 100%;
+  border-radius: 999px;
+  background: #fff;
+}
+.js-motion .slides-ctl .dot.active .fill {
+  width: 0;
+  animation: dot-fill var(--interval, 6s) linear forwards;
+}
+.paused .slides-ctl .dot.active .fill {
+  animation-play-state: paused;
+}
+@keyframes dot-fill {
+  from { width: 0; }
+  to { width: 100%; }
+}
+.slides-ctl .pp {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  border: 0;
+  background: rgb(18 18 20 / 0.82);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.slides-ctl .pp:hover {
+  background: var(--red);
+}
+.slides-ctl .pp .i-play,
+.paused .slides-ctl .pp .i-pause {
+  display: none;
+}
+.paused .slides-ctl .pp .i-play {
+  display: block;
+}
+/* Nothing plays by itself without motion, so there is nothing to pause. */
+html:not(.js-motion) .slides-ctl .pp {
+  display: none;
+}
+.slides-ctl.small .pill,
+.slides-ctl.small .dot,
+.slides-ctl.small .pp {
+  height: 2.25rem;
+}
+.slides-ctl.small .pp {
+  width: 2.25rem;
+  font-size: 0.85rem;
+}
+.slides-ctl.small .dot.active .dot-i {
+  width: 2.5rem;
+}

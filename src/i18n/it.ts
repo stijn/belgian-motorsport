@@ -31,6 +31,8 @@ export const it: Dict = {
     watchFilms: 'Guarda i film',
     photos: 'Foto in testata',
     scroll: 'Scorri in basso',
+    pause: 'Metti in pausa la presentazione',
+    resume: 'Riprendi la presentazione',
   },
   stats: {
     years: 'anni a bordo pista',

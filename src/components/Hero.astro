@@ -1,10 +1,11 @@
 ---
 // Full-screen hero: three of his photos, each with a slow Ken Burns zoom into the car, cross-fading
-// every six seconds. Three progress bars show where the sequence is and jump to a photo when pressed
-// (src/scripts/hero.ts). The words read through a dark halo (text-shadow) over the photo, not a box.
+// every six seconds. The pill under the words shows where the sequence is (the active dot fills),
+// jumps to a photo when pressed, and pauses (SlidesControl.astro, src/scripts/hero.ts). The words read through a dark halo (text-shadow) over the photo, not a box.
 import { Image, Picture, getImage } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
 import LineMd from './LineMd.astro';
+import SlidesControl from './SlidesControl.astro';
 import { site } from '../data/site';
 import { href } from '../lib/url';
 import { t, type Lang } from '../i18n';
@@ -63,14 +64,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
       <a class="btn btn-red" href={href('/#photos', lang)} data-replay><LineMd name="camera" />{d.hero.seePhotos}</a>
       <a class="btn btn-ghost" href={href('/#film', lang)} data-replay><LineMd name="play" />{d.hero.watchFilms}</a>
     </div>
-    {/* One bar per photo: it fills while that photo shows, and jumps to it when pressed. */}
-    <div class="bars hv" role="group" aria-label={d.hero.photos} data-bars>
-      {slides.map((s, i) => (
-        <button type="button" class:list={['bar', { active: i === 0 }]} aria-label={`${i + 1}/${slides.length}: ${s.alt}`} data-tip={`${i + 1} / ${slides.length}`} aria-pressed={i === 0 ? 'true' : 'false'} data-go={i}>
-          <span class="fill"></span>
-        </button>
-      ))}
-    </div>
+    <SlidesControl class="hv" names={slides.map((s) => s.alt)} group={d.hero.photos} pause={d.hero.pause} resume={d.hero.resume} />
   </div>
 
   <a class="cue tip-left" href="#stats" aria-label={d.hero.scroll} data-tip={d.hero.scroll} data-replay>
@@ -192,51 +186,13 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   .cta .btn-ghost {
     background: rgb(11 11 12 / 0.6);
   }
-  .bars {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: var(--s3);
+  .hero :global(.slides-ctl) {
+    margin-top: var(--s4);
   }
-  .bar {
-    position: relative;
-    width: clamp(2.5rem, 6vw, 4rem);
-    height: 1.5rem;
-    padding: 0;
-    background: none;
-    border: 0;
-    cursor: pointer;
-  }
-  .bar::before,
-  .fill {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 50%;
-    height: 3px;
-    transform: translateY(-50%);
-    border-radius: 2px;
-  }
-  .bar::before {
-    background: rgb(255 255 255 / 0.3);
-  }
-  .fill {
-    right: auto;
-    width: 0;
-    background: #fff;
-  }
-  .bar.active .fill {
-    width: 100%;
-  }
-  :global(.js-motion) .bar.active .fill {
-    animation: fill var(--interval) linear forwards;
-  }
-  @keyframes fill {
-    from { width: 0; }
-    to { width: 100%; }
-  }
-  .bar:hover::before {
-    background: rgb(255 255 255 / 0.5);
+  /* Paused: the photo's drift holds where it is. */
+  .hero.paused .slide.active :global(img),
+  .hero.paused .slide.leaving :global(img) {
+    animation-play-state: paused;
   }
   .cue {
     font-size: 1.25rem;

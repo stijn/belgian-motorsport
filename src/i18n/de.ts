@@ -31,6 +31,8 @@ export const de: Dict = {
     watchFilms: 'Zu den Filmen',
     photos: 'Fotos im Kopfbereich',
     scroll: 'Nach unten scrollen',
+    pause: 'Diashow anhalten',
+    resume: 'Diashow fortsetzen',
   },
   stats: {
     years: 'Jahre an der Strecke',

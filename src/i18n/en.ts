@@ -31,6 +31,8 @@ export const en = {
     watchFilms: 'Watch the films',
     photos: 'Photos in the header',
     scroll: 'Scroll down',
+    pause: 'Pause the slideshow',
+    resume: 'Play the slideshow',
   },
   stats: {
     years: 'years trackside',

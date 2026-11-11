@@ -1,24 +1,13 @@
-// The portraits in About cross-fade every six seconds, with a slow drift (CSS). The photo on its way
-// out keeps .leaving for the length of the fade, so its drift runs on instead of snapping back.
-// Reduced motion: the first photo stays.
+// The portraits in About cross-fade every six seconds while they are on screen, with the small
+// control under them (src/scripts/slides.ts). Reduced motion: the first photo stays.
+import { slideshow } from './slides';
+
 const box = document.querySelector<HTMLElement>('[data-portraits]');
-if (box && document.documentElement.classList.contains('js-motion')) {
+if (box) {
   const pics = [...box.querySelectorAll<HTMLElement>('[data-portrait]')];
   if (pics.length > 1) {
-    let i = 0;
-    let timer = 0;
-    const next = () => {
-      const old = pics[i]!;
-      old.classList.remove('active');
-      old.classList.add('leaving');
-      setTimeout(() => old.classList.remove('leaving'), 1500);
-      i = (i + 1) % pics.length;
-      pics[i]!.classList.add('active');
-    };
-    const io = new IntersectionObserver(([e]) => {
-      clearInterval(timer);
-      if (e?.isIntersecting) timer = window.setInterval(next, 6000);
-    });
-    io.observe(box);
+    const motion = document.documentElement.classList.contains('js-motion');
+    const show = slideshow(box, pics, { interval: 6000, leaveMs: 1500, autoplay: motion });
+    new IntersectionObserver(([e]) => (e?.isIntersecting ? show.start() : show.stop())).observe(box);
   }
 }
