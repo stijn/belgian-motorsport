@@ -1,7 +1,7 @@
 // The contact form, sent without leaving the page. Without JS the form posts the usual way and the
 // Worker answers with a redirect to /thanks/.
 const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
-if (form) {
+if (form && !('demo' in form.dataset)) {
   const status = form.querySelector<HTMLElement>('[data-status]')!;
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   const started = form.querySelector<HTMLInputElement>('input[name="started"]');

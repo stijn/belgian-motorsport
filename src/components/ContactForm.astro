@@ -3,9 +3,11 @@
 // his address lives only in a Worker secret, so it never appears in the page. Spam defences: a
 // honeypot field, a minimum time to fill in the form, a rate limit, and Turnstile when configured.
 import { contact } from '../data/site';
+import { href, demo } from '../lib/url';
 const turnstile = contact.turnstileSiteKey;
 ---
-<form class="contact-form" method="post" action={contact.endpoint} data-contact-form novalidate>
+<form class="contact-form" method="post" action={contact.endpoint} data-contact-form data-demo={demo ? '' : undefined} novalidate>
+  {demo && <p class="demo-note">This is the preview: the form is switched off until the site is on its domain. Everything else about it is final.</p>}
   <div class="two">
     <div class="field">
       <label for="cf-name">Your name</label>
@@ -29,10 +31,10 @@ const turnstile = contact.turnstileSiteKey;
   <input type="hidden" name="started" value="" />
   {turnstile && <div class="cf-turnstile" data-sitekey={turnstile} data-theme="dark" data-size="flexible"></div>}
   <div class="actions">
-    <button class="btn btn-red" type="submit">Send message</button>
+    <button class="btn btn-red" type="submit" disabled={demo || undefined}>Send message</button>
     <p class="status" role="status" aria-live="polite" data-status></p>
   </div>
-  <p class="privacy">Your message goes straight to my inbox by email and isn’t stored anywhere else. <a href="/privacy/">Privacy</a>.</p>
+  <p class="privacy">Your message goes straight to my inbox by email and isn’t stored anywhere else. <a href={href('/privacy/')}>Privacy</a>.</p>
 </form>
 {turnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 <script>
@@ -88,5 +90,12 @@ const turnstile = contact.turnstileSiteKey;
   .privacy {
     font-size: 0.9rem;
     color: var(--text-3);
+  }
+  .demo-note {
+    padding: 0.75rem 1rem;
+    border: 1px dashed var(--line-2);
+    border-radius: var(--radius);
+    color: var(--text-2);
+    font-size: 0.95rem;
   }
 </style>

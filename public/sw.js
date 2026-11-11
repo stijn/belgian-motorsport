@@ -11,6 +11,8 @@ const VERSION = 1;
 const PAGES = 'bm-pages-v' + VERSION;
 const ASSETS = 'bm-assets-v' + VERSION;
 const FILE = /[\w.-]+\.(?:js|css|woff2|avif|webp|jpe?g|png|svg)\b/g;
+// Where the site lives: '/' on its domain, '/belgian-motorsport/' on the GitHub Pages demo.
+const BASE = new URL('./', self.location).pathname;
 
 self.addEventListener('install', () => self.skipWaiting());
 
@@ -28,13 +30,13 @@ const pageKey = (href) => {
   const url = new URL(href);
   return url.origin + url.pathname.replace(/index\.html$/, '');
 };
-const isAsset = (url) => url.pathname.startsWith('/_astro/');
+const isAsset = (url) => url.pathname.startsWith(BASE + '_astro/');
 
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return;
+  if (url.origin !== self.location.origin || !url.pathname.startsWith(BASE) || url.pathname.startsWith(BASE + 'api/')) return;
   if (req.mode === 'navigate') event.respondWith(page(event));
   else if (isAsset(url)) event.respondWith(asset(req));
 });
@@ -68,7 +70,7 @@ async function page(event) {
 
 /** No copy of this page: the home page, else any saved page. */
 async function fallback(cache) {
-  const home = await cache.match(self.location.origin + '/');
+  const home = await cache.match(self.location.origin + BASE);
   if (home) return home;
   const any = (await cache.keys())[0];
   return any ? cache.match(any) : null;

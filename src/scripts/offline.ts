@@ -13,9 +13,10 @@ window.addEventListener('pageshow', (e) => e.persisted && showNote());
 showNote();
 
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   const start = () => {
     navigator.serviceWorker
-      .register('/sw.js', { scope: '/' })
+      .register(`${base}sw.js`, { scope: base })
       .then(() => navigator.serviceWorker.ready)
       .then((reg) => {
         // Everything this page loaded before the worker took over, so it can be saved from the

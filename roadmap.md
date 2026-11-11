@@ -15,6 +15,9 @@
 
 First release, replacing the WordPress site.
 
+- A demo on GitHub Pages (https://stijn.github.io/belgian-motorsport/, `.github/workflows/pages.yml`):
+  the same build under a base path, with a preview bar, noindex and the form switched off. The
+  approved site goes to Cloudflare with the domain, from the same code.
 - Astro 7 static site on Cloudflare Workers (static assets), with one Worker route for the contact
   form. Private repo, GitHub Actions checks, Cloudflare Workers Builds deploys `main`.
 - The BM logo, the name and the tagline "Passionate about cars" as on the old site; the old footer's

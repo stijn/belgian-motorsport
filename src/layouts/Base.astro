@@ -9,6 +9,7 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site, socials, stats } from '../data/site';
+import { href, demo } from '../lib/url';
 
 interface Props {
   title?: string;
@@ -22,7 +23,7 @@ interface Props {
 }
 const { title = site.title, description = site.description, noindex = false, overHero = false, schema = [] } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL('/og.jpg', Astro.site).href;
+const ogImage = new URL(href('/og.jpg'), Astro.site).href;
 const ogAlt = `${site.name}: a race car at speed, with the red BM logo and the words "${site.tagline}".`;
 
 const org = {
@@ -34,7 +35,7 @@ const org = {
   slogan: site.tagline,
   description: site.description,
   url: site.url + '/',
-  logo: new URL('/bm-logo.png', Astro.site).href,
+  logo: new URL(href('/bm-logo.png'), Astro.site).href,
   image: ogImage,
   foundingDate: String(stats.since),
   areaServed: ['Belgium', 'Europe'],
@@ -65,13 +66,13 @@ const website = {
     {/* JS and motion classes before the first paint. public/_headers allows this script by its hash;
         tools/headers.test.mjs checks the hash still matches whenever this line changes. */}
     <script is:inline>document.documentElement.className=matchMedia('(prefers-reduced-motion: reduce)').matches?'js':'js js-motion'</script>
-    {noindex ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
+    {noindex || demo ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
     <link rel="canonical" href={canonical} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
-    <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
-    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="sitemap" href={href('/sitemap-index.xml')} />
+    <link rel="icon" href={href('/favicon.png')} type="image/png" sizes="48x48" />
+    <link rel="icon" href={href('/icon-192.png')} type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href={href('/apple-touch-icon.png')} />
+    <link rel="manifest" href={href('/manifest.webmanifest')} />
     <meta name="theme-color" content={site.themeColor} />
     <meta name="color-scheme" content="dark" />
     <meta name="author" content={site.name} />
@@ -99,6 +100,9 @@ const website = {
   </head>
   <body>
     <a class="skip" href="#main">Skip to content</a>
+    {demo && (
+      <p class="demo-bar" role="note">Preview of the new site. Not public, not in search engines; the contact form goes live together with the domain.</p>
+    )}
     <Header overHero={overHero} />
     <main id="main" tabindex="-1">
       <slot />

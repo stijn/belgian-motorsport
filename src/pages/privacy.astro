@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
+import { href } from '../lib/url';
 const updated = '2026-11-11';
 ---
 <Base title={`Privacy — ${site.name}`} description={`What ${site.name} does, and doesn’t do, with your data: no cookies, no trackers, and a contact form that goes straight to an inbox.`}>
@@ -17,7 +18,7 @@ const updated = '2026-11-11';
         <h2>Hosting</h2>
         <p>The site is served by <a href="https://www.cloudflare.com/privacypolicy/" rel="noopener">Cloudflare</a>, which keeps the usual short-lived technical logs to run and protect the service. After your first visit your browser may keep a copy of the site so it opens without a connection; that copy stays on your device.</p>
         <h2>Photos and films</h2>
-        <p>Everything on this site and on my channels is my own work. If you’d like to use a photo or a clip, ask through the <a href="/#contact">contact form</a>.</p>
+        <p>Everything on this site and on my channels is my own work. If you’d like to use a photo or a clip, ask through the <a href={href('/#contact')}>contact form</a>.</p>
         <p class="small">Last updated {updated}.</p>
       </div>
     </div>

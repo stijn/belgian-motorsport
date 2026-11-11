@@ -3,8 +3,14 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { site } from './src/data/site.ts';
 
+// The real site lives at the root of its domain. The demo on GitHub Pages lives under
+// https://stijn.github.io/belgian-motorsport/ (set by .github/workflows/pages.yml).
+const SITE = process.env.SITE ?? site.url;
+const BASE = process.env.BASE ?? '/';
+
 export default defineConfig({
-  site: site.url,
+  site: SITE,
+  base: BASE,
   output: 'static',
   trailingSlash: 'always',
   // The stylesheet goes inside each page: the first paint needs one download instead of two.

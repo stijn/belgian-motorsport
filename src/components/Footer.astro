@@ -5,12 +5,13 @@ import { Image } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
 import SocialIcon from './SocialIcon.astro';
 import { site, socials, about, nav } from '../data/site';
+import { href } from '../lib/url';
 const year = new Date().getFullYear();
 ---
 <footer class="site-footer">
   <div class="wrap grid">
     <div class="col about">
-      <a href="/" class="logo" aria-label={`${site.name}, home`}>
+      <a href={href('/')} class="logo" aria-label={`${site.name}, home`}>
         <Image src={logo} alt="" width="160" height="59" densities={[1, 2]} />
       </a>
       <p class="tagline">{site.tagline}</p>
@@ -29,13 +30,13 @@ const year = new Date().getFullYear();
     <nav class="col links" aria-label="Footer">
       <h2 class="label">On this page</h2>
       <ul>
-        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
-        <li><a href="/privacy/">Privacy</a></li>
+        {nav.map((n) => <li><a href={href(n.href)}>{n.label}</a></li>)}
+        <li><a href={href('/privacy/')}>Privacy</a></li>
       </ul>
     </nav>
     <div class="col meta">
       <h2 class="label">Rights</h2>
-      <p>Every photo and film on this site and on the channels above is my own work. Please ask before using one: the <a href="/#contact">contact form</a> is the quickest way.</p>
+      <p>Every photo and film on this site and on the channels above is my own work. Please ask before using one: the <a href={href('/#contact')}>contact form</a> is the quickest way.</p>
       <p class="small">© {year} {site.name}. All rights reserved.</p>
     </div>
   </div>

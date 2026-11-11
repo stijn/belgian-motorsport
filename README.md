@@ -68,7 +68,12 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 
 ## Deploys
 
-Cloudflare Workers Builds watches `main`: build command `npm run build`, deploy command
+**Demo:** every push to `main` also builds the site for GitHub Pages at
+https://stijn.github.io/belgian-motorsport/ (`.github/workflows/pages.yml`, with `SITE`, `BASE` and
+`PUBLIC_DEMO=1`): a preview bar, `noindex`, and the contact form switched off. Nothing on the demo is
+indexed or reachable by search engines.
+
+**Live:** Cloudflare Workers Builds watches `main`: build command `npm run build`, deploy command
 `npx wrangler deploy`. GitHub Actions (`.github/workflows/ci.yml`) runs the checks, tests and a build
 on every push and pull request. Releases: bump `version` in `package.json`, add the section to
 `roadmap.md`, tag `vX.Y.Z`.

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
+import { href } from '../lib/url';
 ---
 <Base title={`Off track — ${site.name}`} noindex>
   <section class="section">
@@ -9,8 +10,8 @@ import { site } from '../data/site';
       <h1 class="h2">Off track.</h1>
       <p class="lead">That page isn’t here. The old site had different addresses; everything now lives on one page.</p>
       <p class="cta">
-        <a class="btn btn-red" href="/">Back to the start</a>
-        <a class="btn btn-ghost" href="/#work">The photos</a>
+        <a class="btn btn-red" href={href('/')}>Back to the start</a>
+        <a class="btn btn-ghost" href={href('/#work')}>The photos</a>
       </p>
     </div>
   </section>

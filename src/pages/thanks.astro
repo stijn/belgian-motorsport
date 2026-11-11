@@ -2,6 +2,7 @@
 // Where the form lands without JavaScript (the Worker redirects here after sending).
 import Base from '../layouts/Base.astro';
 import { site } from '../data/site';
+import { href } from '../lib/url';
 ---
 <Base title={`Thanks — ${site.name}`} noindex>
   <section class="section">
@@ -9,7 +10,7 @@ import { site } from '../data/site';
       <p class="eyebrow">Sent</p>
       <h1 class="h2">Thanks, your message is on its way.</h1>
       <p class="lead">I’ll get back to you by email, usually within a day or two.</p>
-      <p><a class="btn btn-ghost" href="/">Back to the site</a></p>
+      <p><a class="btn btn-ghost" href={href('/')}>Back to the site</a></p>
     </div>
   </section>
 </Base>
