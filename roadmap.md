@@ -2,8 +2,6 @@
 
 ## Next
 
-- Email for the contact form: a Resend account, the domain verified there, the `RESEND_API_KEY`
-  secret ([docs/go-live.md](docs/go-live.md), step 4). Until then the form answers with a friendly notice.
 - Workers Builds, so a push to `main` deploys the live site (today: `npm run deploy` from a laptop).
 - After go-live: Search Console, `AAAA 100::` instead of the Dreamhost IPs, `blog.` subdomain's fate,
   cancel Dreamhost hosting.

@@ -129,8 +129,8 @@ Done:
 
 Open:
 
-- Email: a Resend account, the domain verified, `RESEND_API_KEY` set (step 4). The form stays a
-  friendly 503 until then.
+- Email: done on 2026-11-11. Resend account, domain verified, `RESEND_API_KEY` on both Workers, a
+  test message delivered to his inbox. Resend → Emails shows every message and its status.
 - Workers Builds (step 2): not connected yet, so deploys are `npm run deploy` from a laptop with
   Wrangler logged in.
 - The `A` records for `@` and `www` in the main zone still carry Dreamhost's IP (67.205.1.0). The
