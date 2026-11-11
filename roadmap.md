@@ -15,9 +15,11 @@
 
 First release, replacing the WordPress site.
 
-- A demo on GitHub Pages (https://stijn.github.io/belgian-motorsport/, `.github/workflows/pages.yml`):
-  the same build under a base path, with a preview bar, noindex and the form switched off. The
-  approved site goes to Cloudflare with the domain, from the same code.
+- A demo at https://belgian-motorsport-demo.stijn-vogels.workers.dev (`npm run deploy:demo`): the
+  same Worker without the domain, built with a preview bar, noindex and the form switched off. The
+  build also works under a base path (`SITE`/`BASE`), so a GitHub Pages copy is a workflow away once
+  the account allows Pages on a private repo. The approved site goes to Cloudflare with the domain,
+  from the same code.
 - Astro 7 static site on Cloudflare Workers (static assets), with one Worker route for the contact
   form. Private repo, GitHub Actions checks, Cloudflare Workers Builds deploys `main`.
 - The BM logo, the name and the tagline "Passionate about cars" as on the old site; the old footer's
@@ -45,6 +47,9 @@ First release, replacing the WordPress site.
   reduced motion respected everywhere, alt text on every photo.
 
 ## Not planned
+
+- GitHub Pages for the demo on the free plan: Pages needs a public repo or GitHub Pro; the
+  workers.dev demo does the job without either.
 
 - A CMS or admin panel. The content is a handful of files; the sync script does the rest, and a
   WordPress-style backend was the problem being solved.

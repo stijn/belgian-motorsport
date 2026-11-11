@@ -2,6 +2,8 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "belgian-motorsport",
+  // Stijn's Cloudflare account. Not a secret.
+  "account_id": "0954ead81ed9fd06d343580d95902280",
   "compatibility_date": "2026-11-01",
   "main": "worker/index.ts",
   "assets": {
@@ -27,5 +29,21 @@
   //   CONTACT_TO        the address that receives the form (his address; it never appears in the site)
   //   TURNSTILE_SECRET  optional; switches on Cloudflare Turnstile checks
   "observability": { "enabled": true },
-  "routes": [{ "pattern": "belgian-motorsport.com", "custom_domain": true }]
+  "routes": [{ "pattern": "belgian-motorsport.com", "custom_domain": true }],
+  // The demo: the same Worker on workers.dev, no custom domain, built with PUBLIC_DEMO=1
+  // (preview bar, noindex, form switched off). `npm run deploy:demo`.
+  "env": {
+    "demo": {
+      "name": "belgian-motorsport-demo",
+      "workers_dev": true,
+      "routes": [],
+      "send_email": [{ "name": "EMAIL" }],
+      "ratelimits": [{ "name": "CONTACT_LIMIT", "namespace_id": "1002", "simple": { "limit": 5, "period": 60 } }],
+      "vars": {
+        "CONTACT_FROM": "contact@belgian-motorsport.com",
+        "CONTACT_FROM_NAME": "Belgian Motorsport website (demo)",
+        "SITE_ORIGIN": "https://belgian-motorsport-demo.stijn-vogels.workers.dev"
+      }
+    }
+  }
 }

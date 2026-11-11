@@ -68,10 +68,10 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 
 ## Deploys
 
-**Demo:** every push to `main` also builds the site for GitHub Pages at
-https://stijn.github.io/belgian-motorsport/ (`.github/workflows/pages.yml`, with `SITE`, `BASE` and
-`PUBLIC_DEMO=1`): a preview bar, `noindex`, and the contact form switched off. Nothing on the demo is
-indexed or reachable by search engines.
+**Demo:** https://belgian-motorsport-demo.stijn-vogels.workers.dev, a second copy of the Worker on
+workers.dev without the domain, built with `PUBLIC_DEMO=1` (a preview bar, `noindex`, the contact form
+switched off). `npm run deploy:demo` builds and deploys it from this machine (`env.demo` in
+`wrangler.jsonc`). Search engines are told to stay out.
 
 **Live:** Cloudflare Workers Builds watches `main`: build command `npm run build`, deploy command
 `npx wrangler deploy`. GitHub Actions (`.github/workflows/ci.yml`) runs the checks, tests and a build

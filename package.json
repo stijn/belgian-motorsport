@@ -13,7 +13,8 @@
     "test": "vitest run",
     "sync": "node tools/sync.mjs",
     "icons": "node tools/icons.mjs",
-    "deploy": "astro build && wrangler deploy"
+    "deploy": "astro build && wrangler deploy",
+    "deploy:demo": "PUBLIC_DEMO=1 SITE=https://belgian-motorsport-demo.stijn-vogels.workers.dev astro build && wrangler deploy --env demo"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.4",
