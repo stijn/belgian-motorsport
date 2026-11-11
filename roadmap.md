@@ -11,6 +11,12 @@
 - His portrait in About, when he sends one (replace the placeholder frame).
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.3.1 (2026-11-11)
+
+- The phone menu opens full-screen again: the header's blur had made it the menu's containing block
+  (the panel collapsed to the bar's own height); the blur now sits on a pseudo-element. The menu also
+  covers the back-to-top flag and the status notes instead of sitting under them.
+
 ## 1.3.0 (2026-11-11)
 
 - Five languages: English at the root, Dutch, French, German and Italian under `/nl/`, `/fr/`,

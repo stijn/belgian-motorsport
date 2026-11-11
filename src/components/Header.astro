@@ -75,21 +75,33 @@ const languages = langs.map((l) => ({ lang: l, name: t(l).name, code: t(l).htmlL
   .site-header {
     position: sticky;
     top: 0;
-    z-index: 50;
+    /* Above the back-to-top flag (80) and the status notes (90+), so an open phone menu covers them. */
+    z-index: 100;
+    border-bottom: 1px solid var(--line);
+    transition: border-color 0.4s;
+  }
+  /* The dark, blurred bar lives on a pseudo-element: a backdrop-filter on the header itself would make
+     it the containing block of the fixed phone menu, which then collapses to the header's own box. */
+  .site-header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
     background: rgb(11 11 12 / 0.92);
     -webkit-backdrop-filter: blur(14px);
     backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--line);
-    transition: background 0.4s, border-color 0.4s;
+    transition: background 0.4s;
   }
   /* Over the hero the bar floats on a soft shade until the page scrolls; the links carry a halo. */
   .site-header.over-hero:not(.scrolled) {
     position: fixed;
     inset-inline: 0;
+    border-color: transparent;
+  }
+  .site-header.over-hero:not(.scrolled)::before {
     background: linear-gradient(rgb(0 0 0 / 0.7), rgb(0 0 0 / 0.35) 70%, transparent);
     -webkit-backdrop-filter: none;
     backdrop-filter: none;
-    border-color: transparent;
   }
   .site-header.over-hero.scrolled {
     position: fixed;
