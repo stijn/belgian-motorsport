@@ -13,6 +13,10 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.5.2 (2026-11-11)
+
+- The tricolour line sits on the page, not the sticky header: it shows at the top and scrolls away.
+
 ## 1.5.1 (2026-11-11)
 
 - Film lightbox: previous and next (buttons, arrow keys), the title and a YouTube link under the

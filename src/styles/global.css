@@ -693,9 +693,10 @@ main {
   }
 }
 
-/* The tricolour along the top edge, above the header; a hairline under it so the black third reads on dark. */
+/* The tricolour along the top edge of the page: on the page, not the header, so it scrolls away;
+   a hairline under it so the black third reads on dark. */
 .tricolour {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
