@@ -172,6 +172,12 @@ button {
   width: 2rem;
   height: 2px;
   background: var(--red);
+  transform-origin: left;
+  transition: transform 0.8s var(--ease) 0.15s;
+}
+
+.js-motion .eyebrow.rv:not(.in)::before {
+  transform: scaleX(0);
 }
 
 .h2 {
@@ -226,6 +232,27 @@ button {
   transition: transform 0.25s var(--ease), background 0.25s, color 0.25s, border-color 0.25s;
   /* Racing cut on the corners. */
   clip-path: polygon(0.6rem 0, 100% 0, 100% calc(100% - 0.6rem), calc(100% - 0.6rem) 100%, 0 100%, 0 0.6rem);
+}
+
+/* A light sweeps across on hover, like a reflection on a bonnet. */
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 0.28) 50%, transparent 65%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+
+.btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn:hover::after,
+.btn:focus-visible::after {
+  transition: transform 0.7s var(--ease);
+  transform: translateX(120%);
 }
 
 .btn:hover {
@@ -294,6 +321,12 @@ button {
   flex: none;
 }
 
+.icon-line {
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.3em;
+}
+
 /* Reveal on scroll ------------------------------------------------------ */
 /* Elements start where they are: the class only animates them in once JS is up,
    so nothing is hidden when a script fails or motion is reduced. */
@@ -306,6 +339,16 @@ button {
 
 .js-motion .rv.in {
   opacity: 1;
+  transform: none;
+}
+
+/* Headlines rise a little further and take their time. */
+.js-motion .h2.rv {
+  transform: translateY(32px);
+  transition-duration: 0.9s;
+}
+
+.js-motion .h2.rv.in {
   transform: none;
 }
 

@@ -110,10 +110,30 @@ import { about, socials, site } from '../data/site';
     display: grid;
   }
   .services li {
+    position: relative;
     display: grid;
     gap: 0.25rem;
-    padding: var(--s3) 0;
+    padding: var(--s3) 0 var(--s3) 0;
     border-top: 1px solid var(--line);
+    transition: padding-left 0.4s var(--ease);
+  }
+  .services li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: var(--s3);
+    bottom: var(--s3);
+    width: 3px;
+    background: var(--red);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.4s var(--ease);
+  }
+  .services li:hover {
+    padding-left: var(--s3);
+  }
+  .services li:hover::before {
+    transform: none;
   }
   .services li:last-child {
     border-bottom: 1px solid var(--line);

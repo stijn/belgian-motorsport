@@ -4,6 +4,14 @@ const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
 const menu = document.querySelector<HTMLElement>('[data-menu]');
 
 const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+
+// The header's logo stays out of the way while the hero's big logo is on screen.
+const heroLogo = document.querySelector('[data-hero-logo]');
+if (header && heroLogo && 'IntersectionObserver' in window) {
+  new IntersectionObserver(([e]) => header.classList.toggle('brand-hidden', !!e?.isIntersecting), { threshold: 0.2 }).observe(heroLogo);
+} else {
+  header?.classList.remove('brand-hidden');
+}
 onScroll();
 window.addEventListener('scroll', onScroll, { passive: true });
 

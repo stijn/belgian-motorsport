@@ -106,6 +106,13 @@ const year = new Date().getFullYear();
     transform: scale(1.1);
     box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 30%, transparent);
   }
+  .networks a:hover .dot .icon {
+    animation: wiggle 0.5s var(--ease);
+  }
+  @keyframes wiggle {
+    25% { transform: rotate(-12deg) scale(1.1); }
+    75% { transform: rotate(10deg) scale(1.1); }
+  }
   .networks a:hover span:last-child {
     text-decoration: underline;
     text-underline-offset: 0.2em;

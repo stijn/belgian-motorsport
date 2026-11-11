@@ -1,0 +1,32 @@
+---
+// A line-md animated icon (Iconify), inlined at build time so its SVG animation runs: the icon draws
+// itself when it first comes into view, and again on hover inside a [data-replay] element
+// (src/scripts/line-md.ts). Brand icons stay Font Awesome (Fa.astro / SocialIcon.astro).
+import { icons } from '@iconify-json/line-md';
+import { getIconData, iconToSVG, iconToHTML, replaceIDs } from '@iconify/utils';
+
+interface Props {
+  name: string;
+  class?: string;
+  /** An accessible name, when the icon stands alone. Without one it's decorative. */
+  label?: string;
+}
+const { name, class: cls, label } = Astro.props;
+const data = getIconData(icons, name);
+if (!data) throw new Error(`line-md icon not found: ${name}`);
+const { attributes, body } = iconToSVG(data, { height: '1em' });
+const attrs: Record<string, string> = {
+  ...attributes,
+  class: ['icon icon-line', cls].filter(Boolean).join(' '),
+  'data-line-md': name,
+  focusable: 'false',
+};
+if (label) {
+  attrs.role = 'img';
+  attrs['aria-label'] = label;
+} else {
+  attrs['aria-hidden'] = 'true';
+}
+const html = iconToHTML(replaceIDs(body), attrs);
+---
+<Fragment set:html={html} />

@@ -20,11 +20,24 @@ interface Props {
   overHero?: boolean;
   /** Extra JSON-LD for this page. */
   schema?: Record<string, unknown>[];
+  /** Which share card (public/og-*.jpg, made by tools/share-cards.mjs). */
+  card?: 'home' | 'contact' | 'privacy';
+  /** What the share card shows, for people who can't see it. */
+  cardAlt?: string;
 }
-const { title = site.title, description = site.description, noindex = false, overHero = false, schema = [] } = Astro.props;
+const {
+  title = site.title,
+  description = site.description,
+  noindex = false,
+  overHero = false,
+  schema = [],
+  card = 'home',
+  cardAlt = `A BMW M1 Procar at speed with flames from the exhaust, the red BM logo, and the words "${site.name}, ${site.tagline}".`,
+} = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-const ogImage = new URL(href('/og.jpg'), Astro.site).href;
-const ogAlt = `${site.name}: a race car at speed, with the red BM logo and the words "${site.tagline}".`;
+const ogImage = new URL(href(`/og-${card}.jpg`), Astro.site).href;
+const ogSquare = new URL(href(`/og-${card}-square.jpg`), Astro.site).href;
+const ogAlt = cardAlt;
 
 const org = {
   '@context': 'https://schema.org',
@@ -87,12 +100,22 @@ const website = {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content={ogAlt} />
+    {/* A square version for the networks that crop to one (WhatsApp, Mastodon, iMessage). */}
+    <meta property="og:image" content={ogSquare} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="1200" />
+    <meta property="og:image:alt" content={ogAlt} />
     <meta property="og:locale" content={site.locale} />
+    <meta property="og:see_also" content={socials[0].url} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={ogAlt} />
+    <meta name="apple-mobile-web-app-title" content="BM" />
+    <meta name="application-name" content={site.name} />
+    {socials.map((s) => <link rel="me" href={s.url} />)}
     <meta name="generator" content={Astro.generator} />
 
     <script type="application/ld+json" set:html={JSON.stringify([org, website, ...schema])} />
@@ -108,6 +131,7 @@ const website = {
     <p class="offline-note" role="status" data-offline data-text="No connection. You’re seeing the copy saved on this device."></p>
     <script>
       import '../scripts/reveal';
+      import '../scripts/line-md';
       import '../scripts/offline';
     </script>
   </body>

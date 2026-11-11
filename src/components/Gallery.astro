@@ -4,8 +4,9 @@
 import { Picture, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Fa from './Fa.astro';
+import LineMd from './LineMd.astro';
 import SocialIcon from './SocialIcon.astro';
-import { faArrowRight, faExpand } from '@fortawesome/free-solid-svg-icons';
+import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import gallery from '../data/gallery.json';
 import { accounts, socials } from '../data/site';
 
@@ -59,12 +60,18 @@ const items = await Promise.all(
     </ul>
 
     <p class="more rv">
-      <a class="link-arrow" href={flickr.url} rel="me noopener">
-        <SocialIcon network="flickr" /> Every album on Flickr <Fa icon={faArrowRight} />
+      <a class="link-arrow" data-replay href={flickr.url} rel="me noopener">
+        <SocialIcon network="flickr" /> Every album on Flickr <LineMd name="arrow-right" />
       </a>
     </p>
   </div>
 </section>
+{/* The lightbox is built by src/scripts/lightbox.ts; its icons come from here so they animate. */}
+<template data-lightbox-icons>
+  <span data-icon="prev"><LineMd name="arrow-left" /></span>
+  <span data-icon="next"><LineMd name="arrow-right" /></span>
+  <span data-icon="close"><LineMd name="close" /></span>
+</template>
 <script>
   import '../scripts/lightbox';
   import '../scripts/photos';
@@ -144,6 +151,12 @@ const items = await Promise.all(
     transform: none;
   }
   figcaption {
+    transition: transform 0.5s var(--ease), color 0.3s;
+  }
+  .tile:hover figcaption {
+    transform: translateX(4px);
+  }
+  figcaption {
     display: flex;
     justify-content: space-between;
     gap: var(--s3);
@@ -209,6 +222,15 @@ const items = await Promise.all(
     height: auto;
     object-fit: contain;
     box-shadow: 0 30px 80px rgb(0 0 0 / 0.6);
+  }
+  .js-motion .lb-stage img.lb-switch {
+    animation: lb-img 0.45s var(--ease);
+  }
+  @keyframes lb-img {
+    from { opacity: 0; transform: scale(0.97); }
+  }
+  .lb-btn .icon-line {
+    font-size: 1.1em;
   }
   .lb-caption {
     text-align: center;

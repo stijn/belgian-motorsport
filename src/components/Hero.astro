@@ -3,8 +3,7 @@
 // the name and the tagline from the old site. With motion reduced, the first photo stands still.
 import { Image, Picture, getImage } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
-import Fa from './Fa.astro';
-import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import LineMd from './LineMd.astro';
 import { site } from '../data/site';
 import porsche from '../assets/hero/porsche-911-rsr-spa.jpg';
 import bmw from '../assets/hero/bmw-m1-procar.jpg';
@@ -46,7 +45,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   </div>
 
   <div class="wrap content">
-    <Image src={logo} alt="BM" width="420" height="156" densities={[1, 2]} loading="eager" class="logo rv" />
+    <Image src={logo} alt="BM" width="420" height="156" densities={[1, 2]} loading="eager" class="logo rv" data-hero-logo />
     <h1 class="title rv">
       <span class="name">{site.name}</span>
       <span class="tagline">{site.tagline}</span>
@@ -58,8 +57,8 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     </div>
   </div>
 
-  <a class="cue" href="#stats" aria-label="Scroll down">
-    <Fa icon={faArrowDown} />
+  <a class="cue" href="#stats" aria-label="Scroll down" data-replay>
+    <LineMd name="arrow-down" />
   </a>
 </section>
 
@@ -162,6 +161,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     margin-top: var(--s2);
   }
   .cue {
+    font-size: 1.25rem;
     position: absolute;
     right: var(--gutter);
     bottom: var(--s4);
@@ -175,6 +175,10 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     text-decoration: none;
     animation: bob 2.4s infinite var(--ease);
   }
+  .cue:hover {
+    color: var(--text);
+    border-color: var(--text);
+  }
   @keyframes bob {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(6px); }
@@ -186,6 +190,14 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   .js-motion .content .rv:nth-child(2) { animation-delay: 0.15s; }
   .js-motion .content .rv:nth-child(3) { animation-delay: 0.3s; }
   .js-motion .content .rv:nth-child(4) { animation-delay: 0.45s; }
+  /* The tagline settles from wide tracking into place. */
+  .js-motion .tagline {
+    animation: track 1.4s 0.3s var(--ease) both;
+  }
+  @keyframes track {
+    from { letter-spacing: 0.6em; opacity: 0; }
+    to { letter-spacing: 0.32em; opacity: 1; }
+  }
   @keyframes rise {
     from { opacity: 0; transform: translateY(24px); }
     to { opacity: 1; transform: none; }

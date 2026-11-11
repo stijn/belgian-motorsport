@@ -9,10 +9,16 @@ if (buttons.length) {
       <img alt="" decoding="async" />
       <p class="lb-caption"></p>
     </div>
-    <button type="button" class="lb-btn lb-prev" aria-label="Previous photo">&#8592;</button>
-    <button type="button" class="lb-btn lb-next" aria-label="Next photo">&#8594;</button>
-    <button type="button" class="lb-btn lb-close" aria-label="Close">&#215;</button>
+    <button type="button" class="lb-btn lb-prev" aria-label="Previous photo" data-replay>&#8592;</button>
+    <button type="button" class="lb-btn lb-next" aria-label="Next photo" data-replay>&#8594;</button>
+    <button type="button" class="lb-btn lb-close" aria-label="Close" data-replay>&#215;</button>
     <p class="lb-count" aria-live="polite"></p>`;
+  // The animated icons rendered by Gallery.astro replace the text arrows.
+  const tpl = document.querySelector<HTMLTemplateElement>('[data-lightbox-icons]');
+  for (const [name, sel] of [['prev', '.lb-prev'], ['next', '.lb-next'], ['close', '.lb-close']] as const) {
+    const svg = tpl?.content.querySelector(`[data-icon="${name}"] svg`);
+    if (svg) dlg.querySelector(sel)!.replaceChildren(svg.cloneNode(true));
+  }
   document.body.append(dlg);
   const img = dlg.querySelector('img')!;
   const cap = dlg.querySelector<HTMLElement>('.lb-caption')!;
@@ -23,6 +29,9 @@ if (buttons.length) {
   const show = (n: number) => {
     i = (n + buttons.length) % buttons.length;
     const b = buttons[i]!;
+    img.classList.remove('lb-switch');
+    void img.offsetWidth; // restart the switch animation
+    img.classList.add('lb-switch');
     img.src = b.dataset.full ?? '';
     img.alt = b.dataset.alt ?? '';
     cap.textContent = b.dataset.caption ?? '';

@@ -23,3 +23,5 @@ if (root.classList.contains('js-motion') && 'IntersectionObserver' in window) {
 } else {
   els.forEach((el) => el.classList.add('in'));
 }
+
+export {};

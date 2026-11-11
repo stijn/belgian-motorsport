@@ -4,7 +4,12 @@ import Base from '../layouts/Base.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { contact, site } from '../data/site';
 ---
-<Base title={`Contact — ${site.name}`} description={`${contact.heading} ${contact.text} Bookings, prints and licensing for motorsport photography and film from Belgium.`}>
+<Base
+  title={`Contact — ${site.name}`}
+  description={`${contact.heading} ${contact.text} Bookings, prints and licensing for motorsport photography and film from Belgium.`}
+  card="contact"
+  cardAlt="A yellow Porsche 911 on the kerbs at Spa, the red BM logo, and the words “Want to work with me?”"
+>
   <section class="section">
     <div class="wrap narrow">
       <p class="eyebrow">Contact</p>

@@ -22,7 +22,7 @@ for the move from Dreamhost to Cloudflare.
 | Pages | `src/pages/` (`index`, `contact`, `privacy`, `thanks`, `404`, the manifest) |
 | Contact form server side | `worker/index.ts`, `worker/contact.ts` (+ tests) |
 | Security and caching headers, redirects, service worker, icons, share image | `public/` |
-| Scripts that build things | `tools/sync.mjs`, `tools/icons.mjs` |
+| Scripts that build things | `tools/sync.mjs` (films, albums), `tools/icons.mjs` (icons), `tools/share-cards.mjs` (share cards) |
 
 ## Local development
 
@@ -36,7 +36,8 @@ npm run preview    # build, then serve dist/ with the Worker through wrangler (h
 npm run check      # astro check + the Worker's types
 npm test           # vitest: form validation, email building, CSP hash
 npm run sync       # refresh films and albums from YouTube and Flickr
-npm run icons      # rebuild favicon, app icons and og.jpg from the logo
+npm run icons      # rebuild favicon and app icons from the logo
+npm run cards      # rebuild the share cards (public/og-*.jpg) from his photos, the logo and the site's fonts
 ```
 
 The Worker's generated types come from `npx wrangler types worker/worker-configuration.d.ts`
@@ -62,7 +63,8 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
   inline script allowed by hash, YouTube no-cookie frames after a click), Permissions-Policy, COOP,
   nosniff, referrer policy and immutable caching for `/_astro/*`. `tests/headers.test.ts` fails if the
   inline script changes without its hash.
-- **Search and sharing.** Canonical URLs, Open Graph and Twitter cards with `public/og.jpg`, JSON-LD for
+- **Search and sharing.** Canonical URLs, Open Graph and Twitter cards with a card per page in two shapes
+  (`public/og-*.jpg`, words set in the site's own fonts by `tools/share-cards.mjs`), JSON-LD for
   the organisation, the website, the photo gallery and the film list, `sitemap-index.xml`, `robots.txt`,
   and `public/_redirects` for the old WordPress paths and short links.
 
@@ -82,5 +84,5 @@ on every push and pull request. Releases: bump `version` in `package.json`, add 
 The repository is public so the demo can run on GitHub Pages. Photos, films and the BM logo
 © Belgian Motorsport, all rights reserved: they may not be reused. The code is here to read and learn
 from, not packaged as a template. Icons by
-[Font Awesome](https://fontawesome.com) (CC BY 4.0); fonts Barlow and Barlow Condensed (OFL) via
-[Fontsource](https://fontsource.org).
+[Font Awesome](https://fontawesome.com) (CC BY 4.0) and [line-md](https://github.com/cyberalien/line-md)
+(MIT); fonts Barlow and Barlow Condensed (OFL) via [Fontsource](https://fontsource.org).

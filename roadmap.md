@@ -11,6 +11,23 @@
 - Dutch and French versions of the words, with hreflang.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.1.0 (2026-11-11)
+
+- The header's logo stays hidden while the hero's big logo is on screen and fades in once it has
+  scrolled away, so the BM mark never shows twice at once.
+- Animation throughout: the tagline settles from wide tracking, the numbers count up and their red
+  markers draw in, section lines and year rules draw themselves, headlines rise, buttons carry a
+  light sweep on hover, the play button pulses a ring, services get a red marker, footer icons
+  wiggle, the lightbox cross-fades between photos, and the phone menu's items slide in one by one.
+  All of it is off with reduced motion.
+- line-md animated icons beside Font Awesome: the scroll cue, the "more" arrows (they redraw on
+  hover), the lightbox's arrows and close, and the form's sending, sent and error states. Each
+  draws itself when it first comes into view. Brand icons stay Font Awesome.
+- Share cards per page (home, contact, privacy), in 1200×630 and a 1200×1200 square for the
+  networks that crop: his photo, the BM logo, the words set in Barlow Condensed and Barlow as
+  paths (no system font), the numbers and the domain, the tricolour. `npm run cards` rebuilds
+  them. Plus `rel="me"` links to his four networks and an `og:see_also`.
+
 ## 1.0.0 (2026-11-11)
 
 First release, replacing the WordPress site.

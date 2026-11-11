@@ -4,6 +4,7 @@
 // honeypot field, a minimum time to fill in the form, a rate limit, and Turnstile when configured.
 import { contact } from '../data/site';
 import { href, demo } from '../lib/url';
+import LineMd from './LineMd.astro';
 const turnstile = contact.turnstileSiteKey;
 ---
 <form class="contact-form" method="post" action={contact.endpoint} data-contact-form data-demo={demo ? '' : undefined} novalidate>
@@ -34,6 +35,12 @@ const turnstile = contact.turnstileSiteKey;
     <button class="btn btn-red" type="submit" disabled={demo || undefined}>Send message</button>
     <p class="status" role="status" aria-live="polite" data-status></p>
   </div>
+  {/* Icons for the status line (src/scripts/contact-form.ts picks one). */}
+  <template data-status-icons>
+    <span data-icon="sending"><LineMd name="loading-twotone-loop" /></span>
+    <span data-icon="ok"><LineMd name="email-check" /></span>
+    <span data-icon="error"><LineMd name="alert-circle" /></span>
+  </template>
   <p class="privacy">Your message goes straight to my inbox by email and isn’t stored anywhere else. <a href={href('/privacy/')}>Privacy</a>.</p>
 </form>
 {turnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
@@ -71,6 +78,12 @@ const turnstile = contact.turnstileSiteKey;
   .status {
     min-height: 1.5em;
     color: var(--text-2);
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+  }
+  .status .icon-line {
+    font-size: 1.3em;
   }
   .status[data-kind='ok'] {
     color: #7ed9a0;

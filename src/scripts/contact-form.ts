@@ -14,15 +14,19 @@ if (form && !('demo' in form.dataset)) {
     history.replaceState(null, '', location.pathname);
   }
 
-  const say = (text: string, kind: 'ok' | 'error' | '') => {
-    status.textContent = text;
+  const icons = form.querySelector<HTMLTemplateElement>('[data-status-icons]');
+  const say = (text: string, kind: 'ok' | 'error' | 'sending' | '') => {
+    status.replaceChildren();
+    const svg = kind && icons?.content.querySelector(`[data-icon="${kind}"] svg`);
+    if (svg) status.append(svg.cloneNode(true));
+    status.append(document.createTextNode(text));
     status.dataset.kind = kind;
   };
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form.reportValidity()) return;
-    say('Sending…', '');
+    say('Sending…', 'sending');
     button.setAttribute('aria-busy', 'true');
     button.disabled = true;
     try {

@@ -6,13 +6,16 @@ const years = new Date(stats.asOf).getFullYear() - stats.since;
 <section id="stats" class="stats" aria-label="In numbers">
   <div class="wrap">
     <ul data-stagger>
-      <li class="rv"><span class="value num">{years}</span><span class="label">years trackside</span></li>
+      <li class="rv"><span class="value num" data-count={String(years)}>{years}</span><span class="label">years trackside</span></li>
       {stats.items.map((s) => (
-        <li class="rv"><span class="value num">{s.value}<i>+</i></span><span class="label">{s.label}</span></li>
+        <li class="rv"><span class="value num" data-count={s.value}>{s.value}<i>+</i></span><span class="label">{s.label}</span></li>
       ))}
     </ul>
   </div>
 </section>
+<script>
+  import '../scripts/stats';
+</script>
 
 <style>
   .stats {
@@ -28,11 +31,26 @@ const years = new Date(stats.asOf).getFullYear() - stats.since;
     gap: var(--s3) var(--s4);
   }
   li {
+    position: relative;
     display: grid;
     gap: 0.1rem;
     padding: var(--s2) 0;
-    border-left: 2px solid var(--red);
     padding-left: var(--s3);
+  }
+  /* The red marker draws down as the item reveals. */
+  li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--red);
+    transform-origin: top;
+    transition: transform 0.8s var(--ease) 0.2s;
+  }
+  .js-motion li:not(.in)::before {
+    transform: scaleY(0);
   }
   .value {
     font-family: var(--font-display);
