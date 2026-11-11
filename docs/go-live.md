@@ -133,7 +133,18 @@ Open:
   test message delivered to his inbox. Resend → Emails shows every message and its status.
 - Workers Builds (step 2): not connected yet, so deploys are `npm run deploy` from a laptop with
   Wrangler logged in.
-- The `A` records for `@` and `www` in the main zone still carry Dreamhost's IP (67.205.1.0). The
-  Worker answers before any origin is reached, so they are harmless; replace them with `AAAA 100::`
-  once Dreamhost hosting is cancelled, and decide what `blog.belgian-motorsport.com` becomes.
+- Dreamhost hosting for `belgian-motorsport.com` was set to **DNS Only** on 2026-11-11 (the old
+  WordPress is gone from Dreamhost's server; its one page and twelve media files are in
+  `archive/wordpress/`, git-ignored). In Dreamhost's own DNS the `@` and `www` records then point at
+  Cloudflare's addresses, so a resolver that still holds the old delegation lands on the new site too.
+  The `A` records for `@` and `www` in the Cloudflare zone still carry 67.205.1.0: harmless (the Worker
+  answers first); swap them for `AAAA 100::` at leisure. `blog.belgian-motorsport.com` is still a
+  Dreamhost-hosted site; delete it there when he agrees.
+- Registrations: both domains are still registered at Dreamhost (belgianmotorsport.com until
+  2027-04-07, belgian-motorsport.com until 2027-09-03, auto-renew on). Moving them to Cloudflare
+  Registrar costs about USD 10.5 per year each (at cost) instead of Dreamhost's renewal price, and a
+  transfer adds a year. Steps, per domain, in Dreamhost → Domains → Registrations → Manage: switch off
+  the registrar lock, note the authorization (EPP) code; in Cloudflare → Domain Registration →
+  Transfer: pick the domain, enter that code, pay one year. Dreamhost emails a confirmation; approve it
+  and the transfer completes within five days. The DNS stays as it is throughout.
 - Search Console (step 5) and the Dreamhost cancellation (step 6).
