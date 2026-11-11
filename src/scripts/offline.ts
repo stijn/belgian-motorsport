@@ -12,6 +12,17 @@ window.addEventListener('offline', showNote);
 window.addEventListener('pageshow', (e) => e.persisted && showNote());
 showNote();
 
+// The worker shows the saved copy of a page and fetches the current one behind it. When that one
+// differs (a new deploy), it says so, and this note offers a reload.
+const update = document.querySelector<HTMLElement>('[data-update]');
+if ('serviceWorker' in navigator && update) {
+  navigator.serviceWorker.addEventListener('message', (e) => {
+    if (e.data?.type !== 'updated') return;
+    update.hidden = false;
+    update.querySelector('button')?.addEventListener('click', () => location.reload(), { once: true });
+  });
+}
+
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   const start = () => {

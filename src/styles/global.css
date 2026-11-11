@@ -468,6 +468,46 @@ button {
   display: none;
 }
 
+.update-note {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 91;
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  margin: 0;
+  padding: 0.5rem 0.6rem 0.5rem 1.1rem;
+  background: var(--bg-3);
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  font-size: 0.95rem;
+  color: var(--text);
+  box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);
+  max-width: calc(100% - 2rem);
+}
+
+.update-note[hidden] {
+  display: none;
+}
+
+.js-motion .update-note:not([hidden]) {
+  animation: note-in 0.5s var(--ease);
+}
+
+@keyframes note-in {
+  from { opacity: 0; transform: translate(-50%, 12px); }
+}
+
+.btn-small {
+  min-height: 2.25rem;
+  padding: 0.35rem 0.9rem;
+  font-size: 1rem;
+  border-radius: 999px;
+  clip-path: none;
+}
+
 /* Cross-fade between pages (same-document view transitions where supported). */
 @view-transition {
   navigation: auto;

@@ -58,7 +58,8 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
   preloaded. Fonts are self-hosted (`@fontsource`, latin subset). The stylesheet is inlined.
 - **Offline.** `public/sw.js` keeps a copy of the pages and their files after the first visit
   (stale-while-revalidate for pages, cache-first for hashed files) and prunes what a new deploy no
-  longer uses. `src/scripts/offline.ts` shows a note when the connection drops.
+  longer uses. The refresh skips the HTTP cache, and a changed page gets a "newer version, reload"
+  note. `src/scripts/offline.ts` shows a note when the connection drops.
 - **Headers.** `public/_headers` sets a strict Content-Security-Policy (only the site's own files, one
   inline script allowed by hash, YouTube no-cookie frames after a click), Permissions-Policy, COOP,
   nosniff, referrer policy and immutable caching for `/_astro/*`. `tests/headers.test.ts` fails if the

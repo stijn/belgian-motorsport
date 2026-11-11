@@ -11,6 +11,12 @@
 - Dutch and French versions of the words, with hreflang.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.2.1 (2026-11-11)
+
+- New deploys reach phones that have the site saved: the service worker refreshes past the browser's
+  HTTP cache (GitHub Pages keeps pages for ten minutes) and, when the page has changed, the open page
+  shows "A newer version of this page is ready" with a Reload button.
+
 ## 1.2.0 (2026-11-11)
 
 - Contrast to WCAG 2.2 AAA throughout: the hero's words sit on a dark panel with a red edge instead

@@ -5,9 +5,12 @@
 //   is always right: device first, network only when missing.
 // - Nothing is downloaded just to fill the cache. After the first visit the page sends the list of
 //   files it already loaded, and they're copied from the browser's own cache.
-// - When a page changes (a new deploy), files no saved page uses any more are removed.
+// - When a page changes (a new deploy), files no saved page uses any more are removed, and the open
+//   page is told, so it can offer a reload (src/scripts/offline.ts).
+// - The refresh skips the browser's HTTP cache: GitHub Pages and some CDNs tell browsers to keep a
+//   page for ten minutes, which would otherwise hold a new deploy back.
 // Bump VERSION when the logic below changes, so browsers pick up the new worker.
-const VERSION = 1;
+const VERSION = 2;
 const PAGES = 'bm-pages-v' + VERSION;
 const ASSETS = 'bm-assets-v' + VERSION;
 const FILE = /[\w.-]+\.(?:js|css|woff2|avif|webp|jpe?g|png|svg)\b/g;
@@ -48,11 +51,16 @@ async function page(event) {
   const cached = await cache.match(key);
   const before = cached ? cached.clone().text() : Promise.resolve(null);
 
-  const fresh = fetch(req).then(async (res) => {
+  const fresh = fetch(new Request(req.url, { cache: 'no-cache', credentials: 'same-origin' })).then(async (res) => {
     if (res.ok && (res.headers.get('content-type') || '').includes('text/html')) {
       const [old, now] = await Promise.all([before, res.clone().text()]);
       await cache.put(key, res.clone());
-      if (old !== null && old !== now) await prune();
+      if (old !== null && old !== now) {
+        await prune();
+        for (const c of await self.clients.matchAll({ type: 'window' })) {
+          if (pageKey(c.url) === key) c.postMessage({ type: 'updated', url: key });
+        }
+      }
     }
     return res;
   });
