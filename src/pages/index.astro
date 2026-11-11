@@ -1,0 +1,47 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import Gallery from '../components/Gallery.astro';
+import Videos from '../components/Videos.astro';
+import Events from '../components/Events.astro';
+import About from '../components/About.astro';
+import Contact from '../components/Contact.astro';
+import gallery from '../data/gallery.json';
+import videos from '../data/videos.json';
+import { site } from '../data/site';
+
+// Structured data for the home page: the photo set and the films, so search engines can show them.
+const schema = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ImageGallery',
+    '@id': `${site.url}/#work`,
+    name: `${site.name}: photos`,
+    url: `${site.url}/#work`,
+    author: { '@id': `${site.url}/#org` },
+    copyrightHolder: { '@id': `${site.url}/#org` },
+    associatedMedia: gallery.map((g) => ({ '@type': 'ImageObject', name: g.title, description: g.alt, url: `https://www.flickr.com/photos/belgian-motorsport/${g.flickrId}/` })),
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${site.url}/#film`,
+    name: `${site.name}: latest films`,
+    itemListElement: videos.slice(0, 6).map((v, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: { '@type': 'VideoObject', name: v.title, uploadDate: v.published, thumbnailUrl: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`, embedUrl: `https://www.youtube-nocookie.com/embed/${v.id}`, url: `https://www.youtube.com/watch?v=${v.id}` },
+    })),
+  },
+];
+---
+<Base overHero schema={schema}>
+  <Hero />
+  <Stats />
+  <Gallery />
+  <Videos />
+  <Events />
+  <About />
+  <Contact />
+</Base>

@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../data/site';
+---
+<Base title={`Off track — ${site.name}`} noindex>
+  <section class="section">
+    <div class="wrap center">
+      <p class="eyebrow">404</p>
+      <h1 class="h2">Off track.</h1>
+      <p class="lead">That page isn’t here. The old site had different addresses; everything now lives on one page.</p>
+      <p class="cta">
+        <a class="btn btn-red" href="/">Back to the start</a>
+        <a class="btn btn-ghost" href="/#work">The photos</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .center {
+    display: grid;
+    gap: var(--s4);
+    justify-items: start;
+    max-width: 760px;
+    min-height: 60svh;
+    align-content: center;
+  }
+  .cta {
+    display: flex;
+    gap: var(--s3);
+    flex-wrap: wrap;
+  }
+</style>

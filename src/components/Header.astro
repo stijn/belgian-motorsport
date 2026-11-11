@@ -1,0 +1,262 @@
+---
+// Sticky header: the BM logo, the sections, and the four networks. Transparent over the hero,
+// a dark bar once the page scrolls (src/scripts/header.ts).
+import { Image } from 'astro:assets';
+import logo from '../assets/bm-logo.png';
+import SocialIcon from './SocialIcon.astro';
+import { site, socials, nav } from '../data/site';
+
+interface Props {
+  overHero?: boolean;
+}
+const { overHero = false } = Astro.props;
+---
+<header class:list={['site-header', { 'over-hero': overHero }]} data-header>
+  <div class="wrap bar">
+    <a class="brand" href="/" aria-label={`${site.name}, home`}>
+      <Image src={logo} alt="" width="138" height="51" densities={[1, 2, 3]} loading="eager" class="brand-logo" />
+      <span class="brand-text"><strong>{site.name}</strong><em>{site.tagline}</em></span>
+    </a>
+    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-btn>
+      <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+      <span class="menu-label">Menu</span>
+    </button>
+    <nav id="site-nav" class="site-nav" aria-label="Site" data-menu>
+      <ul class="nav-links">
+        {nav.map((n) => <li><a href={n.href} data-nav>{n.label}</a></li>)}
+      </ul>
+      <ul class="nav-social" aria-label="Elsewhere">
+        {socials.map((s) => (
+          <li>
+            <a href={s.url} rel="me noopener" title={s.label} aria-label={s.label}>
+              <SocialIcon network={s.key} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+<script>
+  import '../scripts/header';
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgb(11 11 12 / 0.92);
+    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+    transition: background 0.4s, border-color 0.4s;
+  }
+  /* Over the hero the bar floats, transparent, until the page scrolls. */
+  .site-header.over-hero:not(.scrolled) {
+    position: fixed;
+    inset-inline: 0;
+    background: linear-gradient(rgb(0 0 0 / 0.55), transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-color: transparent;
+  }
+  .site-header.over-hero.scrolled {
+    position: fixed;
+    inset-inline: 0;
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s4);
+    min-height: var(--header-h);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    text-decoration: none;
+    flex: none;
+  }
+  .brand-logo {
+    width: 138px;
+    height: auto;
+    filter: drop-shadow(0 2px 6px rgb(0 0 0 / 0.5));
+  }
+  .brand-text {
+    display: none;
+  }
+  @media (min-width: 1100px) {
+    .brand-text {
+      display: grid;
+      line-height: 1.1;
+      border-left: 1px solid var(--line-2);
+      padding-left: 0.9rem;
+    }
+  }
+  .brand-text strong {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+  .brand-text em {
+    font-style: normal;
+    font-size: 0.85rem;
+    color: var(--text-2);
+  }
+
+  .site-nav {
+    display: flex;
+    align-items: center;
+    gap: var(--s5);
+  }
+  .nav-links,
+  .nav-social {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--s4);
+  }
+  .nav-links a {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-2);
+    padding: 0.5rem 0;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 100%;
+    bottom: 0.1rem;
+    height: 2px;
+    background: var(--red);
+    transition: right 0.3s var(--ease);
+  }
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--text);
+  }
+  .nav-links a:hover::after,
+  .nav-links a.active::after {
+    right: 0;
+  }
+  .nav-social {
+    gap: 0.25rem;
+    border-left: 1px solid var(--line-2);
+    padding-left: var(--s4);
+  }
+  .nav-social a {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    color: var(--text-2);
+    font-size: 1.1rem;
+    transition: color 0.2s, background 0.2s, transform 0.3s var(--ease);
+  }
+  .nav-social a:hover {
+    color: #fff;
+    background: var(--red);
+    transform: translateY(-2px);
+  }
+
+  .menu-btn {
+    display: none;
+    align-items: center;
+    gap: 0.6rem;
+    background: none;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    padding: 0.5rem 1rem;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  .menu-lines {
+    display: grid;
+    gap: 5px;
+    width: 18px;
+  }
+  .menu-lines i {
+    display: block;
+    height: 2px;
+    background: currentColor;
+    transition: transform 0.3s var(--ease);
+    transform-origin: center;
+  }
+  .menu-btn[aria-expanded='true'] .menu-lines i:first-child {
+    transform: translateY(3.5px) rotate(45deg);
+  }
+  .menu-btn[aria-expanded='true'] .menu-lines i:last-child {
+    transform: translateY(-3.5px) rotate(-45deg);
+  }
+
+  @media (max-width: 900px) {
+    .menu-btn {
+      display: inline-flex;
+    }
+    .site-nav {
+      position: fixed;
+      top: var(--header-h);
+      inset-inline: 0;
+      bottom: 0;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: space-between;
+      gap: var(--s4);
+      padding: var(--s4) var(--gutter) calc(var(--s5) + env(safe-area-inset-bottom));
+      background: rgb(11 11 12 / 0.98);
+      overflow: auto;
+      transform: translateX(100%);
+      visibility: hidden;
+      transition: transform 0.4s var(--ease), visibility 0s 0.4s;
+    }
+    .site-nav.open {
+      transform: none;
+      visibility: visible;
+      transition: transform 0.4s var(--ease);
+    }
+    .nav-links {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+    .nav-links li + li {
+      border-top: 1px solid var(--line);
+    }
+    .nav-links a {
+      display: block;
+      font-size: clamp(2rem, 9vw, 3rem);
+      padding: 0.6rem 0;
+    }
+    .nav-links a::after {
+      display: none;
+    }
+    .nav-social {
+      border: 0;
+      padding: 0;
+      justify-content: center;
+      gap: var(--s3);
+    }
+    .nav-social a {
+      width: 3.25rem;
+      height: 3.25rem;
+      font-size: 1.4rem;
+      border: 1px solid var(--line-2);
+    }
+  }
+</style>

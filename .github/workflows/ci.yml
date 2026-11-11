@@ -1,0 +1,21 @@
+# Checks on every push and pull request: types, tests and a full build.
+# Deploys are not done here: Cloudflare Workers Builds deploys main on its own (see docs/go-live.md).
+name: CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .node-version
+          cache: npm
+      - run: npm ci
+      - run: npx wrangler types worker/worker-configuration.d.ts
+      - run: npm run check
+      - run: npm test
+      - run: npm run build

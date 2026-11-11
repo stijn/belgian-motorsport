@@ -1,0 +1,16 @@
+# Security and caching headers for every page. The Content-Security-Policy lets only the site's own
+# files run. Styles may be inline (Astro inlines the stylesheet). YouTube only loads in a frame after a
+# click, from the no-cookie domain. challenges.cloudflare.com is for Turnstile, when it's switched on.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-4OoBav9LEHHtEC8JeTAXrooIf7zYTzWX5l/ko6WNJPE=' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; font-src 'self'; frame-src https://www.youtube-nocookie.com https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/sw.js
+  Cache-Control: no-cache

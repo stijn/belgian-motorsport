@@ -1,0 +1,99 @@
+# Go-live: from Dreamhost WordPress to Cloudflare
+
+The order matters. Mail for `belgian-motorsport.com` is on Google (the MX records point at
+`aspmx.l.google.com`), so the DNS move has to carry the mail records across untouched.
+
+## 0. Before you start
+
+- A Cloudflare account that will own both zones (Free plan is enough for everything here).
+- The GitHub repository `stijn/belgian-motorsport` (private) with this code on `main`.
+- Access to the Dreamhost panel for both domains.
+- His email address, for the `CONTACT_TO` secret. It goes into Cloudflare only, never into the repo.
+- Export the WordPress site once (Tools → Export, and a copy of `wp-content/uploads`), for the archive.
+
+## 1. Add both domains to Cloudflare
+
+For each of `belgian-motorsport.com` and `belgianmotorsport.com`:
+
+1. Cloudflare dashboard → Add a domain → Free plan. Cloudflare scans the existing DNS.
+2. Check the imported records against Dreamhost's DNS page. Keep every `MX`, the Google `TXT`
+   (SPF: `v=spf1 include:_spf.google.com ~all`), any `google._domainkey` (DKIM) and `_dmarc` record,
+   and Google site-verification records. Delete the Dreamhost `A`/`AAAA` records for `@` and `www`:
+   the Worker will own those.
+3. Change the nameservers at Dreamhost (Domains → Manage → DNS → nameservers) to the two Cloudflare
+   gives you. Activation takes minutes to a few hours; the old site keeps working meanwhile because
+   Cloudflare still points at it until step 3.
+4. In Cloudflare → SSL/TLS set the mode to **Full (strict)** and switch on **Always Use HTTPS**.
+
+## 2. Deploy the Worker from GitHub
+
+1. Workers & Pages → Create → **Import a repository** → `stijn/belgian-motorsport`.
+2. Build command `npm run build`, deploy command `npx wrangler deploy`. Node 24 comes from
+   `.node-version`. Leave the root as is; Cloudflare reads `wrangler.jsonc`.
+3. The first deploy creates `belgian-motorsport.workers.dev`. Open it: the whole site should be there
+   and the form should answer "The form isn't connected yet" until step 4.
+4. The custom domain `belgian-motorsport.com` is in `wrangler.jsonc` (`routes`), so once the zone is
+   active on Cloudflare the deploy attaches it and creates the DNS record by itself.
+
+Every push to `main` now deploys. The GitHub Actions workflow only checks and builds; it doesn't deploy.
+
+## 3. Redirects: www and the second domain
+
+- `www.belgian-motorsport.com`: in the zone, DNS → add `AAAA www 100::` (proxied). Rules → Redirect
+  Rules → template **Redirect from WWW to root** → deploy.
+- `belgianmotorsport.com`: in its zone, DNS → add `AAAA @ 100::` and `AAAA www 100::` (proxied).
+  Rules → Redirect Rules → create: when `Hostname` ends with `belgianmotorsport.com`, dynamic redirect to
+  `concat("https://belgian-motorsport.com", http.request.uri.path)`, status 301, preserve query string.
+
+The hyphenated domain stays canonical because that is where the search history and the links from
+YouTube, Flickr and Facebook already point. To switch, change `site.url` in `src/data/site.ts`,
+`SITE_ORIGIN`, `routes` and `CONTACT_FROM` in `wrangler.jsonc`, `public/robots.txt`, and flip the two
+redirect rules.
+
+## 4. Email: the contact form
+
+1. Onboard the domain to Email Sending:
+   ```bash
+   npx wrangler email sending enable belgian-motorsport.com
+   npx wrangler email sending dns get belgian-motorsport.com
+   ```
+   This adds DKIM records and wants an SPF include. The zone already has Google's SPF, and a domain may
+   have only **one** SPF record: merge them into one `TXT @` record, e.g.
+   `v=spf1 include:_spf.google.com include:<the host from "dns get"> ~all`. Delete any duplicate.
+2. Set the secret that receives the form (prompted, never shown):
+   ```bash
+   npx wrangler secret put CONTACT_TO
+   ```
+3. Optional, recommended once the form sees spam: Turnstile. Cloudflare → Turnstile → Add widget for
+   `belgian-motorsport.com` (Managed, invisible). Then
+   `npx wrangler secret put TURNSTILE_SECRET`, and in the Worker's **Settings → Build → Variables**
+   add `PUBLIC_TURNSTILE_SITE_KEY` with the site key, and redeploy. Without it the form still has the
+   honeypot, the 3-second rule and the 5-a-minute rate limit.
+4. Test from a phone off wifi: send a message, check it arrives, hit Reply and check it goes to the
+   sender. The Worker's logs are in Workers & Pages → belgian-motorsport → Logs.
+
+Local test with real sending: `"send_email": [{ "name": "EMAIL", "remote": true }]` in
+`wrangler.jsonc` and `npm run preview`; remove `remote` again before committing.
+
+## 5. Search
+
+- Google Search Console: verify both domains (DNS TXT, now easy in Cloudflare), submit
+  `https://belgian-motorsport.com/sitemap-index.xml`. No change-of-address is needed: the canonical
+  domain stays the same.
+- Bing Webmaster Tools: import from Search Console.
+- The old WordPress paths redirect (see `public/_redirects`), and the four short links
+  `/video`, `/instagram`, `/facebook`, `/photo` still work.
+- Check the share card: paste the home URL into LinkedIn's Post Inspector or
+  `https://www.opengraph.xyz/` and look at `og.jpg`.
+
+## 6. After go-live
+
+- Dreamhost: cancel the hosting plan once the Cloudflare site has run for a week. Keep the domain
+  registrations (or transfer them to Cloudflare Registrar later: unlock, auth code, at-cost renewal).
+- Give him this routine:
+  - New films and albums: `npm run sync`, look at the diff, commit, push. Monthly is plenty.
+  - New gallery photos: drop JPEGs (1600px wide or more) in `src/assets/gallery/`, add them to
+    `src/data/gallery.json` with a caption and alt text.
+  - Numbers on the home page: `stats` in `src/data/site.ts`, with the date they were read.
+- Keep an eye on Workers & Pages → Analytics now and then: requests, errors and the Worker's own
+  invocations (only `/api/*` runs code; everything else is a static file).

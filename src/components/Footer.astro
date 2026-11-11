@@ -1,0 +1,146 @@
+---
+// The footer keeps what the old site's footer said: the About line and the four places his work lives,
+// each with its own label and brand colour.
+import { Image } from 'astro:assets';
+import logo from '../assets/bm-logo.png';
+import SocialIcon from './SocialIcon.astro';
+import { site, socials, about, nav } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap grid">
+    <div class="col about">
+      <a href="/" class="logo" aria-label={`${site.name}, home`}>
+        <Image src={logo} alt="" width="160" height="59" densities={[1, 2]} />
+      </a>
+      <p class="tagline">{site.tagline}</p>
+      <p class="blurb">{about.short} You can see more of my work at:</p>
+      <ul class="networks">
+        {socials.map((s) => (
+          <li>
+            <a href={s.url} rel="me noopener" style={`--brand:${s.color}`}>
+              <span class="dot"><SocialIcon network={s.key} /></span>
+              <span>{s.label}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+    <nav class="col links" aria-label="Footer">
+      <h2 class="label">On this page</h2>
+      <ul>
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        <li><a href="/privacy/">Privacy</a></li>
+      </ul>
+    </nav>
+    <div class="col meta">
+      <h2 class="label">Rights</h2>
+      <p>Every photo and film on this site and on the channels above is my own work. Please ask before using one: the <a href="/#contact">contact form</a> is the quickest way.</p>
+      <p class="small">© {year} {site.name}. All rights reserved.</p>
+    </div>
+  </div>
+  <div class="stripe" aria-hidden="true"></div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--bg-2);
+    position: relative;
+  }
+  .grid {
+    display: grid;
+    gap: var(--s5);
+    padding-block: var(--s6) var(--s5);
+  }
+  @media (min-width: 820px) {
+    .grid {
+      grid-template-columns: 1.6fr 0.8fr 1.2fr;
+      gap: var(--s6);
+    }
+  }
+  .logo {
+    display: inline-block;
+    width: 160px;
+  }
+  .tagline {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin-top: var(--s3);
+  }
+  .blurb {
+    margin-top: var(--s3);
+    max-width: 44ch;
+    color: var(--text-2);
+  }
+  .networks {
+    list-style: none;
+    margin: var(--s4) 0 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
+  .networks a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .dot {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    background: var(--brand);
+    color: #fff;
+    font-size: 1rem;
+    transition: transform 0.3s var(--ease), box-shadow 0.3s;
+  }
+  .networks a:hover .dot {
+    transform: scale(1.1);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--brand) 30%, transparent);
+  }
+  .networks a:hover span:last-child {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+  .label {
+    font-size: 0.9rem;
+    letter-spacing: 0.22em;
+    color: var(--text-3);
+    margin-bottom: var(--s3);
+  }
+  .links ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .links a {
+    text-decoration: none;
+    color: var(--text-2);
+  }
+  .links a:hover {
+    color: var(--text);
+  }
+  .meta p {
+    color: var(--text-2);
+    max-width: 40ch;
+  }
+  .small {
+    font-size: 0.9rem;
+    color: var(--text-3);
+    margin-top: var(--s4);
+  }
+  /* Black, yellow, red: the tricolour as a finish line. */
+  .stripe {
+    height: 6px;
+    background: linear-gradient(90deg, #000 0 33.3%, #fdda24 33.3% 66.6%, var(--red) 66.6%);
+  }
+</style>

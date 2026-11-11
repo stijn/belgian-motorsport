@@ -1,0 +1,92 @@
+---
+// The contact form. It posts to the Worker (worker/index.ts), which sends the message on by email;
+// his address lives only in a Worker secret, so it never appears in the page. Spam defences: a
+// honeypot field, a minimum time to fill in the form, a rate limit, and Turnstile when configured.
+import { contact } from '../data/site';
+const turnstile = contact.turnstileSiteKey;
+---
+<form class="contact-form" method="post" action={contact.endpoint} data-contact-form novalidate>
+  <div class="two">
+    <div class="field">
+      <label for="cf-name">Your name</label>
+      <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="100" />
+    </div>
+    <div class="field">
+      <label for="cf-email">Your email</label>
+      <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200" inputmode="email" />
+    </div>
+  </div>
+  <div class="field">
+    <label for="cf-message">Your message</label>
+    <textarea id="cf-message" name="message" required minlength="10" maxlength="5000" rows="6"></textarea>
+    <p class="hint">What, where and when, and I’ll come back to you with what’s possible.</p>
+  </div>
+  {/* Honeypot: people never see it; bots fill it in. */}
+  <div class="hp" aria-hidden="true">
+    <label for="cf-website">Website</label>
+    <input id="cf-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+  </div>
+  <input type="hidden" name="started" value="" />
+  {turnstile && <div class="cf-turnstile" data-sitekey={turnstile} data-theme="dark" data-size="flexible"></div>}
+  <div class="actions">
+    <button class="btn btn-red" type="submit">Send message</button>
+    <p class="status" role="status" aria-live="polite" data-status></p>
+  </div>
+  <p class="privacy">Your message goes straight to my inbox by email and isn’t stored anywhere else. <a href="/privacy/">Privacy</a>.</p>
+</form>
+{turnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+<script>
+  import '../scripts/contact-form';
+</script>
+
+<style>
+  .contact-form {
+    display: grid;
+    gap: var(--s4);
+  }
+  .two {
+    display: grid;
+    gap: var(--s4);
+  }
+  @media (min-width: 640px) {
+    .two {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s3) var(--s4);
+  }
+  .status {
+    min-height: 1.5em;
+    color: var(--text-2);
+  }
+  .status[data-kind='ok'] {
+    color: #7ed9a0;
+  }
+  .status[data-kind='error'] {
+    color: var(--red-ink);
+  }
+  .sent .two,
+  .sent .field,
+  .sent button {
+    display: none;
+  }
+  .sent .status {
+    font-size: 1.25rem;
+    color: var(--text);
+  }
+  .privacy {
+    font-size: 0.9rem;
+    color: var(--text-3);
+  }
+</style>

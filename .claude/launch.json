@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/opt/homebrew/opt/node/bin/npm",
+      "runtimeArgs": ["run", "dev", "--", "--host", "127.0.0.1", "--port", "4330"],
+      "port": 4330
+    },
+    {
+      "name": "preview",
+      "runtimeExecutable": "/opt/homebrew/opt/node/bin/npm",
+      "runtimeArgs": ["run", "preview", "--", "--port", "8787"],
+      "port": 8787
+    }
+  ]
+}

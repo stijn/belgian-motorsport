@@ -1,0 +1,131 @@
+---
+// About him and what he can be booked for. The words live in src/data/site.ts.
+import { Picture } from 'astro:assets';
+import portrait from '../assets/hero/bmw-m1-procar.jpg';
+import { about, socials, site } from '../data/site';
+---
+<section id="about" class="section about">
+  <div class="wrap grid">
+    <div class="text">
+      <p class="eyebrow rv">About</p>
+      <h2 class="h2 rv">{site.tagline}</h2>
+      <div class="copy rv">
+        {about.long.map((p) => <p>{p}</p>)}
+      </div>
+      <ul class="elsewhere rv" aria-label="Elsewhere">
+        {socials.map((s) => (
+          <li><a href={s.url} rel="me noopener">{s.name} <span>{s.handle}</span></a></li>
+        ))}
+      </ul>
+    </div>
+    <div class="side">
+      <figure class="pic ph rv">
+        <Picture src={portrait} alt="A BMW M1 Procar at full speed, panned so the background streaks past." widths={[480, 720, 960]} sizes="(min-width: 900px) 40vw, 100vw" formats={['avif', 'webp']} quality={65} loading="lazy" />
+      </figure>
+      <h3 class="rv">Available for</h3>
+      <ul class="services" data-stagger>
+        {about.services.map((s) => (
+          <li class="rv">
+            <strong>{s.title}</strong>
+            <span>{s.text}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--s5);
+  }
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: 1.1fr 1fr;
+      gap: var(--s6);
+      align-items: start;
+    }
+  }
+  .copy {
+    margin-top: var(--s4);
+    font-size: clamp(1.05rem, 1.4vw, 1.2rem);
+    color: var(--text-2);
+    max-width: 58ch;
+    text-wrap: pretty;
+  }
+  .copy p:first-child {
+    color: var(--text);
+    font-size: 1.15em;
+  }
+  .elsewhere {
+    list-style: none;
+    margin: var(--s4) 0 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .elsewhere a {
+    display: inline-flex;
+    gap: 0.4em;
+    align-items: baseline;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .elsewhere a span {
+    text-transform: none;
+    letter-spacing: 0;
+    font-family: var(--font-text);
+    font-weight: 400;
+    color: var(--text-3);
+  }
+  .elsewhere a:hover {
+    border-color: var(--text);
+    background: var(--bg-2);
+  }
+  .pic {
+    margin: 0;
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius);
+  }
+  .side h3 {
+    margin-top: var(--s5);
+    font-size: 1rem;
+    letter-spacing: 0.22em;
+    color: var(--text-3);
+  }
+  .services {
+    list-style: none;
+    margin: var(--s3) 0 0;
+    padding: 0;
+    display: grid;
+  }
+  .services li {
+    display: grid;
+    gap: 0.25rem;
+    padding: var(--s3) 0;
+    border-top: 1px solid var(--line);
+  }
+  .services li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .services strong {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+  .services span {
+    color: var(--text-2);
+  }
+</style>
