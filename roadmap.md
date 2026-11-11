@@ -13,6 +13,11 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.5.1 (2026-11-11)
+
+- Film lightbox: previous and next (buttons, arrow keys), the title and a YouTube link under the
+  player, and a counter, like the photos.
+
 ## 1.5.0 (2026-11-11)
 
 - The contact form sends through Resend (free, a key in a secret); Cloudflare Email Sending stays as

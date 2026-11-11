@@ -59,6 +59,8 @@ export const fr: Dict = {
     watchOnYoutube: 'Voir sur YouTube',
     allFilms: 'Les {count}+ films sur YouTube',
     close: 'Fermer le film',
+    prev: 'Film précédent',
+    next: 'Film suivant',
   },
   events: {
     eyebrow: 'Événements',

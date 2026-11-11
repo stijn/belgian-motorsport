@@ -59,6 +59,8 @@ export const en = {
     watchOnYoutube: 'Watch on YouTube',
     allFilms: 'All {count}+ films on YouTube',
     close: 'Close the film',
+    prev: 'Previous film',
+    next: 'Next film',
   },
   events: {
     eyebrow: 'Events',

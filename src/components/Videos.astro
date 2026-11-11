@@ -59,7 +59,9 @@ const fmt = new Intl.DateTimeFormat(d.htmlLang, { day: 'numeric', month: 'short'
     </p>
   </div>
 </section>
-<template data-film-icons data-close={d.film.close}>
+<template data-film-icons data-prev={d.film.prev} data-next={d.film.next} data-close={d.film.close} data-watch={d.film.watchOnYoutube}>
+  <span data-icon="prev"><LineMd name="arrow-left" /></span>
+  <span data-icon="next"><LineMd name="arrow-right" /></span>
   <span data-icon="close"><LineMd name="close" /></span>
 </template>
 <script>
