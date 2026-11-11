@@ -1,13 +1,22 @@
 ---
-// Full-screen hero: three of his photos cross-fade with a slow drift (CSS only), the BM logo,
-// the name and the tagline from the old site. With motion reduced, the first photo stands still.
+// Full-screen hero: three of his photos cross-fade with a slow drift (CSS only), the BM logo, the
+// name and the tagline from the old site. The photo stays in view: the words read through a dark halo
+// (text-shadow) and a shade that deepens towards the bottom-left, not a box over the picture.
 import { Image, Picture, getImage } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
 import LineMd from './LineMd.astro';
 import { site } from '../data/site';
+import { href } from '../lib/url';
+import { t, type Lang } from '../i18n';
 import porsche from '../assets/hero/porsche-911-rsr-spa.jpg';
 import bmw from '../assets/hero/bmw-m1-procar.jpg';
 import aston from '../assets/hero/aston-martin-dbr9.jpg';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
 
 const slides = [
   { src: porsche, alt: 'A yellow Porsche 911 RSR on the kerbs of the Raidillon at Spa-Francorchamps, the track empty behind it.', pos: '70% 50%' },
@@ -23,7 +32,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   <link rel="preload" as="image" type="image/avif" imagesrcset={first.srcSet.attribute} imagesizes={sizes} fetchpriority="high" />
 </Fragment>
 
-<section class="hero" aria-label="Welcome">
+<section class="hero" aria-label={site.name}>
   <div class="slides" aria-hidden="true">
     {slides.map((s, i) => (
       <div class="slide" style={`--focus:${s.pos};--i:${i}`}>
@@ -34,7 +43,6 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
           sizes={sizes}
           formats={['avif', 'webp']}
           quality={60}
-
           loading={i === 0 ? 'eager' : 'lazy'}
           fetchpriority={i === 0 ? 'high' : 'low'}
           decoding={i === 0 ? 'sync' : 'async'}
@@ -45,21 +53,19 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   </div>
 
   <div class="wrap content">
-    <div class="panel">
-    <Image src={logo} alt="BM" width="420" height="156" densities={[1, 2]} loading="eager" class="logo rv" data-hero-logo />
-    <h1 class="title rv">
+    <Image src={logo} alt="BM" width="420" height="156" densities={[1, 2]} loading="eager" class="logo hv" data-hero-logo data-delight="rev" />
+    <h1 class="title hv">
       <span class="name">{site.name}</span>
       <span class="tagline">{site.tagline}</span>
     </h1>
-    <p class="sub rv">Motorsport photography and film from Belgium &amp; Europe. Spa, Zolder, the Nürburgring and the rally stages in between, since 2006.</p>
-    <div class="cta rv">
-      <a class="btn btn-red" href="#work">See the photos</a>
-      <a class="btn btn-ghost" href="#film">Watch the films</a>
-    </div>
+    <p class="sub hv">{d.hero.sub}</p>
+    <div class="cta hv">
+      <a class="btn btn-red" href={href('/#work', lang)} data-replay><LineMd name="camera" />{d.hero.seePhotos}</a>
+      <a class="btn btn-ghost" href={href('/#film', lang)} data-replay><LineMd name="play" />{d.hero.watchFilms}</a>
     </div>
   </div>
 
-  <a class="cue" href="#stats" aria-label="Scroll down" data-replay>
+  <a class="cue" href="#stats" aria-label={d.hero.scroll} data-replay>
     <LineMd name="arrow-down" />
   </a>
 </section>
@@ -93,7 +99,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   }
   .slide {
     opacity: 0;
-    /* Each slide: 6 s on, 1 s fade either side, drifting the whole time. */
+    will-change: opacity, transform;
     animation: slide 18s infinite var(--ease);
     animation-delay: calc(var(--i) * 6s);
   }
@@ -104,38 +110,31 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     39.3% { opacity: 0; transform: scale(1.12); }
     100% { opacity: 0; }
   }
-  /* Reduced motion, or an older browser: the first photo, still. */
   @media (prefers-reduced-motion: reduce) {
     .slide { animation: none; }
     .slide:first-child { opacity: 1; }
   }
-  /* The panel carries the text now; the shade only eases the photo into the page below. */
+  /* The photo stays the picture; the shade only deepens where the words are. */
   .shade {
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgb(0 0 0 / 0.2) 0%, transparent 30%, rgb(11 11 12 / 0.85) 100%);
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.3) 0%, transparent 30%, rgb(0 0 0 / 0.35) 60%, rgb(11 11 12 / 0.92) 100%),
+      linear-gradient(90deg, rgb(0 0 0 / 0.5) 0%, rgb(0 0 0 / 0.2) 45%, transparent 75%);
   }
   .content {
     padding-block: calc(var(--header-h) + var(--s5)) var(--s7);
-  }
-  /* The words sit on a dark panel, so they read the same over any photo: a pit wall, not a haze. */
-  .panel {
     display: grid;
     gap: var(--s4);
     justify-items: start;
-    width: fit-content;
-    max-width: 100%;
-    padding: clamp(var(--s4), 4vw, var(--s5));
-    margin-left: calc(-1 * clamp(var(--s4), 4vw, var(--s5)));
-    background: var(--scrim);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
-    border-left: 4px solid var(--red);
+    /* A dark halo around every letter: readable over any part of any photo. */
+    --halo: 0 1px 2px rgb(0 0 0 / 0.95), 0 0 6px rgb(0 0 0 / 0.9), 0 2px 18px rgb(0 0 0 / 0.8), 0 0 40px rgb(0 0 0 / 0.6);
   }
   .logo {
     width: clamp(180px, 28vw, 360px);
     height: auto;
-    filter: drop-shadow(0 6px 24px rgb(0 0 0 / 0.6));
+    aspect-ratio: 1380 / 512;
+    filter: drop-shadow(0 6px 24px rgb(0 0 0 / 0.7));
   }
   .title {
     display: grid;
@@ -145,20 +144,23 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     font-size: clamp(3rem, 11vw, 9rem);
     font-weight: 800;
     letter-spacing: -0.015em;
-    text-shadow: 0 4px 30px rgb(0 0 0 / 0.5);
+    text-shadow: var(--halo);
   }
   .tagline {
-    font-size: clamp(1.1rem, 2.4vw, 1.7rem);
+    font-size: clamp(1.2rem, 2.4vw, 1.7rem);
     font-weight: 700;
     letter-spacing: 0.32em;
     color: var(--red-ink);
     padding-left: 0.2em;
+    text-shadow: var(--halo);
   }
   .sub {
-    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
-    color: var(--text-2);
+    font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+    font-weight: 500;
+    color: var(--text);
     max-width: 44ch;
     text-wrap: pretty;
+    text-shadow: var(--halo);
   }
   .cta {
     display: flex;
@@ -166,9 +168,11 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     gap: var(--s3);
     margin-top: var(--s2);
   }
+  .cta .btn-ghost {
+    background: rgb(11 11 12 / 0.6);
+  }
   .cue {
     font-size: 1.25rem;
-    background: var(--scrim);
     position: absolute;
     right: var(--gutter);
     bottom: var(--s4);
@@ -178,26 +182,26 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     height: 3rem;
     border: 1px solid var(--line-2);
     border-radius: 50%;
-    color: var(--text-2);
+    background: rgb(11 11 12 / 0.7);
+    color: var(--text);
     text-decoration: none;
     animation: bob 2.4s infinite var(--ease);
   }
   .cue:hover {
-    color: var(--text);
     border-color: var(--text);
   }
   @keyframes bob {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(6px); }
   }
-  /* The hero's own reveal: staggered, as soon as the page is up. */
-  .js-motion .panel .rv {
+  /* The entrance moves, it never hides: the words are the largest contentful paint, and an
+     element at opacity 0 doesn't count as painted. */
+  .js-motion .hv {
     animation: rise 0.9s var(--ease) both;
   }
-  .js-motion .panel .rv:nth-child(2) { animation-delay: 0.15s; }
-  .js-motion .panel .rv:nth-child(3) { animation-delay: 0.3s; }
-  .js-motion .panel .rv:nth-child(4) { animation-delay: 0.45s; }
-  /* The tagline settles from wide tracking into place. */
+  .js-motion .hv:nth-child(2) { animation-delay: 0.1s; }
+  .js-motion .hv:nth-child(3) { animation-delay: 0.2s; }
+  .js-motion .hv:nth-child(4) { animation-delay: 0.3s; }
   .js-motion .tagline {
     animation: track 1.4s 0.3s var(--ease) both;
   }
@@ -206,7 +210,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     to { letter-spacing: 0.32em; opacity: 1; }
   }
   @keyframes rise {
-    from { opacity: 0; transform: translateY(24px); }
-    to { opacity: 1; transform: none; }
+    from { transform: translateY(20px); }
+    to { transform: none; }
   }
 </style>

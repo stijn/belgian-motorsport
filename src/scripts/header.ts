@@ -1,19 +1,20 @@
-// The header: solid once the page scrolls, a menu on small screens, and the current section underlined.
+// The header: solid once the page scrolls, its logo held back while the hero's logo is on screen, a
+// menu on small screens, the language menu closing when clicked away, and the current section underlined.
 const header = document.querySelector<HTMLElement>('[data-header]');
 const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
 const menu = document.querySelector<HTMLElement>('[data-menu]');
+const lang = document.querySelector<HTMLDetailsElement>('[data-lang]');
 
 const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+requestAnimationFrame(onScroll);
+window.addEventListener('scroll', onScroll, { passive: true });
 
-// The header's logo stays out of the way while the hero's big logo is on screen.
 const heroLogo = document.querySelector('[data-hero-logo]');
 if (header && heroLogo && 'IntersectionObserver' in window) {
   new IntersectionObserver(([e]) => header.classList.toggle('brand-hidden', !!e?.isIntersecting), { threshold: 0.2 }).observe(heroLogo);
 } else {
   header?.classList.remove('brand-hidden');
 }
-onScroll();
-window.addEventListener('scroll', onScroll, { passive: true });
 
 if (btn && menu) {
   const set = (open: boolean) => {
@@ -31,7 +32,19 @@ if (btn && menu) {
       btn.focus();
     }
   });
-  matchMedia('(min-width: 901px)').addEventListener('change', (e) => e.matches && set(false));
+  matchMedia('(min-width: 961px)').addEventListener('change', (e) => e.matches && set(false));
+}
+
+if (lang) {
+  document.addEventListener('click', (e) => {
+    if (lang.open && !lang.contains(e.target as Node)) lang.open = false;
+  });
+  lang.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && lang.open) {
+      lang.open = false;
+      lang.querySelector('summary')?.focus();
+    }
+  });
 }
 
 // Underline the section in view (home page only: the links have hashes).

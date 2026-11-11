@@ -1,0 +1,8 @@
+---
+// The same page in Dutch, French, German and Italian (English lives at the root).
+import Home from '../../views/Home.astro';
+import { langs, defaultLang, type Lang } from '../../i18n';
+export const getStaticPaths = () => langs.filter((l) => l !== defaultLang).map((lang) => ({ params: { lang } }));
+const lang = Astro.params.lang as Lang;
+---
+<Home lang={lang} />

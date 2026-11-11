@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../data/site';
+import { fill, t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+const updated = new Intl.DateTimeFormat(d.htmlLang, { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date('2026-11-11'));
+---
+<Base lang={lang} path="/privacy/" title={`${d.privacy.title} — ${site.name}`} description={d.privacy.description} card="privacy" cardAlt={d.meta.cardPrivacy}>
+  <section class="section">
+    <div class="wrap narrow">
+      <SectionHead level={1} icon="security" eyebrow={d.privacy.title} heading={d.privacy.heading} />
+      <div class="prose">
+        <p>{d.privacy.intro}</p>
+        {d.privacy.sections.map((s) => (
+          <>
+            <h2>{s.h}</h2>
+            <p>{s.p}</p>
+          </>
+        ))}
+        <p class="small">{fill(d.privacy.updated, { date: updated })}</p>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 720px;
+  }
+  .prose {
+    margin-top: var(--s4);
+    color: var(--text-2);
+    font-size: 1.1rem;
+  }
+  .prose h2 {
+    margin-top: var(--s5);
+    margin-bottom: var(--s2);
+    font-size: 1.5rem;
+    color: var(--text);
+  }
+  .small {
+    margin-top: var(--s5);
+    font-size: 0.9rem;
+    color: var(--text-3);
+  }
+</style>

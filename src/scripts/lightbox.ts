@@ -1,27 +1,42 @@
-// A lightbox for the photo grid: one <dialog>, arrow keys, swipe, and the photo's caption.
-// Each figure button carries data-full (a large WebP), data-alt and data-caption.
+// One <dialog> lightbox for the photos (and the films, see video.ts): arrow keys, swipe, the caption
+// with a link to the photo on Flickr. Each figure button carries data-full, data-alt, data-caption
+// and data-link; labels and icons come from the <template data-lightbox-icons> in Gallery.astro.
 const buttons = [...document.querySelectorAll<HTMLButtonElement>('[data-lightbox]')];
-if (buttons.length) {
+const tpl = document.querySelector<HTMLTemplateElement>('[data-lightbox-icons]');
+
+export function makeDialog(className: string) {
   const dlg = document.createElement('dialog');
-  dlg.className = 'lightbox';
+  dlg.className = `lightbox ${className}`;
+  document.body.append(dlg);
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg || (e.target as HTMLElement).classList.contains('lb-stage')) dlg.close();
+  });
+  return dlg;
+}
+export const iconFor = (name: string) => tpl?.content.querySelector(`[data-icon="${name}"] svg`)?.cloneNode(true);
+
+if (buttons.length && tpl) {
+  const L = tpl.dataset;
+  const dlg = makeDialog('lightbox-photos');
   dlg.innerHTML = `
     <div class="lb-stage">
       <img alt="" decoding="async" />
-      <p class="lb-caption"></p>
+      <p class="lb-caption"><span></span></p>
     </div>
-    <button type="button" class="lb-btn lb-prev" aria-label="Previous photo" data-replay>&#8592;</button>
-    <button type="button" class="lb-btn lb-next" aria-label="Next photo" data-replay>&#8594;</button>
-    <button type="button" class="lb-btn lb-close" aria-label="Close" data-replay>&#215;</button>
+    <button type="button" class="lb-btn lb-prev" aria-label="${L.prev}" data-replay></button>
+    <button type="button" class="lb-btn lb-next" aria-label="${L.next}" data-replay></button>
+    <button type="button" class="lb-btn lb-close" aria-label="${L.close}" data-replay></button>
     <p class="lb-count" aria-live="polite"></p>`;
-  // The animated icons rendered by Gallery.astro replace the text arrows.
-  const tpl = document.querySelector<HTMLTemplateElement>('[data-lightbox-icons]');
   for (const [name, sel] of [['prev', '.lb-prev'], ['next', '.lb-next'], ['close', '.lb-close']] as const) {
-    const svg = tpl?.content.querySelector(`[data-icon="${name}"] svg`);
-    if (svg) dlg.querySelector(sel)!.replaceChildren(svg.cloneNode(true));
+    const svg = iconFor(name);
+    if (svg) dlg.querySelector(sel)!.replaceChildren(svg);
   }
-  document.body.append(dlg);
   const img = dlg.querySelector('img')!;
-  const cap = dlg.querySelector<HTMLElement>('.lb-caption')!;
+  const cap = dlg.querySelector<HTMLElement>('.lb-caption span')!;
+  const capP = dlg.querySelector<HTMLElement>('.lb-caption')!;
+  const link = document.createElement('a');
+  link.target = '_blank';
+  link.rel = 'noopener';
   const count = dlg.querySelector<HTMLElement>('.lb-count')!;
   let i = 0;
   let opener: HTMLElement | null = null;
@@ -35,8 +50,10 @@ if (buttons.length) {
     img.src = b.dataset.full ?? '';
     img.alt = b.dataset.alt ?? '';
     cap.textContent = b.dataset.caption ?? '';
+    link.href = b.dataset.link ?? '';
+    link.textContent = L.see ?? 'Flickr';
+    if (!link.isConnected) capP.append(link);
     count.textContent = `${i + 1} / ${buttons.length}`;
-    // Warm up the neighbours.
     for (const d of [1, -1]) {
       const n2 = buttons[(i + d + buttons.length) % buttons.length];
       if (n2?.dataset.full) new Image().src = n2.dataset.full;
@@ -48,21 +65,15 @@ if (buttons.length) {
     dlg.showModal();
     document.body.style.overflow = 'hidden';
   };
-  const close = () => dlg.close();
   dlg.addEventListener('close', () => {
     document.body.style.overflow = '';
     img.removeAttribute('src');
     opener?.focus();
   });
-
   buttons.forEach((b, n) => b.addEventListener('click', () => open(n, b)));
   dlg.querySelector('.lb-prev')!.addEventListener('click', () => show(i - 1));
   dlg.querySelector('.lb-next')!.addEventListener('click', () => show(i + 1));
-  dlg.querySelector('.lb-close')!.addEventListener('click', close);
-  dlg.addEventListener('click', (e) => {
-    // The backdrop, or the empty stage around the photo.
-    if (e.target === dlg || (e.target as HTMLElement).classList.contains('lb-stage')) close();
-  });
+  dlg.querySelector('.lb-close')!.addEventListener('click', () => dlg.close());
   dlg.addEventListener('keydown', (e) => {
     if (e.key === 'ArrowRight') show(i + 1);
     else if (e.key === 'ArrowLeft') show(i - 1);

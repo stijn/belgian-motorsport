@@ -1,17 +1,19 @@
 ---
+// The 404 page is English: Cloudflare serves one 404 for the whole site.
 import Base from '../layouts/Base.astro';
+import SectionHead from '../components/SectionHead.astro';
 import { site } from '../data/site';
 import { href } from '../lib/url';
+import { t } from '../i18n';
+const d = t('en');
 ---
-<Base title={`Off track — ${site.name}`} noindex>
+<Base lang="en" path="/404/" title={`${d.notFound.title} — ${site.name}`} noindex>
   <section class="section">
     <div class="wrap center">
-      <p class="eyebrow">404</p>
-      <h1 class="h2">Off track.</h1>
-      <p class="lead">That page isn’t here. The old site had different addresses; everything now lives on one page.</p>
+      <SectionHead level={1} icon="alert-circle" eyebrow="404" heading={d.notFound.heading} lead={d.notFound.text} />
       <p class="cta">
-        <a class="btn btn-red" href={href('/')}>Back to the start</a>
-        <a class="btn btn-ghost" href={href('/#work')}>The photos</a>
+        <a class="btn btn-red" href={href('/')}>{d.notFound.back}</a>
+        <a class="btn btn-ghost" href={href('/#work')}>{d.notFound.photos}</a>
       </p>
     </div>
   </section>

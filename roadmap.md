@@ -8,8 +8,36 @@
 - A light theme, if he wants one: the colours are tokens in `src/styles/global.css`.
 - Per-event pages (one page per album with its photos and films), if the one-pager starts to feel
   too small. Not before go-live.
-- Dutch and French versions of the words, with hreflang.
+- His portrait in About, when he sends one (replace the placeholder frame).
 - Prints and licensing: a short page with prices, when he has decided them.
+
+## 1.3.0 (2026-11-11)
+
+- Five languages: English at the root, Dutch, French, German and Italian under `/nl/`, `/fr/`,
+  `/de/`, `/it/`, every word from `src/i18n/`. A language switcher in the header (names in their own
+  language, no flags), `hreflang` with plain language codes and `x-default`, per-language titles and
+  descriptions within search-result lengths, Open Graph locales, a sitemap for all of them, and the
+  Worker sending the no-JavaScript form back to the right language.
+- Header: the social links are gone (the footer has them, opening in a new window); the sections carry
+  line-md icons that redraw on hover; the hero's buttons too.
+- Hero: no panel over the photo. The words carry a dark halo (text-shadow) and the shade deepens
+  bottom-left; the contrast test checks the halo. The entrance moves without hiding, so the headline is
+  painted at once.
+- Photos: a dense grid with the two featured photos in 2×2 cells, no empty cells; every caption links the
+  album and the photo on Flickr ("See on Flickr", new window), as does the lightbox.
+- Films open in the same lightbox (youtube-nocookie, after a click, removed on close).
+- Events as a wrapping grid, no sideways scrolling, albums in a new window.
+- About: a placeholder frame for his portrait; services with Font Awesome icons and a calmer hover.
+- Contact: the hint above the message field, icons on the fields, a chequered flag on Send, a lock and
+  envelope on the privacy line.
+- Footer in four columns (who, networks, this page, rights), with the credits Font Awesome's licence
+  asks for. A chequered back-to-top flag that waves. Red accents in headlines come from the words
+  (`*like this*` in the dictionaries), never from hard-coded capitals.
+- Delights: the hero logo revs on hover, the footer logo sends a car down the tricolour, section lines
+  turn chequered on hover. Counters carry icons; the photos icon is a camera drawn in line-md's style.
+- Audits: axe-core clean on every page type (WCAG 2.x A, AA, AAA rules and best practices); Lighthouse
+  100 / 100 / 100 / 100 on mobile and desktop for the local build (fonts preloaded, hero entrance
+  without opacity, below-the-fold images lazy, no layout read before first paint).
 
 ## 1.2.1 (2026-11-11)
 

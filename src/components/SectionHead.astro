@@ -1,0 +1,23 @@
+---
+// The eyebrow (icon, line, word), the headline with its red accent, and the lead of a section.
+import LineMd from './LineMd.astro';
+import { accent } from '../lib/accent';
+
+interface Props {
+  icon: string;
+  eyebrow: string;
+  heading: string;
+  lead?: string;
+  /** 1 on pages where this is the page's own title. */
+  level?: 1 | 2;
+}
+const { icon, eyebrow, heading, lead, level = 2 } = Astro.props;
+const H = level === 1 ? 'h1' : 'h2';
+---
+<div class="section-head" data-replay>
+  <div>
+    <p class="eyebrow rv"><LineMd name={icon} /><span>{eyebrow}</span></p>
+    <H class="h2 rv" set:html={accent(heading)} />
+  </div>
+  {lead && <p class="lead rv">{lead}</p>}
+</div>

@@ -45,7 +45,10 @@ async function contact(request: Request, env: Env, ctx: ExecutionContext): Promi
   const answer = (ok: boolean, error: string | undefined, status: number) => {
     if (asJson) return json(ok ? { ok } : { ok, error }, status);
     // Without JavaScript the form posts the usual way: send people on to a page.
-    const to = ok ? '/thanks/' : `/contact/?error=${encodeURIComponent(error ?? '')}`;
+    // Back to the page's own language: the referer path starts with /nl/, /fr/, /de/ or /it/.
+    const ref = request.headers.get('referer') ?? '';
+    const prefix = ref.match(/^https?:\/\/[^/]+(\/(?:nl|fr|de|it))\//)?.[1] ?? '';
+    const to = ok ? `${prefix}/thanks/` : `${prefix}/contact/?error=${encodeURIComponent(error ?? '')}`;
     return Response.redirect(new URL(to, self).href, 303);
   };
 

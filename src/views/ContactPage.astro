@@ -1,0 +1,36 @@
+---
+// The form on its own page, for a link that goes straight to it.
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+import SectionHead from '../components/SectionHead.astro';
+import { site } from '../data/site';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
+---
+<Base lang={lang} path="/contact/" title={`${d.contactPage.title} — ${site.name}`} description={d.contactPage.description} card="contact" cardAlt={d.meta.cardContact}>
+  <section class="section">
+    <div class="wrap narrow">
+      <SectionHead level={1} icon="email" eyebrow={d.contact.eyebrow} heading={d.contact.heading} lead={d.contact.text} />
+      <div class="box">
+        <ContactForm lang={lang} />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+  .box {
+    padding: clamp(var(--s4), 3vw, var(--s5));
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+</style>

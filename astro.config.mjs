@@ -13,6 +13,11 @@ export default defineConfig({
   base: BASE,
   output: 'static',
   trailingSlash: 'always',
+  i18n: {
+    defaultLocale: 'en',
+    locales: ['en', 'nl', 'fr', 'de', 'it'],
+    routing: { prefixDefaultLocale: false },
+  },
   // The stylesheet goes inside each page: the first paint needs one download instead of two.
   build: { inlineStylesheets: 'always' },
   // Scripts stay separate files (never inlined), so the Content-Security-Policy can allow only the
@@ -23,6 +28,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
+      i18n: { defaultLocale: 'en', locales: { en: 'en', nl: 'nl', fr: 'fr', de: 'de', it: 'it' } },
       filter: (page) => !/\/(404|thanks)\/?$/.test(page) && !/\.webmanifest$/.test(page),
       changefreq: 'monthly',
       lastmod: new Date(),

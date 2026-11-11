@@ -1,25 +1,32 @@
 ---
 // The contact section: his words from the old site, and the form.
 import ContactForm from './ContactForm.astro';
+import SectionHead from './SectionHead.astro';
 import SocialIcon from './SocialIcon.astro';
-import { contact, socials, site } from '../data/site';
+import { socials, site } from '../data/site';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
 ---
 <section id="contact" class="section contact">
   <div class="wrap grid">
     <div class="intro">
-      <p class="eyebrow rv">Contact</p>
-      <h2 class="h2 rv">{contact.heading}</h2>
-      <p class="lead rv">{contact.text}</p>
-      <p class="rv">Bookings, prints, licensing a photo or a film clip, a car you’d like shot: send a note and I’ll reply by email.</p>
-      <ul class="dm rv" aria-label="Or send a message on">
+      <SectionHead icon="email" eyebrow={d.contact.eyebrow} heading={d.contact.heading} />
+      <p class="lead rv">{d.contact.text}</p>
+      <p class="rv">{d.contact.more}</p>
+      <ul class="dm rv" aria-label={d.contact.dm}>
         {socials.filter((s) => s.key === 'instagram' || s.key === 'facebook').map((s) => (
-          <li><a href={s.url} rel="me noopener"><SocialIcon network={s.key} /> {s.name}</a></li>
+          <li><a href={s.url} target="_blank" rel="me noopener"><SocialIcon network={s.key} /> {s.name}</a></li>
         ))}
       </ul>
-      <p class="based rv">{site.name} · {site.based}</p>
+      <p class="based rv">{site.name} · {d.contact.basedIn}</p>
     </div>
     <div class="form rv">
-      <ContactForm />
+      <ContactForm lang={lang} />
     </div>
   </div>
 </section>

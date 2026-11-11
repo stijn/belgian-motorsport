@@ -1,20 +1,15 @@
-// The contact form, sent without leaving the page. Without JS the form posts the usual way and the
-// Worker answers with a redirect to /thanks/.
+// The contact form, sent without leaving the page. Without JavaScript the form posts the usual way and
+// the Worker answers with a redirect to /thanks/. The messages come from the form's data attributes,
+// in the page's language.
 const form = document.querySelector<HTMLFormElement>('[data-contact-form]');
 if (form && !('demo' in form.dataset)) {
   const status = form.querySelector<HTMLElement>('[data-status]')!;
   const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
   const started = form.querySelector<HTMLInputElement>('input[name="started"]');
-  if (started) started.value = String(Date.now());
-  // Sent without JavaScript and bounced back here with a reason (see worker/index.ts).
-  const bounced = new URLSearchParams(location.search).get('error');
-  if (bounced) {
-    status.textContent = bounced;
-    status.dataset.kind = 'error';
-    history.replaceState(null, '', location.pathname);
-  }
-
   const icons = form.querySelector<HTMLTemplateElement>('[data-status-icons]');
+  const msg = form.dataset;
+  if (started) started.value = String(Date.now());
+
   const say = (text: string, kind: 'ok' | 'error' | 'sending' | '') => {
     status.replaceChildren();
     const svg = kind && icons?.content.querySelector(`[data-icon="${kind}"] svg`);
@@ -23,10 +18,17 @@ if (form && !('demo' in form.dataset)) {
     status.dataset.kind = kind;
   };
 
+  // Sent without JavaScript and bounced back here with a reason (see worker/index.ts).
+  const bounced = new URLSearchParams(location.search).get('error');
+  if (bounced) {
+    say(bounced, 'error');
+    history.replaceState(null, '', location.pathname);
+  }
+
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     if (!form.reportValidity()) return;
-    say('Sending…', 'sending');
+    say(msg.msgSending ?? '…', 'sending');
     button.setAttribute('aria-busy', 'true');
     button.disabled = true;
     try {
@@ -41,12 +43,12 @@ if (form && !('demo' in form.dataset)) {
         form.reset();
         if (started) started.value = String(Date.now());
         form.classList.add('sent');
-        say('Thanks, your message is on its way. I’ll get back to you soon.', 'ok');
+        say(msg.msgSent ?? 'OK', 'ok');
       } else {
-        say(body.error ?? 'That didn’t go through. Please try again in a moment.', 'error');
+        say(body.error ?? msg.msgFail ?? 'Error', 'error');
       }
     } catch {
-      say(navigator.onLine ? 'That didn’t go through. Please try again in a moment.' : 'You’re offline. Try again when you have a connection.', 'error');
+      say((navigator.onLine ? msg.msgFail : msg.msgOffline) ?? 'Error', 'error');
     } finally {
       button.removeAttribute('aria-busy');
       button.disabled = false;

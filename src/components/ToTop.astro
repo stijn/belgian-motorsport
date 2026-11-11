@@ -1,0 +1,68 @@
+---
+// Back to the top: a chequered flag that appears once the hero has scrolled away and waves on hover.
+import Fa from './Fa.astro';
+import LineMd from './LineMd.astro';
+import { faFlagCheckered } from '@fortawesome/free-solid-svg-icons';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const d = t(Astro.props.lang);
+---
+<nav aria-label={d.footer.toTop}>
+  <a class="to-top" href="#main" aria-label={d.footer.toTop} title={d.footer.toTop} data-to-top data-replay>
+    <span class="flag"><Fa icon={faFlagCheckered} /></span>
+    <LineMd name="arrow-up" />
+  </a>
+</nav>
+<script>
+  import '../scripts/to-top';
+</script>
+
+<style>
+  .to-top {
+    position: fixed;
+    right: var(--gutter);
+    bottom: var(--s4);
+    z-index: 80;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 0.8rem 0.55rem 0.7rem;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    background: var(--bg-2);
+    color: var(--text);
+    text-decoration: none;
+    box-shadow: 0 10px 30px rgb(0 0 0 / 0.5);
+    opacity: 0;
+    transform: translateY(12px);
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease), border-color 0.2s;
+  }
+  .to-top.show {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+  .to-top:hover {
+    border-color: var(--text);
+  }
+  .flag {
+    display: inline-block;
+    font-size: 1.15rem;
+    transform-origin: left bottom;
+  }
+  .js-motion .to-top:hover .flag {
+    animation: wave 0.7s var(--ease) infinite;
+  }
+  @keyframes wave {
+    0%, 100% { transform: rotate(0) skewY(0); }
+    30% { transform: rotate(-10deg) skewY(-4deg); }
+    70% { transform: rotate(6deg) skewY(3deg); }
+  }
+  .to-top .icon-line {
+    font-size: 1.1rem;
+  }
+</style>

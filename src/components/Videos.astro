@@ -1,62 +1,67 @@
 ---
-// The latest films, from src/data/videos.json (npm run sync). Each is a still from the site itself
-// until it's clicked; then it plays from youtube-nocookie.com (src/scripts/video.ts).
+// The latest films, from src/data/videos.json (npm run sync). Each is a still from the site itself;
+// a click opens the film in the lightbox, from youtube-nocookie.com (src/scripts/video.ts).
 import { Picture } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Fa from './Fa.astro';
 import LineMd from './LineMd.astro';
 import SocialIcon from './SocialIcon.astro';
-import { faPlay } from '@fortawesome/free-solid-svg-icons';
+import SectionHead from './SectionHead.astro';
+import { faPlay, faArrowUpRightFromSquare } from '@fortawesome/free-solid-svg-icons';
 import videos from '../data/videos.json';
 import { socials, stats } from '../data/site';
+import { fill, t, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
   count?: number;
 }
-const { count = 6 } = Astro.props;
+const { lang, count = 6 } = Astro.props;
+const d = t(lang);
 const stills = import.meta.glob<{ default: ImageMetadata }>('../assets/videos/*.jpg', { eager: true });
 const list = videos
   .map((v) => ({ ...v, still: stills[`../assets/videos/${v.id}.jpg`]?.default }))
   .filter((v) => v.still)
   .slice(0, count);
 const youtube = socials.find((s) => s.key === 'youtube')!;
-const subs = stats.items.find((s) => s.label.includes('subscribers'))?.value;
-const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+const subs = stats.items.find((s) => s.key === 'subscribers')!.value;
+const films = stats.items.find((s) => s.key === 'films')!.value;
+const fmt = new Intl.DateTimeFormat(d.htmlLang, { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 <section id="film" class="section film">
   <div class="wrap">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow rv">Film</p>
-        <h2 class="h2 rv">Fast, and with a beautiful sound</h2>
-      </div>
-      <p class="lead rv">Flybys, flames, downshifts and on-boards, cut to the engine rather than a soundtrack. {subs ? `${subs}+ people subscribe` : 'People subscribe'} to the channel; the newest films are here.</p>
-    </div>
+    <SectionHead icon="play" eyebrow={d.film.eyebrow} heading={d.film.heading} lead={fill(d.film.lead, { subs })} />
 
     <ul class="grid" data-stagger>
-      {list.map((v, i) => (
+      {list.map((v) => (
         <li class="card rv" data-video={v.id} data-title={v.title}>
           <div class="yt-still ph">
-            <Picture src={v.still!} alt="" widths={[400, 640, 960]} sizes="(min-width: 1100px) 400px, (min-width: 700px) 50vw, 100vw" formats={['avif', 'webp']} quality={65} loading={i < 3 ? 'eager' : 'lazy'} />
-            <button type="button" class="play" aria-label={`Play: ${v.title}`}>
+            <Picture src={v.still!} alt="" widths={[400, 640, 960]} sizes="(min-width: 1100px) 400px, (min-width: 700px) 50vw, 100vw" formats={['avif', 'webp']} quality={62} loading="lazy" />
+            <button type="button" class="play" aria-label={`${d.film.play}: ${v.title}`} data-play>
               <span class="play-disc"><Fa icon={faPlay} /></span>
             </button>
           </div>
           <div class="meta">
             <h3>{v.title}</h3>
-            <p><time datetime={v.published}>{fmt.format(new Date(v.published))}</time> · <a href={`https://www.youtube.com/watch?v=${v.id}`} rel="noopener">Watch on YouTube</a></p>
+            <p>
+              <time datetime={v.published}>{fmt.format(new Date(v.published))}</time> ·
+              <a href={`https://www.youtube.com/watch?v=${v.id}`} target="_blank" rel="noopener">{d.film.watchOnYoutube} <Fa icon={faArrowUpRightFromSquare} class="ext" /></a>
+            </p>
           </div>
         </li>
       ))}
     </ul>
 
     <p class="more rv">
-      <a class="link-arrow" data-replay href={youtube.url} rel="me noopener">
-        <SocialIcon network="youtube" /> All {stats.items.find((s) => s.label === 'films')?.value}+ films on YouTube <LineMd name="arrow-right" />
+      <a class="link-arrow" data-replay href={youtube.url} target="_blank" rel="me noopener">
+        <SocialIcon network="youtube" /> {fill(d.film.allFilms, { count: films })} <LineMd name="arrow-right" />
       </a>
     </p>
   </div>
 </section>
+<template data-film-icons data-close={d.film.close}>
+  <span data-icon="close"><LineMd name="close" /></span>
+</template>
 <script>
   import '../scripts/video';
 </script>
@@ -99,6 +104,7 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
     cursor: pointer;
   }
   .play-disc {
+    position: relative;
     display: grid;
     place-items: center;
     width: 4rem;
@@ -114,9 +120,8 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
   .play:hover .play-disc,
   .play:focus-visible .play-disc {
     transform: scale(1.1);
-    background: var(--red-2);
+    background: #c50500;
   }
-  /* A ring pulses out of the play button on hover. */
   .play-disc::after {
     content: '';
     position: absolute;
@@ -125,9 +130,6 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
     border: 2px solid var(--red-2);
     opacity: 0;
   }
-  .play-disc {
-    position: relative;
-  }
   .play:hover .play-disc::after,
   .play:focus-visible .play-disc::after {
     animation: ring 1.2s var(--ease) infinite;
@@ -135,13 +137,6 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
   @keyframes ring {
     0% { transform: scale(1); opacity: 0.8; }
     100% { transform: scale(1.7); opacity: 0; }
-  }
-  .card :global(iframe) {
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    border: 0;
-    border-radius: var(--radius);
-    background: #000;
   }
   h3 {
     font-size: 1.35rem;
@@ -157,6 +152,14 @@ const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', y
   }
   .meta a {
     color: var(--text-2);
+    text-decoration: none;
+  }
+  .meta a:hover {
+    color: var(--text);
+    text-decoration: underline;
+  }
+  .ext {
+    font-size: 0.7em;
   }
   .more {
     margin-top: var(--s5);

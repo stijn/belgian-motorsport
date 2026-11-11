@@ -2,27 +2,47 @@
 // The contact form. It posts to the Worker (worker/index.ts), which sends the message on by email;
 // his address lives only in a Worker secret, so it never appears in the page. Spam defences: a
 // honeypot field, a minimum time to fill in the form, a rate limit, and Turnstile when configured.
+import Fa from './Fa.astro';
+import LineMd from './LineMd.astro';
+import { faFlagCheckered, faLock, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
 import { contact } from '../data/site';
 import { href, demo } from '../lib/url';
-import LineMd from './LineMd.astro';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const f = t(lang).contact.form;
 const turnstile = contact.turnstileSiteKey;
 ---
-<form class="contact-form" method="post" action={contact.endpoint} data-contact-form data-demo={demo ? '' : undefined} novalidate>
-  {demo && <p class="demo-note">This is the preview: the form is switched off until the site is on its domain. Everything else about it is final.</p>}
+<form
+  class="contact-form"
+  method="post"
+  action={contact.endpoint}
+  data-contact-form
+  data-demo={demo ? '' : undefined}
+  data-msg-sending={f.sending}
+  data-msg-sent={f.sent}
+  data-msg-fail={f.fail}
+  data-msg-offline={f.offline}
+  novalidate
+>
+  {demo && <p class="demo-note">{f.demo}</p>}
   <div class="two">
-    <div class="field">
-      <label for="cf-name">Your name</label>
+    <div class="field" data-replay>
+      <label for="cf-name"><LineMd name="account" /><span>{f.name}</span></label>
       <input id="cf-name" name="name" type="text" autocomplete="name" required maxlength="100" />
     </div>
-    <div class="field">
-      <label for="cf-email">Your email</label>
+    <div class="field" data-replay>
+      <label for="cf-email"><LineMd name="email" /><span>{f.email}</span></label>
       <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200" inputmode="email" />
     </div>
   </div>
-  <div class="field">
-    <label for="cf-message">Your message</label>
-    <textarea id="cf-message" name="message" required minlength="10" maxlength="5000" rows="6"></textarea>
-    <p class="hint">What, where and when, and I’ll come back to you with what’s possible.</p>
+  <div class="field" data-replay>
+    <label for="cf-message"><LineMd name="text-box" /><span>{f.message}</span></label>
+    <p class="hint" id="cf-message-hint">{f.hint}</p>
+    <textarea id="cf-message" name="message" required minlength="10" maxlength="5000" rows="6" aria-describedby="cf-message-hint"></textarea>
   </div>
   {/* Honeypot: people never see it; bots fill it in. */}
   <div class="hp" aria-hidden="true">
@@ -32,16 +52,18 @@ const turnstile = contact.turnstileSiteKey;
   <input type="hidden" name="started" value="" />
   {turnstile && <div class="cf-turnstile" data-sitekey={turnstile} data-theme="dark" data-size="flexible"></div>}
   <div class="actions">
-    <button class="btn btn-red" type="submit" disabled={demo || undefined}>Send message</button>
+    <button class="btn btn-red" type="submit" disabled={demo || undefined}><Fa icon={faFlagCheckered} class="flag" />{f.send}</button>
     <p class="status" role="status" aria-live="polite" data-status></p>
   </div>
-  {/* Icons for the status line (src/scripts/contact-form.ts picks one). */}
+  <p class="privacy">
+    <span class="pv"><Fa icon={faLock} /> <Fa icon={faEnvelopeOpenText} /></span>
+    <span>{f.privacy} <a href={href('/privacy/', lang)}>{f.privacyLink}</a>.</span>
+  </p>
   <template data-status-icons>
     <span data-icon="sending"><LineMd name="loading-twotone-loop" /></span>
     <span data-icon="ok"><LineMd name="email-check" /></span>
     <span data-icon="error"><LineMd name="alert-circle" /></span>
   </template>
-  <p class="privacy">Your message goes straight to my inbox by email and isn’t stored anywhere else. <a href={href('/privacy/')}>Privacy</a>.</p>
 </form>
 {turnstile && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
 <script>
@@ -62,6 +84,15 @@ const turnstile = contact.turnstileSiteKey;
       grid-template-columns: 1fr 1fr;
     }
   }
+  .field label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
+  }
+  .field label .icon-line {
+    color: var(--red-ink);
+    font-size: 1.2em;
+  }
   .hp {
     position: absolute;
     left: -10000px;
@@ -74,6 +105,18 @@ const turnstile = contact.turnstileSiteKey;
     flex-wrap: wrap;
     align-items: center;
     gap: var(--s3) var(--s4);
+  }
+  .btn .flag {
+    font-size: 1.1em;
+    transition: transform 0.3s var(--ease);
+  }
+  .js-motion .btn:hover .flag {
+    animation: flag-wave 0.6s var(--ease) infinite;
+  }
+  @keyframes flag-wave {
+    0%, 100% { transform: rotate(0); }
+    30% { transform: rotate(-12deg); }
+    70% { transform: rotate(8deg); }
   }
   .status {
     min-height: 1.5em;
@@ -101,8 +144,22 @@ const turnstile = contact.turnstileSiteKey;
     color: var(--text);
   }
   .privacy {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
     font-size: 0.9rem;
     color: var(--text-3);
+  }
+  .pv {
+    display: inline-flex;
+    gap: 0.35em;
+    padding: 0.45rem 0.6rem;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    color: var(--text-2);
+  }
+  .privacy a {
+    color: var(--text-2);
   }
   .demo-note {
     padding: 0.75rem 1rem;

@@ -1,43 +1,54 @@
 ---
-// The page shell: fonts, metadata for search and sharing, header, footer, offline support.
+// The page shell: fonts, metadata for search and sharing in five languages, header, footer, the
+// back-to-top flag, offline support.
 import '@fontsource/barlow-condensed/latin-600.css';
 import '@fontsource/barlow-condensed/latin-700.css';
 import '@fontsource/barlow-condensed/latin-800.css';
 import '@fontsource/barlow/latin-400.css';
 import '@fontsource/barlow/latin-500.css';
 import '../styles/global.css';
+// The two faces on the first screen, preloaded so the headline never paints in a fallback first.
+import barlowCondensed800 from '@fontsource/barlow-condensed/files/barlow-condensed-latin-800-normal.woff2?url';
+import barlow500 from '@fontsource/barlow/files/barlow-latin-500-normal.woff2?url';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import ToTop from '../components/ToTop.astro';
 import { site, socials, stats } from '../data/site';
 import { href, demo } from '../lib/url';
+import { langs, t, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
+  /** The page's path after the language prefix: '/' for home, '/contact/' for contact. */
+  path?: string;
   title?: string;
   description?: string;
   /** Pages that shouldn't be in search results (thanks, 404). */
   noindex?: boolean;
-  /** The header starts transparent over a full-bleed hero. */
+  /** The header starts over a full-bleed hero. */
   overHero?: boolean;
   /** Extra JSON-LD for this page. */
   schema?: Record<string, unknown>[];
   /** Which share card (public/og-*.jpg, made by tools/share-cards.mjs). */
   card?: 'home' | 'contact' | 'privacy';
-  /** What the share card shows, for people who can't see it. */
   cardAlt?: string;
 }
+const d = t(Astro.props.lang);
 const {
-  title = site.title,
-  description = site.description,
+  lang,
+  path = '/',
+  title = d.meta.title,
+  description = d.meta.description,
   noindex = false,
   overHero = false,
   schema = [],
   card = 'home',
-  cardAlt = `A BMW M1 Procar at speed with flames from the exhaust, the red BM logo, and the words "${site.name}, ${site.tagline}".`,
+  cardAlt = d.meta.cardHome,
 } = Astro.props;
-const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const canonical = new URL(href(path, lang), Astro.site).href;
 const ogImage = new URL(href(`/og-${card}.jpg`), Astro.site).href;
 const ogSquare = new URL(href(`/og-${card}-square.jpg`), Astro.site).href;
-const ogAlt = cardAlt;
+const alternates = langs.map((l) => ({ lang: l, hreflang: t(l).htmlLang, url: new URL(href(path, l), Astro.site).href }));
 
 const org = {
   '@context': 'https://schema.org',
@@ -46,7 +57,7 @@ const org = {
   name: site.name,
   alternateName: 'BM',
   slogan: site.tagline,
-  description: site.description,
+  description: d.meta.description,
   url: site.url + '/',
   logo: new URL(href('/bm-logo.png'), Astro.site).href,
   image: ogImage,
@@ -55,7 +66,7 @@ const org = {
   address: { '@type': 'PostalAddress', addressCountry: 'BE' },
   knowsAbout: ['Motorsport photography', 'Motorsport videography', 'Endurance racing', 'Historic racing', 'Rallying', 'Supercars'],
   sameAs: socials.map((s) => s.url),
-  contactPoint: { '@type': 'ContactPoint', contactType: 'bookings', url: `${site.url}/#contact`, availableLanguage: ['en', 'nl', 'fr'] },
+  contactPoint: { '@type': 'ContactPoint', contactType: 'bookings', url: `${site.url}/#contact`, availableLanguage: ['en', 'nl', 'fr', 'de', 'it'] },
 };
 const website = {
   '@context': 'https://schema.org',
@@ -63,24 +74,28 @@ const website = {
   '@id': `${site.url}/#website`,
   url: site.url + '/',
   name: site.name,
-  description: site.description,
-  inLanguage: site.language,
+  description: d.meta.description,
+  inLanguage: d.htmlLang,
   publisher: { '@id': `${site.url}/#org` },
 };
 ---
 
 <!doctype html>
-<html lang={site.language} class="no-js">
+<html lang={d.htmlLang} class="no-js">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
     {/* JS and motion classes before the first paint. public/_headers allows this script by its hash;
-        tools/headers.test.mjs checks the hash still matches whenever this line changes. */}
+        tests/headers.test.ts checks the hash still matches whenever this line changes. */}
     <script is:inline>document.documentElement.className=matchMedia('(prefers-reduced-motion: reduce)').matches?'js':'js js-motion'</script>
     {noindex || demo ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
     <link rel="canonical" href={canonical} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={barlowCondensed800} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={barlow500} />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.hreflang} href={a.url} />)}
+    <link rel="alternate" hreflang="x-default" href={new URL(href(path, 'en'), Astro.site).href} />
     <link rel="sitemap" href={href('/sitemap-index.xml')} />
     <link rel="icon" href={href('/favicon.png')} type="image/png" sizes="48x48" />
     <link rel="icon" href={href('/icon-192.png')} type="image/png" sizes="192x192" />
@@ -99,20 +114,21 @@ const website = {
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content={ogAlt} />
+    <meta property="og:image:alt" content={cardAlt} />
     {/* A square version for the networks that crop to one (WhatsApp, Mastodon, iMessage). */}
     <meta property="og:image" content={ogSquare} />
     <meta property="og:image:type" content="image/jpeg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="1200" />
-    <meta property="og:image:alt" content={ogAlt} />
-    <meta property="og:locale" content={site.locale} />
+    <meta property="og:image:alt" content={cardAlt} />
+    <meta property="og:locale" content={d.ogLocale} />
+    {langs.filter((l) => l !== lang).map((l) => <meta property="og:locale:alternate" content={t(l).ogLocale} />)}
     <meta property="og:see_also" content={socials[0].url} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={ogAlt} />
+    <meta name="twitter:image:alt" content={cardAlt} />
     <meta name="apple-mobile-web-app-title" content="BM" />
     <meta name="application-name" content={site.name} />
     {socials.map((s) => <link rel="me" href={s.url} />)}
@@ -122,20 +138,24 @@ const website = {
     <slot name="head" />
   </head>
   <body>
-    <a class="skip" href="#main">Skip to content</a>
-    <Header overHero={overHero} />
+    <a class="skip" href="#main">{d.nav.skip}</a>
+    <Header lang={lang} path={path} overHero={overHero} />
     <main id="main" tabindex="-1">
       <slot />
     </main>
-    <Footer />
-    <p class="offline-note" role="status" data-offline data-text="No connection. You’re seeing the copy saved on this device."></p>
-    <p class="update-note" role="status" data-update hidden>
-      <span>A newer version of this page is ready.</span>
-      <button type="button" class="btn btn-red btn-small">Reload</button>
-    </p>
+    <Footer lang={lang} />
+    <ToTop lang={lang} />
+    <aside aria-label="Status">
+      <p class="offline-note" role="status" data-offline data-text={d.notes.offline}></p>
+      <p class="update-note" role="status" data-update hidden>
+        <span>{d.notes.newer}</span>
+        <button type="button" class="btn btn-red btn-small">{d.notes.reload}</button>
+      </p>
+    </aside>
     <script>
       import '../scripts/reveal';
       import '../scripts/line-md';
+      import '../scripts/delight';
       import '../scripts/offline';
     </script>
   </body>

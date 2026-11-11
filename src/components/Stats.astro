@@ -1,14 +1,30 @@
 ---
-// The numbers, in one strip. They're rounded down in src/data/site.ts so they stay true for a while.
+// The numbers, in one strip, each with its line-md icon. They count up when the strip comes into view
+// (src/scripts/stats.ts); the values are rounded down in src/data/site.ts so they stay true for a while.
+import LineMd from './LineMd.astro';
 import { stats } from '../data/site';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
 const years = new Date(stats.asOf).getFullYear() - stats.since;
+const items = [
+  { icon: 'calendar', value: String(years), plus: false, label: d.stats.years },
+  ...stats.items.map((s) => ({ icon: s.icon, value: s.value, plus: true, label: d.stats[s.key] })),
+];
 ---
-<section id="stats" class="stats" aria-label="In numbers">
+<section id="stats" class="stats" aria-label={d.stats.years}>
   <div class="wrap">
     <ul data-stagger>
-      <li class="rv"><span class="value num" data-count={String(years)}>{years}</span><span class="label">years trackside</span></li>
-      {stats.items.map((s) => (
-        <li class="rv"><span class="value num" data-count={s.value}>{s.value}<i>+</i></span><span class="label">{s.label}</span></li>
+      {items.map((s) => (
+        <li class="rv" data-replay>
+          <span class="ico"><LineMd name={s.icon} /></span>
+          <span class="value num" data-count={s.value}>{s.value}{s.plus && <i>+</i>}</span>
+          <span class="label">{s.label}</span>
+        </li>
       ))}
     </ul>
   </div>
@@ -27,17 +43,18 @@ const years = new Date(stats.asOf).getFullYear() - stats.since;
     margin: 0;
     padding: var(--s4) 0;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: var(--s3) var(--s4);
   }
   li {
     position: relative;
     display: grid;
-    gap: 0.1rem;
-    padding: var(--s2) 0;
-    padding-left: var(--s3);
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    column-gap: 0.75rem;
+    align-items: center;
+    padding: var(--s2) 0 var(--s2) var(--s3);
   }
-  /* The red marker draws down as the item reveals. */
   li::before {
     content: '';
     position: absolute;
@@ -52,10 +69,21 @@ const years = new Date(stats.asOf).getFullYear() - stats.since;
   .js-motion li:not(.in)::before {
     transform: scaleY(0);
   }
+  .ico {
+    grid-row: 1 / 3;
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+    color: var(--red-ink);
+    font-size: 1.25rem;
+  }
   .value {
     font-family: var(--font-display);
     font-weight: 800;
-    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    font-size: clamp(2rem, 3.6vw, 2.9rem);
     line-height: 1;
     letter-spacing: -0.01em;
   }

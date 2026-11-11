@@ -1,41 +1,70 @@
 ---
-// Sticky header: the BM logo, the sections, and the four networks. Transparent over the hero,
-// a dark bar once the page scrolls (src/scripts/header.ts).
+// Sticky header: the BM logo, the sections with their icons, and the language switcher. Over the hero
+// it is transparent with a soft shade; a dark bar once the page scrolls (src/scripts/header.ts). No
+// social links here: a new visitor should land in the work, not leave for YouTube; the footer has them.
 import { Image } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
-import SocialIcon from './SocialIcon.astro';
-import { site, socials, nav } from '../data/site';
+import LineMd from './LineMd.astro';
+import Fa from './Fa.astro';
+import { faLanguage, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { site, sections } from '../data/site';
 import { href } from '../lib/url';
+import { langs, t, type Lang } from '../i18n';
 
 interface Props {
+  lang: Lang;
+  path?: string;
   overHero?: boolean;
 }
-const { overHero = false } = Astro.props;
+const { lang, path = '/', overHero = false } = Astro.props;
+const d = t(lang);
+const nav = sections.map((s) => ({ ...s, label: d.nav[s.key], href: href(`/#${s.id}`, lang) }));
+const languages = langs.map((l) => ({ lang: l, name: t(l).name, code: t(l).htmlLang, href: href(path, l), current: l === lang }));
 ---
 <header class:list={['site-header', { 'over-hero': overHero, 'brand-hidden': overHero }]} data-header>
   <div class="wrap bar">
-    <a class="brand" href={href('/')} aria-label={`${site.name}, home`} data-brand>
+    <a class="brand" href={href('/', lang)} aria-label={`${site.name}, ${d.nav.home}`} data-brand>
       <Image src={logo} alt="" width="138" height="51" densities={[1, 2, 3]} loading="eager" class="brand-logo" />
       <span class="brand-text"><strong>{site.name}</strong><em>{site.tagline}</em></span>
     </a>
-    <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-btn>
-      <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
-      <span class="menu-label">Menu</span>
-    </button>
-    <nav id="site-nav" class="site-nav" aria-label="Site" data-menu>
+
+    <nav id="site-nav" class="site-nav" aria-label={d.nav.site} data-menu>
       <ul class="nav-links">
-        {nav.map((n) => <li><a href={href(n.href)} data-nav>{n.label}</a></li>)}
-      </ul>
-      <ul class="nav-social" aria-label="Elsewhere">
-        {socials.map((s) => (
-          <li>
-            <a href={s.url} rel="me noopener" title={s.label} aria-label={s.label}>
-              <SocialIcon network={s.key} />
-            </a>
-          </li>
+        {nav.map((n) => (
+          <li><a href={n.href} data-nav data-replay><LineMd name={n.icon} /><span>{n.label}</span></a></li>
         ))}
       </ul>
+      <div class="nav-langs" aria-label={d.nav.languages}>
+        <p class="nav-langs-label"><Fa icon={faLanguage} /> {d.nav.languages}</p>
+        <ul>
+          {languages.map((l) => (
+            <li><a href={l.href} lang={l.code} hreflang={l.code} aria-current={l.current ? 'page' : undefined}>{l.name}</a></li>
+          ))}
+        </ul>
+      </div>
     </nav>
+
+    <div class="right">
+      {/* Desktop language switcher: a native disclosure, keyboard-friendly without JS. */}
+      <details class="lang" data-lang>
+        <summary>
+          <Fa icon={faLanguage} /><span class="visually-hidden">{d.nav.languages}: </span><span>{d.name}</span>
+        </summary>
+        <ul class="lang-list">
+          {languages.map((l) => (
+            <li>
+              <a href={l.href} lang={l.code} hreflang={l.code} aria-current={l.current ? 'page' : undefined}>
+                {l.name}{l.current && <Fa icon={faCheck} class="tick" />}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+      <button class="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav" data-menu-btn>
+        <span class="menu-lines" aria-hidden="true"><i></i><i></i></span>
+        <span class="menu-label">{d.nav.menu}</span>
+      </button>
+    </div>
   </div>
 </header>
 <script>
@@ -53,11 +82,13 @@ const { overHero = false } = Astro.props;
     border-bottom: 1px solid var(--line);
     transition: background 0.4s, border-color 0.4s;
   }
-  /* Over the hero the bar floats on a dark backdrop (the links must read over any photo). */
+  /* Over the hero the bar floats on a soft shade until the page scrolls; the links carry a halo. */
   .site-header.over-hero:not(.scrolled) {
     position: fixed;
     inset-inline: 0;
-    background: var(--scrim);
+    background: linear-gradient(rgb(0 0 0 / 0.7), rgb(0 0 0 / 0.35) 70%, transparent);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
     border-color: transparent;
   }
   .site-header.over-hero.scrolled {
@@ -79,8 +110,6 @@ const { overHero = false } = Astro.props;
     flex: none;
     transition: opacity 0.5s var(--ease), transform 0.5s var(--ease);
   }
-  /* On the home page the big logo in the hero does the talking; this one arrives once it has
-     scrolled away (src/scripts/header.ts). */
   .brand-hidden .brand {
     opacity: 0;
     transform: translateY(-6px);
@@ -94,7 +123,7 @@ const { overHero = false } = Astro.props;
   .brand-text {
     display: none;
   }
-  @media (min-width: 1100px) {
+  @media (min-width: 1180px) {
     .brand-text {
       display: grid;
       line-height: 1.1;
@@ -114,14 +143,19 @@ const { overHero = false } = Astro.props;
     font-size: 0.85rem;
     color: var(--text-2);
   }
+  .right {
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+  }
 
   .site-nav {
     display: flex;
     align-items: center;
     gap: var(--s5);
+    margin-left: auto;
   }
-  .nav-links,
-  .nav-social {
+  .nav-links {
     list-style: none;
     margin: 0;
     padding: 0;
@@ -130,15 +164,23 @@ const { overHero = false } = Astro.props;
     gap: var(--s4);
   }
   .nav-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45em;
     font-family: var(--font-display);
     font-weight: 600;
     font-size: 1.1rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
     text-decoration: none;
-    color: var(--text-2);
+    color: var(--text);
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.9), 0 0 10px rgb(0 0 0 / 0.8);
     padding: 0.5rem 0;
     position: relative;
+  }
+  .nav-links .icon-line {
+    font-size: 1.05em;
+    color: var(--red-ink);
   }
   .nav-links a::after {
     content: '';
@@ -150,40 +192,95 @@ const { overHero = false } = Astro.props;
     background: var(--red);
     transition: right 0.3s var(--ease);
   }
-  .nav-links a:hover,
-  .nav-links a.active {
-    color: var(--text);
-  }
   .nav-links a:hover::after,
   .nav-links a.active::after {
     right: 0;
   }
-  .nav-social {
-    gap: 0.25rem;
-    border-left: 1px solid var(--line-2);
-    padding-left: var(--s4);
+  .nav-langs {
+    display: none;
   }
-  .nav-social a {
-    display: grid;
-    place-items: center;
-    width: 2.5rem;
-    height: 2.5rem;
-    border-radius: 50%;
+
+  /* Language switcher */
+  .lang {
+    position: relative;
+  }
+  .lang summary {
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-shadow: 0 1px 2px rgb(0 0 0 / 0.9);
+    background: rgb(11 11 12 / 0.55);
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .lang summary::-webkit-details-marker {
+    display: none;
+  }
+  .lang summary .icon {
+    font-size: 1.2em;
+    color: var(--red-ink);
+  }
+  .lang summary:hover,
+  .lang[open] summary {
+    border-color: var(--text);
+    background: var(--bg-2);
+  }
+  .lang-list {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 0.5rem);
+    min-width: 11rem;
+    list-style: none;
+    margin: 0;
+    padding: 0.35rem;
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius);
+    box-shadow: 0 16px 40px rgb(0 0 0 / 0.5);
+    z-index: 5;
+  }
+  .js-motion .lang[open] .lang-list {
+    animation: drop 0.25s var(--ease);
+  }
+  @keyframes drop {
+    from { opacity: 0; transform: translateY(-6px); }
+  }
+  .lang-list a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s3);
+    padding: 0.55rem 0.8rem;
+    border-radius: 3px;
+    text-decoration: none;
     color: var(--text-2);
-    font-size: 1.1rem;
-    transition: color 0.2s, background 0.2s, transform 0.3s var(--ease);
   }
-  .nav-social a:hover {
-    color: #fff;
-    background: var(--red);
-    transform: translateY(-2px);
+  .lang-list a:hover {
+    background: var(--bg-3);
+    color: var(--text);
+  }
+  .lang-list a[aria-current] {
+    color: var(--text);
+  }
+  .tick {
+    color: var(--red-ink);
+    font-size: 0.85em;
   }
 
   .menu-btn {
     display: none;
     align-items: center;
     gap: 0.6rem;
-    background: none;
+    background: rgb(11 11 12 / 0.55);
     border: 1px solid var(--line-2);
     border-radius: 999px;
     padding: 0.5rem 1rem;
@@ -212,15 +309,19 @@ const { overHero = false } = Astro.props;
     transform: translateY(-3.5px) rotate(-45deg);
   }
 
-  @media (max-width: 900px) {
+  @media (max-width: 960px) {
     .menu-btn {
       display: inline-flex;
+    }
+    .lang {
+      display: none;
     }
     .site-nav {
       position: fixed;
       top: var(--header-h);
       inset-inline: 0;
       bottom: 0;
+      margin: 0;
       flex-direction: column;
       align-items: stretch;
       justify-content: space-between;
@@ -246,11 +347,14 @@ const { overHero = false } = Astro.props;
       border-top: 1px solid var(--line);
     }
     .nav-links a {
-      display: block;
+      display: flex;
       font-size: clamp(2rem, 9vw, 3rem);
       padding: 0.6rem 0;
+      text-shadow: none;
     }
-    /* Items slide in one after another once the panel is open. */
+    .nav-links a::after {
+      display: none;
+    }
     .nav-links li {
       opacity: 0;
       transform: translateX(24px);
@@ -265,27 +369,46 @@ const { overHero = false } = Astro.props;
     .site-nav.open .nav-links li:nth-child(3) { transition-delay: 0.22s; }
     .site-nav.open .nav-links li:nth-child(4) { transition-delay: 0.28s; }
     .site-nav.open .nav-links li:nth-child(5) { transition-delay: 0.34s; }
-    .nav-social {
+    .nav-langs {
+      display: block;
       opacity: 0;
       transition: opacity 0.4s 0.4s;
     }
-    .site-nav.open .nav-social {
+    .site-nav.open .nav-langs {
       opacity: 1;
     }
-    .nav-links a::after {
-      display: none;
+    .nav-langs-label {
+      font-family: var(--font-display);
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      color: var(--text-3);
+      margin-bottom: var(--s2);
     }
-    .nav-social {
-      border: 0;
+    .nav-langs-label .icon {
+      color: var(--red-ink);
+      font-size: 1.2em;
+    }
+    .nav-langs ul {
+      list-style: none;
+      margin: 0;
       padding: 0;
-      justify-content: center;
-      gap: var(--s3);
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--s2);
     }
-    .nav-social a {
-      width: 3.25rem;
-      height: 3.25rem;
-      font-size: 1.4rem;
+    .nav-langs a {
+      display: inline-block;
+      padding: 0.5rem 0.9rem;
       border: 1px solid var(--line-2);
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--text-2);
+    }
+    .nav-langs a[aria-current] {
+      border-color: var(--red);
+      color: var(--text);
     }
   }
 </style>

@@ -1,18 +1,13 @@
-// Everything about the site that is words rather than code. Edit here; the pages read from it.
-// Name, tagline and the BM logo stay as they were on the old site.
+// Everything about the site that is data rather than words. The words are in src/i18n/ (one file per
+// language). Name, tagline and the BM logo stay as they were on the old site; the tagline is the brand
+// and stays English in every language.
 
 export const site = {
   name: 'Belgian Motorsport',
   tagline: 'Passionate about cars',
   /** The canonical domain. belgianmotorsport.com redirects here (see docs/go-live.md). */
   url: 'https://belgian-motorsport.com',
-  /** The <title> of the home page and the share cards. */
-  title: 'Belgian Motorsport — Motorsport photography and film from Belgium & Europe',
-  description:
-    'Motorsport photographer and filmmaker from Belgium. Race cars, rally cars and supercars at Spa-Francorchamps, Zolder, the Nürburgring and the rally stages of Belgium and Europe, in photos and film since 2006.',
-  locale: 'en_BE',
-  language: 'en',
-  /** Where he is based: used in the contact section and the structured data. */
+  /** Where he is based, for the structured data. */
   based: 'Belgium',
   themeColor: '#0b0b0c',
 } as const;
@@ -64,49 +59,35 @@ export const accounts = {
 
 /**
  * The numbers on the home page. They come from the channel and Flickr pages; rounded down so they
- * stay true for a while. Update `asOf` when you refresh them (npm run sync prints the current values).
+ * stay true for a while. Update `asOf` when you refresh them. The labels are in src/i18n/ (stats.*),
+ * the icons are line-md names.
  */
 export const stats = {
   asOf: '2026-11-11',
   since: 2006,
   items: [
-    { value: '125K', label: 'YouTube subscribers' },
-    { value: '62M', label: 'video views' },
-    { value: '2,750', label: 'films' },
-    { value: '9,500', label: 'photos on Flickr' },
+    { key: 'subscribers', value: '125K', icon: 'account' },
+    { key: 'views', value: '62M', icon: 'play' },
+    { key: 'films', value: '2,750', icon: 'youtube' },
+    { key: 'photos', value: '9,500', icon: 'camera' },
   ],
 } as const;
 
-/** The About section and the footer. The first two sentences are his own, from the old site. */
-export const about = {
-  short: 'I am passionate about everything car-related. Mostly racecars and supercars.',
-  long: [
-    'I am passionate about everything car-related. Mostly racecars and supercars. I film everything, as long as it’s fast and has a beautiful sound.',
-    'Since 2006 I have been at the fences and in the pit lanes of Spa-Francorchamps, Zolder and the Nürburgring, and on the rally stages of Limburg, the Ardennes and the Eifel: endurance racing, historic grands prix, hill climbs, track days and test days.',
-    'The photos go to Flickr, the films to YouTube, and the best of both to Instagram and Facebook. Everything you see here is mine.',
-  ],
-  /** What he can be booked for. Edit freely. */
-  services: [
-    { title: 'Race weekends and track days', text: 'Trackside and pit-lane coverage of a weekend, a race or a single session.' },
-    { title: 'Teams, drivers and sponsors', text: 'Action and portrait photography of your car and crew, delivered ready for print and social media.' },
-    { title: 'Car portraits and collections', text: 'Static and rolling shots of road cars, classics and supercars, on location.' },
-    { title: 'Film with real sound', text: 'Flybys, on-boards and accelerations, cut to the sound of the engine rather than a soundtrack.' },
-  ],
-} as const;
+/** Icons (Font Awesome) for the four services; the words are in src/i18n/ (about.services). */
+export const serviceIcons = ['flag', 'users', 'car', 'video'] as const;
+
+/** The sections of the home page, with their line-md icons. Labels come from src/i18n/ (nav.*). */
+export const sections = [
+  { id: 'work', key: 'photos', icon: 'camera' },
+  { id: 'film', key: 'film', icon: 'play' },
+  { id: 'events', key: 'events', icon: 'calendar' },
+  { id: 'about', key: 'about', icon: 'account' },
+  { id: 'contact', key: 'contact', icon: 'email' },
+] as const;
 
 export const contact = {
-  heading: 'Want to work with me?',
-  text: 'I’m based in Belgium. Let’s get in touch.',
   /** The form posts here; a Cloudflare Worker sends it on by email. His address is a secret on the Worker. */
   endpoint: '/api/contact',
   /** Cloudflare Turnstile site key. Leave empty to run without it (the honeypot and rate limit stay). */
   turnstileSiteKey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '',
 } as const;
-
-export const nav = [
-  { href: '/#work', label: 'Photos' },
-  { href: '/#film', label: 'Film' },
-  { href: '/#events', label: 'Events' },
-  { href: '/#about', label: 'About' },
-  { href: '/#contact', label: 'Contact' },
-] as const;

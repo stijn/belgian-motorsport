@@ -103,6 +103,12 @@ a:hover {
   color: #fff;
 }
 
+/* The one red word in a headline (src/lib/accent.ts). */
+.accent {
+  font-style: normal;
+  color: var(--red-ink);
+}
+
 h1,
 h2,
 h3,
@@ -170,6 +176,10 @@ button {
   gap: 0.7em;
 }
 
+.eyebrow .icon-line {
+  font-size: 1.35em;
+}
+
 .eyebrow::before {
   content: '';
   width: 2rem;
@@ -177,6 +187,11 @@ button {
   background: var(--red);
   transform-origin: left;
   transition: transform 0.8s var(--ease) 0.15s;
+}
+
+/* Hovering a section head turns the line into a chequered flag. */
+.section-head:hover .eyebrow::before {
+  background: repeating-linear-gradient(90deg, var(--text) 0 4px, var(--bg) 4px 8px);
 }
 
 .js-motion .eyebrow.rv:not(.in)::before {
@@ -444,6 +459,18 @@ button {
 
 .num {
   font-variant-numeric: tabular-nums;
+}
+
+/* The hero logo revs on hover (src/scripts/delight.ts). */
+.js-motion .rev {
+  animation: rev 0.6s var(--ease);
+}
+
+@keyframes rev {
+  0% { transform: none; }
+  30% { transform: skewX(-8deg) translateX(6px); }
+  60% { transform: skewX(3deg) translateX(-2px); }
+  100% { transform: none; }
 }
 
 /* Offline note ----------------------------------------------------------- */

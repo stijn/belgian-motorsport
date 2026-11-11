@@ -11,7 +11,8 @@ for the move from Dreamhost to Cloudflare.
 
 | What | Where |
 |---|---|
-| Name, tagline, description, the four networks, the numbers, About, services, contact copy, nav | `src/data/site.ts` |
+| Every word, in five languages (one file each, English is the source) | `src/i18n/` |
+| Name, tagline, the four networks, the numbers, section icons | `src/data/site.ts` |
 | Gallery photos (which, caption, alt text) | `src/data/gallery.json` + `src/assets/gallery/` |
 | Latest films and albums (written by `npm run sync`) | `src/data/videos.json`, `src/data/albums.json` + `src/assets/videos/`, `src/assets/albums/` |
 | Hero photos | `src/assets/hero/` (used in `src/components/Hero.astro`) |
@@ -19,7 +20,7 @@ for the move from Dreamhost to Cloudflare.
 | Design tokens and shared styles | `src/styles/global.css` |
 | Page shell, metadata, JSON-LD | `src/layouts/Base.astro` |
 | Sections of the home page | `src/components/` |
-| Pages | `src/pages/` (`index`, `contact`, `privacy`, `thanks`, `404`, the manifest) |
+| Pages | `src/views/` (one per page) rendered by `src/pages/` at the root (English) and `src/pages/[lang]/` (nl, fr, de, it); `404` and the manifest |
 | Contact form server side | `worker/index.ts`, `worker/contact.ts` (+ tests) |
 | Security and caching headers, redirects, service worker, icons, share image | `public/` |
 | Scripts that build things | `tools/sync.mjs` (films, albums), `tools/icons.mjs` (icons), `tools/share-cards.mjs` (share cards) |
@@ -45,6 +46,9 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 
 ## How it works
 
+- **Languages.** English lives at the root, the others under `/nl/`, `/fr/`, `/de/`, `/it/`. Each page
+  links its siblings with `hreflang` (plain language codes, `x-default` on English). Proper names, the
+  tagline and photo captions stay as they are.
 - **Static first.** Every page is HTML built ahead of time. Cloudflare serves `dist/` as static assets;
   only `/api/*` runs the Worker (`wrangler.jsonc` → `run_worker_first`).
 - **Contact form.** `POST /api/contact` validates the message, checks a honeypot, a minimum fill-in

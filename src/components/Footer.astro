@@ -1,46 +1,67 @@
 ---
-// The footer keeps what the old site's footer said: the About line and the four places his work lives,
-// each with its own label and brand colour.
+// Four columns: who, the four places his work lives (the old footer's labels, each in its brand colour,
+// opening in a new window), this page, and rights with the credits Font Awesome's licence asks for.
+// A small delight: hover the logo and a car races along the tricolour.
 import { Image } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
 import SocialIcon from './SocialIcon.astro';
-import { site, socials, about, nav } from '../data/site';
+import { site, socials, sections } from '../data/site';
 import { href } from '../lib/url';
+import { t, type Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const d = t(lang);
 const year = new Date().getFullYear();
+const [before, after] = d.footer.rightsText.split('{link}');
 ---
-<footer class="site-footer">
+<footer class="site-footer" data-footer>
   <div class="wrap grid">
     <div class="col about">
-      <a href={href('/')} class="logo" aria-label={`${site.name}, home`}>
+      <a href={href('/', lang)} class="logo" aria-label={`${site.name}, ${d.nav.home}`} data-delight="race">
         <Image src={logo} alt="" width="160" height="59" densities={[1, 2]} />
       </a>
       <p class="tagline">{site.tagline}</p>
-      <p class="blurb">{about.short} You can see more of my work at:</p>
+      <p class="blurb">{d.footer.blurb}</p>
+    </div>
+    <nav class="col" aria-label={d.footer.networks}>
+      <h2 class="label">{d.footer.networks}</h2>
       <ul class="networks">
         {socials.map((s) => (
           <li>
-            <a href={s.url} rel="me noopener" style={`--brand:${s.color}`}>
+            <a href={s.url} target="_blank" rel="me noopener" style={`--brand:${s.color}`}>
               <span class="dot"><SocialIcon network={s.key} /></span>
               <span>{s.label}</span>
             </a>
           </li>
         ))}
       </ul>
-    </div>
-    <nav class="col links" aria-label="Footer">
-      <h2 class="label">On this page</h2>
+    </nav>
+    <nav class="col links" aria-label={d.footer.onThisPage}>
+      <h2 class="label">{d.footer.onThisPage}</h2>
       <ul>
-        {nav.map((n) => <li><a href={href(n.href)}>{n.label}</a></li>)}
-        <li><a href={href('/privacy/')}>Privacy</a></li>
+        {sections.map((s) => <li><a href={href(`/#${s.id}`, lang)}>{d.nav[s.key]}</a></li>)}
+        <li><a href={href('/privacy/', lang)}>{d.footer.privacy}</a></li>
       </ul>
     </nav>
     <div class="col meta">
-      <h2 class="label">Rights</h2>
-      <p>Every photo and film on this site and on the channels above is my own work. Please ask before using one: the <a href={href('/#contact')}>contact form</a> is the quickest way.</p>
-      <p class="small">© {year} {site.name}. All rights reserved.</p>
+      <h2 class="label">{d.footer.rights}</h2>
+      <p>{before}<a href={href('/#contact', lang)}>{d.footer.rightsLink}</a>{after}</p>
+      <p class="small">© {year} {site.name}. {d.footer.copyright}</p>
+      <p class="small credits">{d.footer.credits}</p>
     </div>
   </div>
-  <div class="stripe" aria-hidden="true"></div>
+  <div class="stripe" aria-hidden="true">
+    {/* A simple car silhouette, drawn by hand: it races the stripe when the logo is hovered. */}
+    <svg class="car" viewBox="0 0 64 24" width="64" height="24" aria-hidden="true">
+      <path d="M4 16h4l5-7h18l9 6h14a6 6 0 0 1 6 5v0H4z" fill="#f3f2ef"/>
+      <path d="M14 10l-3 5h8v-5zM21 10v5h9l-6-5z" fill="#0b0b0c"/>
+      <circle cx="16" cy="19" r="4" fill="#0b0b0c" stroke="#f3f2ef" stroke-width="1.5"/>
+      <circle cx="46" cy="19" r="4" fill="#0b0b0c" stroke="#f3f2ef" stroke-width="1.5"/>
+    </svg>
+  </div>
 </footer>
 
 <style>
@@ -54,10 +75,15 @@ const year = new Date().getFullYear();
     gap: var(--s5);
     padding-block: var(--s6) var(--s5);
   }
-  @media (min-width: 820px) {
+  @media (min-width: 700px) {
     .grid {
-      grid-template-columns: 1.6fr 0.8fr 1.2fr;
-      gap: var(--s6);
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1000px) {
+    .grid {
+      grid-template-columns: 1.3fr 1fr 0.7fr 1.2fr;
+      gap: var(--s5);
     }
   }
   .logo {
@@ -74,12 +100,12 @@ const year = new Date().getFullYear();
   }
   .blurb {
     margin-top: var(--s3);
-    max-width: 44ch;
+    max-width: 40ch;
     color: var(--text-2);
   }
   .networks {
     list-style: none;
-    margin: var(--s4) 0 0;
+    margin: 0;
     padding: 0;
     display: grid;
     gap: 0.6rem;
@@ -146,9 +172,29 @@ const year = new Date().getFullYear();
     color: var(--text-3);
     margin-top: var(--s4);
   }
+  .credits {
+    margin-top: var(--s2);
+  }
   /* Black, yellow, red: the tricolour as a finish line. */
   .stripe {
+    position: relative;
     height: 6px;
     background: linear-gradient(90deg, #000 0 33.3%, #fdda24 33.3% 66.6%, var(--red) 66.6%);
+  }
+  .car {
+    position: absolute;
+    left: -80px;
+    bottom: 4px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .js-motion .site-footer.racing .car {
+    animation: race 1.6s cubic-bezier(0.3, 0, 0.2, 1) forwards;
+  }
+  @keyframes race {
+    0% { opacity: 0; transform: translateX(0); }
+    8% { opacity: 1; }
+    92% { opacity: 1; }
+    100% { opacity: 0; transform: translateX(calc(100vw + 100px)); }
   }
 </style>

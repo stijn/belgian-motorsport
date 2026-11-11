@@ -12,9 +12,22 @@ interface Props {
   label?: string;
 }
 const { name, class: cls, label } = Astro.props;
-const data = getIconData(icons, name);
-if (!data) throw new Error(`line-md icon not found: ${name}`);
-const { attributes, body } = iconToSVG(data, { height: '1em' });
+// line-md has no camera; this one is drawn in its style (24-unit grid, 2px round strokes that draw
+// themselves): the body first, then the lens, then the shutter button.
+const own: Record<string, { attributes: Record<string, string>; body: string }> = {
+  camera: {
+    attributes: { viewBox: '0 0 24 24', width: '1em', height: '1em' },
+    body:
+      '<g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">' +
+      '<path stroke-dasharray="64" stroke-dashoffset="64" d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="64;0"/></path>' +
+      '<circle cx="12" cy="13" r="3.5" stroke-dasharray="24" stroke-dashoffset="24"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.5s" dur="0.4s" values="24;0"/></circle>' +
+      '<path stroke-dasharray="4" stroke-dashoffset="4" d="M17 10.5h1"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.9s" dur="0.2s" values="4;0"/></path>' +
+      '</g>',
+  },
+};
+const data = own[name] ? null : getIconData(icons, name);
+if (!data && !own[name]) throw new Error(`line-md icon not found: ${name}`);
+const { attributes, body } = own[name] ?? iconToSVG(data!, { height: '1em' });
 const attrs: Record<string, string> = {
   ...attributes,
   class: ['icon icon-line', cls].filter(Boolean).join(' '),
