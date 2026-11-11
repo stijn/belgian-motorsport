@@ -1,0 +1,129 @@
+---
+// Where he's been: his Flickr albums by year (src/data/albums.json, npm run sync), each linking to
+// the full album. It shows the range: endurance, historics, rallies, hill climbs, test days.
+import { Picture } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Fa from './Fa.astro';
+import SocialIcon from './SocialIcon.astro';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import albums from '../data/albums.json';
+import { socials, stats } from '../data/site';
+
+const covers = import.meta.glob<{ default: ImageMetadata }>('../assets/albums/*.jpg', { eager: true });
+const flickr = socials.find((s) => s.key === 'flickr')!;
+const withCover = albums
+  .map((a) => ({ ...a, img: covers[`../assets/albums/${a.cover}`]?.default }))
+  .filter((a) => a.img);
+const years = [...new Set(withCover.map((a) => a.year).filter((y): y is number => y !== null))].sort((a, b) => b - a);
+const byYear = years.map((y) => ({ year: y, albums: withCover.filter((a) => a.year === y) }));
+const photos = stats.items.find((s) => s.label.includes('photos'))?.value;
+---
+<section id="events" class="section events">
+  <div class="wrap">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow rv">Events</p>
+        <h2 class="h2 rv">Where you’ll find me</h2>
+      </div>
+      <p class="lead rv">Endurance at Spa, historics at Zolder and the Nürburgring, rallies in Limburg, the Ardennes and the Eifel, hill climbs, test days. Every event gets its own album.</p>
+    </div>
+
+    {byYear.map(({ year, albums }) => (
+      <div class="year">
+        <h3 class="year-label rv"><span class="num">{year}</span></h3>
+        <ul class="row" data-stagger>
+          {albums.map((a) => (
+            <li class="rv">
+              <a class="album" href={a.url} rel="noopener">
+                <span class="cover ph">
+                  <Picture src={a.img!} alt="" widths={[320, 480, 640]} sizes="(min-width: 900px) 300px, 70vw" formats={['avif', 'webp']} quality={62} loading="lazy" />
+                </span>
+                <span class="album-title">{a.title}</span>
+                <span class="album-meta">{a.photos ? `${a.photos} photos` : 'Album'} · Flickr</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+
+    <p class="more rv">
+      <a class="link-arrow" href={flickr.url} rel="me noopener">
+        <SocialIcon network="flickr" /> All {photos}+ photos in {albums.length}+ albums on Flickr <Fa icon={faArrowRight} />
+      </a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .year + .year {
+    margin-top: var(--s5);
+  }
+  .year-label {
+    font-size: clamp(2rem, 4vw, 3rem);
+    color: var(--text-3);
+    display: flex;
+    align-items: center;
+    gap: var(--s3);
+    margin-bottom: var(--s3);
+  }
+  .year-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .row {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 var(--s2);
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: min(70vw, 300px);
+    gap: var(--s3);
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-2) transparent;
+    /* Let the row bleed to the viewport edge on small screens. */
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+  }
+  .row li {
+    scroll-snap-align: start;
+  }
+  .album {
+    display: grid;
+    gap: 0.5rem;
+    text-decoration: none;
+    color: var(--text);
+  }
+  .cover {
+    aspect-ratio: 3 / 2;
+    border-radius: var(--radius);
+  }
+  .cover :global(img) {
+    transition: transform 0.8s var(--ease), opacity 0.6s;
+  }
+  .album:hover .cover :global(img) {
+    transform: scale(1.05);
+  }
+  .album-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.2rem;
+    line-height: 1.1;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .album:hover .album-title {
+    color: var(--red-2);
+  }
+  .album-meta {
+    font-size: 0.85rem;
+    color: var(--text-3);
+  }
+  .more {
+    margin-top: var(--s5);
+  }
+</style>

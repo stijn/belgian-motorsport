@@ -1,0 +1,88 @@
+---
+// The contact section: his words from the old site, and the form.
+import ContactForm from './ContactForm.astro';
+import SocialIcon from './SocialIcon.astro';
+import { contact, socials, site } from '../data/site';
+---
+<section id="contact" class="section contact">
+  <div class="wrap grid">
+    <div class="intro">
+      <p class="eyebrow rv">Contact</p>
+      <h2 class="h2 rv">{contact.heading}</h2>
+      <p class="lead rv">{contact.text}</p>
+      <p class="rv">Bookings, prints, licensing a photo or a film clip, a car you’d like shot: send a note and I’ll reply by email.</p>
+      <ul class="dm rv" aria-label="Or send a message on">
+        {socials.filter((s) => s.key === 'instagram' || s.key === 'facebook').map((s) => (
+          <li><a href={s.url} rel="me noopener"><SocialIcon network={s.key} /> {s.name}</a></li>
+        ))}
+      </ul>
+      <p class="based rv">{site.name} · {site.based}</p>
+    </div>
+    <div class="form rv">
+      <ContactForm />
+    </div>
+  </div>
+</section>
+
+<style>
+  .grid {
+    display: grid;
+    gap: var(--s5);
+  }
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: 1fr 1.2fr;
+      gap: var(--s6);
+    }
+  }
+  .intro p {
+    color: var(--text-2);
+    max-width: 44ch;
+  }
+  .intro .lead {
+    margin-top: var(--s3);
+    color: var(--text);
+  }
+  .intro p + p {
+    margin-top: var(--s3);
+  }
+  .dm {
+    list-style: none;
+    margin: var(--s4) 0 0;
+    padding: 0;
+    display: flex;
+    gap: var(--s2);
+  }
+  .dm a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    text-decoration: none;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .dm a:hover {
+    border-color: var(--text);
+  }
+  .based {
+    margin-top: var(--s5) !important;
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    color: var(--text-3) !important;
+  }
+  .form {
+    position: relative;
+    padding: clamp(var(--s4), 3vw, var(--s5));
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+</style>

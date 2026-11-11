@@ -1,0 +1,33 @@
+---
+// The form on its own page, for a link that goes straight to it.
+import Base from '../layouts/Base.astro';
+import ContactForm from '../components/ContactForm.astro';
+import { contact, site } from '../data/site';
+---
+<Base title={`Contact — ${site.name}`} description={`${contact.heading} ${contact.text} Bookings, prints and licensing for motorsport photography and film from Belgium.`}>
+  <section class="section">
+    <div class="wrap narrow">
+      <p class="eyebrow">Contact</p>
+      <h1 class="h2">{contact.heading}</h1>
+      <p class="lead">{contact.text}</p>
+      <div class="box">
+        <ContactForm />
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .narrow {
+    max-width: 760px;
+  }
+  .lead {
+    margin: var(--s3) 0 var(--s5);
+  }
+  .box {
+    padding: clamp(var(--s4), 3vw, var(--s5));
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+</style>

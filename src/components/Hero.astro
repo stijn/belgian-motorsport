@@ -1,0 +1,193 @@
+---
+// Full-screen hero: three of his photos cross-fade with a slow drift (CSS only), the BM logo,
+// the name and the tagline from the old site. With motion reduced, the first photo stands still.
+import { Image, Picture, getImage } from 'astro:assets';
+import logo from '../assets/bm-logo.png';
+import Fa from './Fa.astro';
+import { faArrowDown } from '@fortawesome/free-solid-svg-icons';
+import { site } from '../data/site';
+import porsche from '../assets/hero/porsche-911-rsr-spa.jpg';
+import bmw from '../assets/hero/bmw-m1-procar.jpg';
+import aston from '../assets/hero/aston-martin-dbr9.jpg';
+
+const slides = [
+  { src: porsche, alt: 'A yellow Porsche 911 RSR on the kerbs of the Raidillon at Spa-Francorchamps, the track empty behind it.', pos: '70% 50%' },
+  { src: bmw, alt: 'A white and red BMW M1 Procar panning past at speed, flames from the exhaust.', pos: '50% 60%' },
+  { src: aston, alt: 'A green and yellow Aston Martin DBR9 head-on through a corner.', pos: '50% 50%' },
+];
+const widths = [640, 960, 1280, 1600, 1920];
+const sizes = '100vw';
+// The first slide is the largest contentful paint: preload its AVIF set from the head.
+const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', quality: 60 });
+---
+<Fragment slot="head">
+  <link rel="preload" as="image" type="image/avif" imagesrcset={first.srcSet.attribute} imagesizes={sizes} fetchpriority="high" />
+</Fragment>
+
+<section class="hero" aria-label="Welcome">
+  <div class="slides" aria-hidden="true">
+    {slides.map((s, i) => (
+      <div class="slide" style={`--focus:${s.pos};--i:${i}`}>
+        <Picture
+          src={s.src}
+          alt={i === 0 ? s.alt : ''}
+          widths={widths}
+          sizes={sizes}
+          formats={['avif', 'webp']}
+          quality={60}
+
+          loading={i === 0 ? 'eager' : 'lazy'}
+          fetchpriority={i === 0 ? 'high' : 'low'}
+          decoding={i === 0 ? 'sync' : 'async'}
+        />
+      </div>
+    ))}
+    <div class="shade"></div>
+  </div>
+
+  <div class="wrap content">
+    <Image src={logo} alt="BM" width="420" height="156" densities={[1, 2]} loading="eager" class="logo rv" />
+    <h1 class="title rv">
+      <span class="name">{site.name}</span>
+      <span class="tagline">{site.tagline}</span>
+    </h1>
+    <p class="sub rv">Motorsport photography and film from Belgium &amp; Europe. Spa, Zolder, the Nürburgring and the rally stages in between, since 2006.</p>
+    <div class="cta rv">
+      <a class="btn btn-red" href="#work">See the photos</a>
+      <a class="btn btn-ghost" href="#film">Watch the films</a>
+    </div>
+  </div>
+
+  <a class="cue" href="#stats" aria-label="Scroll down">
+    <Fa icon={faArrowDown} />
+  </a>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    align-items: end;
+    isolation: isolate;
+    overflow: clip;
+    background: var(--bg);
+  }
+  .slides {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .slide,
+  .slide :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .slide :global(img) {
+    object-fit: cover;
+    object-position: var(--focus);
+    max-width: none;
+  }
+  .slide {
+    opacity: 0;
+    /* Each slide: 6 s on, 1 s fade either side, drifting the whole time. */
+    animation: slide 18s infinite var(--ease);
+    animation-delay: calc(var(--i) * 6s);
+  }
+  @keyframes slide {
+    0% { opacity: 0; transform: scale(1.06); }
+    6% { opacity: 1; }
+    33.3% { opacity: 1; }
+    39.3% { opacity: 0; transform: scale(1.12); }
+    100% { opacity: 0; }
+  }
+  /* Reduced motion, or an older browser: the first photo, still. */
+  @media (prefers-reduced-motion: reduce) {
+    .slide { animation: none; }
+    .slide:first-child { opacity: 1; }
+  }
+  .shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgb(0 0 0 / 0.45) 0%, rgb(0 0 0 / 0.05) 35%, rgb(0 0 0 / 0.25) 60%, rgb(11 11 12 / 0.92) 100%),
+      linear-gradient(90deg, rgb(0 0 0 / 0.4), transparent 60%);
+  }
+  /* On a phone the text sits over the lower half; keep the top of the photo clear. */
+  @media (max-width: 700px) {
+    .shade {
+      background: linear-gradient(180deg, rgb(0 0 0 / 0.35) 0%, transparent 25%, rgb(0 0 0 / 0.3) 50%, rgb(11 11 12 / 0.94) 100%);
+    }
+  }
+  .content {
+    padding-block: calc(var(--header-h) + var(--s5)) var(--s7);
+    display: grid;
+    gap: var(--s4);
+    justify-items: start;
+  }
+  .logo {
+    width: clamp(180px, 28vw, 360px);
+    height: auto;
+    filter: drop-shadow(0 6px 24px rgb(0 0 0 / 0.6));
+  }
+  .title {
+    display: grid;
+    gap: 0.1em;
+  }
+  .name {
+    font-size: clamp(3rem, 11vw, 9rem);
+    font-weight: 800;
+    letter-spacing: -0.015em;
+    text-shadow: 0 4px 30px rgb(0 0 0 / 0.5);
+  }
+  .tagline {
+    font-size: clamp(1.1rem, 2.4vw, 1.7rem);
+    font-weight: 600;
+    letter-spacing: 0.32em;
+    color: var(--red-2);
+    padding-left: 0.2em;
+  }
+  .sub {
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    color: var(--text-2);
+    max-width: 44ch;
+    text-wrap: pretty;
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s3);
+    margin-top: var(--s2);
+  }
+  .cue {
+    position: absolute;
+    right: var(--gutter);
+    bottom: var(--s4);
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border: 1px solid var(--line-2);
+    border-radius: 50%;
+    color: var(--text-2);
+    text-decoration: none;
+    animation: bob 2.4s infinite var(--ease);
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(6px); }
+  }
+  /* The hero's own reveal: staggered, as soon as the page is up. */
+  .js-motion .content .rv {
+    animation: rise 0.9s var(--ease) both;
+  }
+  .js-motion .content .rv:nth-child(2) { animation-delay: 0.15s; }
+  .js-motion .content .rv:nth-child(3) { animation-delay: 0.3s; }
+  .js-motion .content .rv:nth-child(4) { animation-delay: 0.45s; }
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+</style>

@@ -1,0 +1,19 @@
+# The old site's short links to his channels. Kept, because they're handy and people have them.
+/video       https://www.youtube.com/@Belgian-Motorsport               302
+/instagram   https://www.instagram.com/belgianmotorsport/              302
+/facebook    https://www.facebook.com/Belgian.Motorsport               302
+/photo       https://www.flickr.com/photos/belgian-motorsport/albums/  302
+/flickr      https://www.flickr.com/photos/belgian-motorsport/albums/  302
+/youtube     https://www.youtube.com/@Belgian-Motorsport               302
+
+# Leftovers of WordPress: back to the start.
+/feed/*         /  301
+/wp-admin/*     /  301
+/wp-login.php   /  301
+/wp-content/*   /  301
+/wp-json/*      /  301
+/xmlrpc.php     /  301
+/category/*     /  301
+/tag/*          /  301
+/author/*       /  301
+/page/*         /  301

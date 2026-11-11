@@ -1,0 +1,15 @@
+---
+// One of the four networks, as its Font Awesome brand icon.
+import Fa from './Fa.astro';
+import { faYoutube, faInstagram, faFacebookF, faFlickr } from '@fortawesome/free-brands-svg-icons';
+import type { SocialKey } from '../data/site';
+
+interface Props {
+  network: SocialKey;
+  class?: string;
+  label?: string;
+}
+const { network, class: cls, label } = Astro.props;
+const icons = { youtube: faYoutube, instagram: faInstagram, facebook: faFacebookF, flickr: faFlickr } as const;
+---
+<Fa icon={icons[network]} class={cls} label={label} />

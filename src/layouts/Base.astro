@@ -1,0 +1,113 @@
+---
+// The page shell: fonts, metadata for search and sharing, header, footer, offline support.
+import '@fontsource/barlow-condensed/latin-600.css';
+import '@fontsource/barlow-condensed/latin-700.css';
+import '@fontsource/barlow-condensed/latin-800.css';
+import '@fontsource/barlow/latin-400.css';
+import '@fontsource/barlow/latin-500.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site, socials, stats } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Pages that shouldn't be in search results (thanks, 404). */
+  noindex?: boolean;
+  /** The header starts transparent over a full-bleed hero. */
+  overHero?: boolean;
+  /** Extra JSON-LD for this page. */
+  schema?: Record<string, unknown>[];
+}
+const { title = site.title, description = site.description, noindex = false, overHero = false, schema = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('/og.jpg', Astro.site).href;
+const ogAlt = `${site.name}: a race car at speed, with the red BM logo and the words "${site.tagline}".`;
+
+const org = {
+  '@context': 'https://schema.org',
+  '@type': ['Organization', 'ProfessionalService'],
+  '@id': `${site.url}/#org`,
+  name: site.name,
+  alternateName: 'BM',
+  slogan: site.tagline,
+  description: site.description,
+  url: site.url + '/',
+  logo: new URL('/bm-logo.png', Astro.site).href,
+  image: ogImage,
+  foundingDate: String(stats.since),
+  areaServed: ['Belgium', 'Europe'],
+  address: { '@type': 'PostalAddress', addressCountry: 'BE' },
+  knowsAbout: ['Motorsport photography', 'Motorsport videography', 'Endurance racing', 'Historic racing', 'Rallying', 'Supercars'],
+  sameAs: socials.map((s) => s.url),
+  contactPoint: { '@type': 'ContactPoint', contactType: 'bookings', url: `${site.url}/#contact`, availableLanguage: ['en', 'nl', 'fr'] },
+};
+const website = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  '@id': `${site.url}/#website`,
+  url: site.url + '/',
+  name: site.name,
+  description: site.description,
+  inLanguage: site.language,
+  publisher: { '@id': `${site.url}/#org` },
+};
+---
+
+<!doctype html>
+<html lang={site.language} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {/* JS and motion classes before the first paint. public/_headers allows this script by its hash;
+        tools/headers.test.mjs checks the hash still matches whenever this line changes. */}
+    <script is:inline>document.documentElement.className=matchMedia('(prefers-reduced-motion: reduce)').matches?'js':'js js-motion'</script>
+    {noindex ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
+    <link rel="canonical" href={canonical} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" sizes="48x48" />
+    <link rel="icon" href="/icon-192.png" type="image/png" sizes="192x192" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="theme-color" content={site.themeColor} />
+    <meta name="color-scheme" content="dark" />
+    <meta name="author" content={site.name} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta property="og:locale" content={site.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
+    <meta name="generator" content={Astro.generator} />
+
+    <script type="application/ld+json" set:html={JSON.stringify([org, website, ...schema])} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <Header overHero={overHero} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
+    <p class="offline-note" role="status" data-offline data-text="No connection. You’re seeing the copy saved on this device."></p>
+    <script>
+      import '../scripts/reveal';
+      import '../scripts/offline';
+    </script>
+  </body>
+</html>
