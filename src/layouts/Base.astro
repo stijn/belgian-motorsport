@@ -134,7 +134,7 @@ const website = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
     <meta name="twitter:image:alt" content={cardAlt} />
-    <meta name="apple-mobile-web-app-title" content="BM" />
+    <meta name="apple-mobile-web-app-title" content={site.name} />
     <meta name="application-name" content={site.name} />
     {socials.map((s) => <link rel="me" href={s.url} />)}
     <meta name="generator" content={Astro.generator} />

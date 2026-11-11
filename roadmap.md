@@ -13,6 +13,11 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.6.3 (2026-11-11)
+
+- Added to a home screen, the app is called "Belgian Motorsport" on iOS (the Apple web-app title) and on
+  Android (the manifest's short name), not "BM".
+
 ## 1.6.2 (2026-11-11)
 
 - Header: black frosted glass once the page scrolls (nearly opaque, blurred behind), and the solid

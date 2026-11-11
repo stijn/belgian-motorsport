@@ -7,7 +7,7 @@ import { t } from '../i18n';
 export const GET: APIRoute = () => {
   const manifest = {
     name: site.name,
-    short_name: 'BM',
+    short_name: 'Belgian Motorsport',
     description: t('en').meta.description,
     lang: 'en',
     start_url: href('/'),
