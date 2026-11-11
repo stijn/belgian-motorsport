@@ -79,8 +79,9 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 push to `main` with `SITE`, `BASE` and `PUBLIC_DEMO=1`: `noindex`, and the contact form switched off (GitHub Pages has no server side). `npm run deploy:demo` can put the same demo on
 workers.dev, where the Worker runs too.
 
-**Live:** Cloudflare Workers Builds watches `main`: build command `npm run build`, deploy command
-`npx wrangler deploy`. GitHub Actions (`.github/workflows/ci.yml`) runs the checks, tests and a build
+**Live:** https://belgian-motorsport.com, the Worker in `wrangler.jsonc`: `npm run deploy` (build,
+then `wrangler deploy`) from a machine with Wrangler logged in. Workers Builds can take that over
+(build command `npm run build`, deploy command `npx wrangler deploy`; see docs/go-live.md). GitHub Actions (`.github/workflows/ci.yml`) runs the checks, tests and a build
 on every push and pull request. Releases: bump `version` in `package.json`, add the section to
 `roadmap.md`, tag `vX.Y.Z`.
 

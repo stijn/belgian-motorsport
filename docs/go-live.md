@@ -1,5 +1,9 @@
 # Go-live: from Dreamhost WordPress to Cloudflare
 
+**Done on 2026-11-11.** Both zones are on Cloudflare, the Worker serves `https://belgian-motorsport.com`
+by zone route, `www` and `belgianmotorsport.com` redirect to it. What is still open is at the end,
+under "State after the move". The steps below stay as the record of how, and as the recipe for a redo.
+
 The order matters. Mail for `belgian-motorsport.com` is on Google (the MX records point at
 `aspmx.l.google.com`), so the DNS move has to carry the mail records across untouched.
 
@@ -18,8 +22,10 @@ For each of `belgian-motorsport.com` and `belgianmotorsport.com`:
 1. Cloudflare dashboard → Add a domain → Free plan. Cloudflare scans the existing DNS.
 2. Check the imported records against Dreamhost's DNS page. Keep every `MX`, the Google `TXT`
    (SPF: `v=spf1 include:_spf.google.com ~all`), any `google._domainkey` (DKIM) and `_dmarc` record,
-   and Google site-verification records. Delete the Dreamhost `A`/`AAAA` records for `@` and `www`:
-   the Worker will own those.
+   and Google site-verification records. Set the Dreamhost `A` records for the service hosts
+   (`blog`, `ftp`, `ssh`, `mail`, …) to DNS only; keep `@` and `www` proxied. The Worker is attached
+   by zone route (`routes` in `wrangler.jsonc`), which sits beside those records: nothing has to be
+   deleted first. (A custom domain would need the `@` record gone.)
 3. Change the nameservers at Dreamhost (Domains → Manage → DNS → nameservers) to the two Cloudflare
    gives you. Activation takes minutes to a few hours; the old site keeps working meanwhile because
    Cloudflare still points at it until step 3.
@@ -35,8 +41,8 @@ The demo is on GitHub Pages (static only). The live site is the Worker in `wrang
    `.node-version`. Leave the root as is; Cloudflare reads `wrangler.jsonc`.
 3. The first deploy creates `belgian-motorsport.workers.dev`. Open it: the whole site should be there
    and the form should answer "The form isn't connected yet" until step 4.
-4. The custom domain `belgian-motorsport.com` is in `wrangler.jsonc` (`routes`), so once the zone is
-   active on Cloudflare the deploy attaches it and creates the DNS record by itself.
+4. The routes `belgian-motorsport.com/*` and `www.belgian-motorsport.com/*` are in `wrangler.jsonc`,
+   so once the zone is active on Cloudflare the deploy attaches them.
 
 Every push to `main` now deploys. The GitHub Actions workflow only checks and builds; it doesn't deploy.
 
@@ -55,7 +61,9 @@ redirect rules.
 
 ## 4. Email: the contact form
 
-1. Onboard the domain to Email Sending:
+1. Onboard the domain to Email Sending. It needs the **Workers Paid** plan (USD 5 a month for the
+   account; the dashboard says so on Email Sending → Get started). Until then the Worker answers the
+   form with "The form goes live together with the domain…" and points at Instagram and Facebook.
    ```bash
    npx wrangler email sending enable belgian-motorsport.com
    npx wrangler email sending dns get belgian-motorsport.com
@@ -100,3 +108,26 @@ Local test with real sending: `"send_email": [{ "name": "EMAIL", "remote": true 
   - Numbers on the home page: `stats` in `src/data/site.ts`, with the date they were read.
 - Keep an eye on Workers & Pages → Analytics now and then: requests, errors and the Worker's own
   invocations (only `/api/*` runs code; everything else is a static file).
+
+## State after the move (2026-11-11)
+
+Done:
+
+- `belgian-motorsport.com` zone on Cloudflare (Free), nameservers `art` and `rose`, SSL Full (strict),
+  Always Use HTTPS, redirect rule www → root. Mail records (Google MX, site verification) untouched.
+  The ten Dreamhost service hosts (`blog`, `www.blog`, `ftp`, `ssh`, `mysql`, `calendar`, `docs`, `mail`,
+  `sites`, `start`) still point at Dreamhost, DNS only.
+- `belgianmotorsport.com` zone on Cloudflare, `@` and `www` proxied, Always Use HTTPS, redirect rule
+  `*://*belgianmotorsport.com/*` → `https://belgian-motorsport.com/${3}` (301, query kept).
+- Worker `belgian-motorsport` deployed from this machine (`npm run deploy`) with the two zone routes;
+  `CONTACT_TO` set on it and on the demo Worker.
+
+Open:
+
+- Email Sending (Workers Paid, then step 4 above). The form stays a friendly 503 until then.
+- Workers Builds (step 2): not connected yet, so deploys are `npm run deploy` from a laptop with
+  Wrangler logged in.
+- The `A` records for `@` and `www` in the main zone still carry Dreamhost's IP (67.205.1.0). The
+  Worker answers before any origin is reached, so they are harmless; replace them with `AAAA 100::`
+  once Dreamhost hosting is cancelled, and decide what `blog.belgian-motorsport.com` becomes.
+- Search Console (step 5) and the Dreamhost cancellation (step 6).

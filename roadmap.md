@@ -2,14 +2,23 @@
 
 ## Next
 
-- Go live: move both domains from Dreamhost to Cloudflare, connect the repo, set the `CONTACT_TO`
-  secret, onboard Email Sending ([docs/go-live.md](docs/go-live.md)).
+- Email Sending for the contact form: Workers Paid, onboard the domain, merge SPF
+  ([docs/go-live.md](docs/go-live.md), step 4). Until then the form answers with a friendly notice.
+- Workers Builds, so a push to `main` deploys the live site (today: `npm run deploy` from a laptop).
+- After go-live: Search Console, `AAAA 100::` instead of the Dreamhost IPs, `blog.` subdomain's fate,
+  cancel Dreamhost hosting.
 - Turnstile on the contact form, once real spam shows up.
 - A light theme, if he wants one: the colours are tokens in `src/styles/global.css`.
 - Per-event pages (one page per album with its photos and films), if the one-pager starts to feel
   too small. Not before go-live.
 - His portrait in About, when he sends one (replace the placeholder frame).
 - Prints and licensing: a short page with prices, when he has decided them.
+
+## 1.4.1 (2026-11-11)
+
+- Live on `https://belgian-motorsport.com`: both domains moved from Dreamhost to Cloudflare, the
+  Worker attached by zone route (no DNS record to delete first), `www` and `belgianmotorsport.com`
+  redirect to the hyphenated apex with the path and query kept. Google mail records carried across.
 
 ## 1.4.0 (2026-11-11)
 

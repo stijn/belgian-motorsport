@@ -29,7 +29,12 @@
   //   CONTACT_TO        the address that receives the form (his address; it never appears in the site)
   //   TURNSTILE_SECRET  optional; switches on Cloudflare Turnstile checks
   "observability": { "enabled": true },
-  "routes": [{ "pattern": "belgian-motorsport.com", "custom_domain": true }],
+  // Zone routes rather than a custom domain: they sit beside the zone's existing DNS records,
+  // so the switch from the old host needs no record deleted first. The www rule redirects before this.
+  "routes": [
+    { "pattern": "belgian-motorsport.com/*", "zone_name": "belgian-motorsport.com" },
+    { "pattern": "www.belgian-motorsport.com/*", "zone_name": "belgian-motorsport.com" }
+  ],
   // The demo Worker on workers.dev: the GitHub Pages demo posts its contact form here
   // (DEMO_ORIGIN allows it). `npm run deploy:demo`; secrets with `--env demo`.
   "env": {
