@@ -11,6 +11,18 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.8.0 (2026-11-11)
+
+- Contact: a subject menu (book a shoot, team or sponsor photography, prints and licensing, an
+  invitation, collaboration or media, something else). Choosing one puts the lines to fill in into the
+  message, in the page's language; the Worker refuses a template sent empty, and the subject leads the
+  email's subject line.
+- Offline, for the track: after the first visit on a good connection the site saves the photos further
+  down the page, the full-size lightbox photos and the other pages of that language, so the whole site
+  opens with no signal. Skipped on slow connections and with data saving on.
+- Lightbox on phones: sized to the visible screen (not behind the browser's bottom bar), the caption
+  kept clear of the previous and next buttons, the home indicator respected.
+
 ## 1.7.0 (2026-11-11)
 
 - About in balance: the words and the portrait side by side, centred on each other; "Available for"

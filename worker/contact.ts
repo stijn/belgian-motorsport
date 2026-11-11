@@ -5,6 +5,8 @@ export interface ContactInput {
   name?: unknown;
   email?: unknown;
   message?: unknown;
+  /** The chosen subject, one of the form's own options (the page's language). */
+  subject?: unknown;
   /** Honeypot: people never see this field. Anything in it means a bot. */
   website?: unknown;
   /** Date.now() when the page was opened. A form filled in under 3 seconds is a bot. */
@@ -17,6 +19,7 @@ export interface Message {
   name: string;
   email: string;
   message: string;
+  subject?: string;
 }
 
 export type Check = { ok: true; message: Message } | { ok: false; error: string; status: number; silent?: boolean };
@@ -35,12 +38,15 @@ export function check(input: ContactInput, now = Date.now()): Check {
   const name = str(input.name, 100);
   const email = str(input.email, 200);
   const message = str(input.message, 5000);
+  const subject = str(input.subject, 80);
   if (!name) return { ok: false, error: 'Please fill in your name.', status: 400 };
   if (!EMAIL.test(email)) return { ok: false, error: 'That email address doesn’t look right.', status: 400 };
   if (message.length < 10) return { ok: false, error: 'Please write a few words more.', status: 400 };
+  // A subject's template is lines ending in a colon; sent with nothing after them, it says nothing.
+  if (message.replace(/^[^\n]{1,80}:[ \t]*$/gm, '').trim().length < 10) return { ok: false, error: 'Please fill in the lines, or write a few words.', status: 400 };
   // Links by the handful are spam; one or two are fine (a car for sale, a team site).
   if ((message.match(/https?:\/\//gi) ?? []).length > 3) return { ok: false, error: 'Thanks.', status: 200, silent: true };
-  return { ok: true, message: { name, email, message } };
+  return { ok: true, message: { name, email, message, ...(subject ? { subject } : {}) } };
 }
 
 /** Header values must stay on one line and free of anything that could inject another header. */
@@ -60,12 +66,13 @@ export interface Outgoing {
 /** The email he receives: plain text and HTML, reply-to set to the sender. */
 export function buildEmail(m: Message, opts: { from: string; fromName: string; to: string; site: string; ip?: string; country?: string }): Outgoing {
   const name = headerSafe(m.name);
-  const subject = `Website message from ${name}`;
+  const subject = m.subject ? `${headerSafe(m.subject)} · ${name}` : `Website message from ${name}`;
   const where = [opts.country, opts.ip].filter(Boolean).join(', ');
   const text = [
     `New message through the contact form on ${opts.site}.`,
     '',
     `From: ${m.name} <${m.email}>`,
+    m.subject ? `Subject: ${m.subject}` : '',
     where ? `Sent from: ${where}` : '',
     '',
     m.message,
@@ -77,7 +84,7 @@ export function buildEmail(m: Message, opts: { from: string; fromName: string; t
     .join('\n');
   const html = `<!doctype html><html><body style="font:16px/1.5 -apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#111;max-width:640px">
 <p style="color:#666;font-size:14px">New message through the contact form on ${escapeHtml(opts.site)}.</p>
-<p><strong>From:</strong> ${escapeHtml(m.name)} &lt;<a href="mailto:${escapeHtml(m.email)}">${escapeHtml(m.email)}</a>&gt;${where ? `<br><strong>Sent from:</strong> ${escapeHtml(where)}` : ''}</p>
+<p><strong>From:</strong> ${escapeHtml(m.name)} &lt;<a href="mailto:${escapeHtml(m.email)}">${escapeHtml(m.email)}</a>&gt;${m.subject ? `<br><strong>Subject:</strong> ${escapeHtml(m.subject)}` : ''}${where ? `<br><strong>Sent from:</strong> ${escapeHtml(where)}` : ''}</p>
 <div style="white-space:pre-wrap;border-left:3px solid #e10600;padding:4px 16px;margin:16px 0">${escapeHtml(m.message)}</div>
 <p style="color:#666;font-size:14px">Reply to this email to answer; it goes to the address above.</p>
 </body></html>`;

@@ -10,7 +10,7 @@
 // - The refresh skips the browser's HTTP cache: GitHub Pages and some CDNs tell browsers to keep a
 //   page for ten minutes, which would otherwise hold a new deploy back.
 // Bump VERSION when the logic below changes, so browsers pick up the new worker.
-const VERSION = 2;
+const VERSION = 3;
 const PAGES = 'bm-pages-v' + VERSION;
 const ASSETS = 'bm-assets-v' + VERSION;
 const FILE = /[\w.-]+\.(?:js|css|woff2|avif|webp|jpe?g|png|svg)\b/g;
@@ -122,10 +122,14 @@ async function prune() {
   for (const [name, req] of byName) if (!keep.has(name)) await assets.delete(req);
 }
 
-// The page lists what it loaded before this worker was in charge; copy those from the browser's own
-// cache (force-cache: no new download, even if a little stale).
+// 'warm' (src/scripts/offline.ts, once per visit, on a good connection): the other pages of the
+// same language and the full-size photos of the lightbox, so the whole site opens at the track.
 self.addEventListener('message', (event) => {
   const data = event.data;
+  if (data && data.type === 'warm') {
+    event.waitUntil(warm(data.pages || [], data.files || []));
+    return;
+  }
   if (!data || data.type !== 'cache' || !Array.isArray(data.urls)) return;
   event.waitUntil(
     (async () => {
@@ -152,3 +156,33 @@ self.addEventListener('message', (event) => {
     })(),
   );
 });
+
+async function warm(pages, files) {
+  const pagesCache = await caches.open(PAGES);
+  const assets = await caches.open(ASSETS);
+  const getFile = async (href) => {
+    try {
+      const url = new URL(href, self.location.href);
+      if (url.origin !== self.location.origin || !isAsset(url) || (await assets.match(url.href))) return;
+      const res = await fetch(url.href);
+      if (res.ok) await assets.put(url.href, res);
+    } catch {
+      /* no connection: another visit tries again */
+    }
+  };
+  for (const href of pages) {
+    try {
+      const key = pageKey(new URL(href, self.location.href).href);
+      if (!key.startsWith(self.location.origin + BASE) || (await pagesCache.match(key))) continue;
+      const res = await fetch(key, { cache: 'no-cache', credentials: 'same-origin' });
+      if (!res.ok) continue;
+      const html = await res.clone().text();
+      await pagesCache.put(key, res);
+      // The scripts and fonts that page needs; its photos only when it is opened.
+      for (const [name] of html.matchAll(FILE)) if (/\.(?:js|css|woff2)$/.test(name)) await getFile(BASE + '_astro/' + name);
+    } catch {
+      /* same */
+    }
+  }
+  for (const href of files) await getFile(href);
+}

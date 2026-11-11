@@ -197,6 +197,13 @@ const items = await Promise.all(
     background: transparent;
     color: var(--text);
   }
+  /* The visible part of the screen: on a phone 100vh runs on behind the browser's bottom bar. */
+  @supports (height: 100dvh) {
+    .lightbox {
+      max-height: 100dvh;
+      height: 100dvh;
+    }
+  }
   .lightbox::backdrop {
     background: rgb(5 5 6 / 0.94);
   }
@@ -279,7 +286,15 @@ const items = await Promise.all(
     color: var(--text-2);
   }
   @media (max-width: 640px) {
-    .lb-prev, .lb-next { top: auto; bottom: 1rem; transform: none; }
+    /* Buttons along the bottom, above the home indicator; the caption keeps clear of them. */
+    .lb-prev, .lb-next { top: auto; bottom: calc(1rem + env(safe-area-inset-bottom)); transform: none; }
+    .lb-stage {
+      padding: 4.5rem 1rem calc(5rem + env(safe-area-inset-bottom));
+      gap: var(--s2);
+    }
+    .lb-caption {
+      font-size: 0.9rem;
+    }
   }
   /* The film player, in the same frame: as wide as the stage allows, 16:9, never taller than the stage. */
   .lightbox .lb-frame {
@@ -290,7 +305,7 @@ const items = await Promise.all(
     min-height: 0;
   }
   .lightbox .lb-film {
-    width: min(100%, 1280px, calc((100vh - 9rem) * 16 / 9));
+    width: min(100%, 1280px, calc((100dvh - 9rem) * 16 / 9));
     aspect-ratio: 16 / 9;
     border: 0;
     background: #000;

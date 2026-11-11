@@ -25,6 +25,7 @@ const turnstile = contact.turnstileSiteKey;
   data-msg-sent={f.sent}
   data-msg-fail={f.fail}
   data-msg-offline={f.offline}
+  data-msg-more={f.more}
   novalidate
 >
   <div class="two">
@@ -36,6 +37,13 @@ const turnstile = contact.turnstileSiteKey;
       <label for="cf-email"><LineMd name="email" /><span>{f.email}</span></label>
       <input id="cf-email" name="email" type="email" autocomplete="email" required maxlength="200" inputmode="email" />
     </div>
+  </div>
+  <div class="field" data-replay>
+    <label for="cf-subject"><LineMd name="list" /><span>{f.subject}</span></label>
+    <select id="cf-subject" name="subject" data-subject>
+      <option value="">{f.subjectPick}</option>
+      {f.subjects.map((s) => <option value={s.label} data-template={s.template}>{s.label}</option>)}
+    </select>
   </div>
   <div class="field" data-replay>
     <label for="cf-message"><LineMd name="text-box" /><span>{f.message}</span></label>
@@ -81,6 +89,23 @@ const turnstile = contact.turnstileSiteKey;
     .two {
       grid-template-columns: 1fr 1fr;
     }
+  }
+  /* The subject menu, dressed like the inputs, with its own chevron. */
+  .field select {
+    width: 100%;
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0.8rem 2.6rem 0.8rem 0.9rem;
+    font: inherit;
+    color: var(--text);
+    background: var(--bg-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b9b5ad' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0.9rem center / 1.1rem;
+    border: 1px solid var(--line-2);
+    border-radius: var(--radius);
+    cursor: pointer;
+  }
+  .field select:focus-visible {
+    outline: 2px solid var(--text);
+    outline-offset: 2px;
   }
   .field label {
     display: inline-flex;

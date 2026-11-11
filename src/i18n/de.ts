@@ -111,6 +111,17 @@ export const de: Dict = {
       offline: 'Ihr seid offline. Versucht es wieder, sobald ihr Verbindung habt.',
       privacy: 'Direkt per E-Mail in mein Postfach, nirgendwo sonst gespeichert.',
       privacyLink: 'Datenschutz',
+      subject: 'Betreff',
+      subjectPick: 'Betreff wählen',
+      more: 'Bitte die Zeilen ausfüllen oder ein paar Worte schreiben.',
+      subjects: [
+        { label: 'Ein Shooting buchen (Rennwochenende, Trackday, Event)', template: 'Event oder Auto:\nWo:\nWann:\nWas ich brauche (Fotos, Film oder beides):\nBudget, falls vorhanden:' },
+        { label: 'Fotografie für Team, Fahrer oder Sponsor', template: 'Team oder Fahrer:\nSerie und nächste Events:\nWas ihr braucht (Action, Porträts, Social Media, Druck):' },
+        { label: 'Einen Abzug kaufen oder ein Foto oder einen Clip lizenzieren', template: 'Welches Foto oder welcher Film (Link oder Beschreibung):\nVerwendung (Druck, Veröffentlichung, Werbung, Video):\nGröße oder Format:' },
+        { label: 'Mich zu einem Event einladen', template: 'Event:\nWo und wann:\nMeine Rolle (Veranstalter, Team, Pressestelle):\nAngebotene Akkreditierung oder Zugang:' },
+        { label: 'Zusammenarbeit oder Medien', template: 'Wer ihr seid:\nWas ihr vorhabt:\nZeitplan:' },
+        { label: 'Etwas anderes', template: '' },
+      ],
     },
   },
   footer: {

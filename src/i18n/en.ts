@@ -111,6 +111,17 @@ export const en = {
       offline: 'You’re offline. Try again when you have a connection.',
       privacy: 'Straight to my inbox by email, stored nowhere else.',
       privacyLink: 'Privacy',
+      subject: 'Subject',
+      subjectPick: 'Choose a subject',
+      more: 'Please fill in the lines, or write a few words.',
+      subjects: [
+        { label: 'Book a shoot (race weekend, track day, event)', template: 'Event or car:\nWhere:\nWhen:\nWhat I need (photos, film or both):\nBudget, if there is one:' },
+        { label: 'Team, driver or sponsor photography', template: 'Team or driver:\nSeries and next events:\nWhat you need (action, portraits, social media, print):' },
+        { label: 'Buy a print or license a photo or clip', template: 'Which photo or film (link or description):\nUse (print at home, publication, advert, video):\nSize or format:' },
+        { label: 'Invite me to an event', template: 'Event:\nWhere and when:\nMy role (organiser, team, press office):\nAccreditation or access on offer:' },
+        { label: 'Collaboration or media', template: 'Who you are:\nWhat you have in mind:\nTiming:' },
+        { label: 'Something else', template: '' },
+      ],
     },
   },
   footer: {

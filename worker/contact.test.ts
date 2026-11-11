@@ -32,6 +32,24 @@ describe('check', () => {
     expect(check({ ...good, message: 'hi' })).toMatchObject({ ok: false, status: 400 });
   });
 
+  it('carries the subject and refuses an unfilled template', () => {
+    const r = check({ ...good, subject: 'Invite me to an event' });
+    expect(r.ok).toBe(true);
+    if (r.ok) expect(r.message.subject).toBe('Invite me to an event');
+    const bare = check({ ...good, subject: 'Invite me to an event', message: 'Event:\nWhere and when:\nMy role (organiser, team, press office):' });
+    expect(bare).toMatchObject({ ok: false, status: 400 });
+    const filled = check({ ...good, message: 'Event: 24 Hours of Spa\nWhere and when: Spa, June' });
+    expect(filled.ok).toBe(true);
+  });
+
+  it('puts the subject in the email subject', () => {
+    const r = check({ ...good, subject: 'Invite me to an event' });
+    if (!r.ok) throw new Error('expected ok');
+    const mail = buildEmail(r.message, { from: 'contact@belgian-motorsport.com', fromName: 'Website', to: 'him@example.com', site: 'belgian-motorsport.com' });
+    expect(mail.subject).toBe('Invite me to an event · Ann Example');
+    expect(mail.text).toContain('Subject: Invite me to an event');
+  });
+
   it('trims and caps the fields', () => {
     const r = check({ ...good, name: '  ' + 'x'.repeat(500), message: 'y'.repeat(6000) });
     expect(r.ok).toBe(true);

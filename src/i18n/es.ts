@@ -112,6 +112,17 @@ export const es: Dict = {
       offline: 'No tienes conexión. Inténtalo de nuevo cuando la tengas.',
       privacy: 'Directo a mi buzón por correo electrónico, sin guardarse en ningún otro sitio.',
       privacyLink: 'Privacidad',
+      subject: 'Asunto',
+      subjectPick: 'Elige un asunto',
+      more: 'Rellena las líneas o escribe unas palabras.',
+      subjects: [
+        { label: 'Reservar una sesión (fin de semana de carreras, track day, evento)', template: 'Evento o coche:\nDónde:\nCuándo:\nQué necesito (fotos, vídeo o ambos):\nPresupuesto, si lo hay:' },
+        { label: 'Fotografía para equipo, piloto o patrocinador', template: 'Equipo o piloto:\nCampeonato y próximos eventos:\nQué necesitáis (acción, retratos, redes sociales, impresión):' },
+        { label: 'Comprar una copia o licenciar una foto o un clip', template: 'Qué foto o vídeo (enlace o descripción):\nUso (copia impresa, publicación, publicidad, vídeo):\nTamaño o formato:' },
+        { label: 'Invitarme a un evento', template: 'Evento:\nDónde y cuándo:\nMi papel (organizador, equipo, prensa):\nAcreditación o acceso que ofrecéis:' },
+        { label: 'Colaboración o medios', template: 'Quiénes sois:\nQué tenéis en mente:\nFechas:' },
+        { label: 'Otra cosa', template: '' },
+      ],
     },
   },
   footer: {

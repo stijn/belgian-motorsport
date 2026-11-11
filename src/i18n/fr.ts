@@ -111,6 +111,17 @@ export const fr: Dict = {
       offline: 'Vous êtes hors ligne. Réessayez dès que vous avez une connexion.',
       privacy: 'Directement dans ma boîte mail, stocké nulle part ailleurs.',
       privacyLink: 'Confidentialité',
+      subject: 'Sujet',
+      subjectPick: 'Choisissez un sujet',
+      more: 'Remplissez les lignes, ou écrivez quelques mots.',
+      subjects: [
+        { label: 'Réserver un reportage (week-end de course, track day, événement)', template: 'Événement ou voiture :\nOù :\nQuand :\nCe qu’il me faut (photos, film ou les deux) :\nBudget, s’il y en a un :' },
+        { label: 'Photographie pour une équipe, un pilote ou un sponsor', template: 'Équipe ou pilote :\nChampionnat et prochains événements :\nCe qu’il vous faut (action, portraits, réseaux sociaux, impression) :' },
+        { label: 'Acheter un tirage ou une licence de photo ou de clip', template: 'Quelle photo ou quel film (lien ou description) :\nUsage (tirage, publication, publicité, vidéo) :\nTaille ou format :' },
+        { label: 'M’inviter à un événement', template: 'Événement :\nOù et quand :\nMon rôle (organisateur, équipe, service de presse) :\nAccréditation ou accès proposé :' },
+        { label: 'Collaboration ou médias', template: 'Qui vous êtes :\nCe que vous avez en tête :\nCalendrier :' },
+        { label: 'Autre chose', template: '' },
+      ],
     },
   },
   footer: {

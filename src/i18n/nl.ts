@@ -111,6 +111,17 @@ export const nl: Dict = {
       offline: 'Je bent offline. Probeer opnieuw zodra je verbinding hebt.',
       privacy: 'Rechtstreeks per e-mail naar mijn inbox, nergens anders bewaard.',
       privacyLink: 'Privacy',
+      subject: 'Onderwerp',
+      subjectPick: 'Kies een onderwerp',
+      more: 'Vul de regels in, of schrijf een paar woorden.',
+      subjects: [
+        { label: 'Een shoot boeken (raceweekend, trackday, evenement)', template: 'Evenement of auto:\nWaar:\nWanneer:\nWat ik nodig heb (foto’s, film of beide):\nBudget, als er een is:' },
+        { label: 'Fotografie voor team, rijder of sponsor', template: 'Team of rijder:\nReeks en volgende evenementen:\nWat je nodig hebt (actie, portretten, social media, print):' },
+        { label: 'Een print kopen of een foto of clip licentiëren', template: 'Welke foto of film (link of omschrijving):\nGebruik (print thuis, publicatie, advertentie, video):\nFormaat:' },
+        { label: 'Mij uitnodigen voor een evenement', template: 'Evenement:\nWaar en wanneer:\nMijn rol (organisator, team, persdienst):\nAccreditatie of toegang die je aanbiedt:' },
+        { label: 'Samenwerking of media', template: 'Wie je bent:\nWat je in gedachten hebt:\nTiming:' },
+        { label: 'Iets anders', template: '' },
+      ],
     },
   },
   footer: {
