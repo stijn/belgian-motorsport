@@ -13,6 +13,11 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.6.1 (2026-11-11)
+
+- The header no longer flashes on the first scroll: its hero shade and its dark bar are two layers that
+  crossfade, instead of one background jumping from a gradient to a colour.
+
 ## 1.6.0 (2026-11-11)
 
 - Switching language is quick: the next page is rendered ahead of time when a link is hovered or
