@@ -45,7 +45,7 @@ const fmt = new Intl.DateTimeFormat(d.htmlLang, { day: 'numeric', month: 'short'
             <h3 class="cap-t">{v.title}</h3>
             <p class="cap-row">
               <time datetime={v.published}>{fmt.format(new Date(v.published))}</time>
-              <a class="cap-link" href={`https://www.youtube.com/watch?v=${v.id}`} target="_blank" rel="noopener"><SocialIcon network="youtube" /> {d.film.watchOnYoutube}</a>
+              <a class="cap-link" href={`https://www.youtube.com/watch?v=${v.id}`} target="_blank" rel="noopener" aria-label={`${d.film.watchOnYoutube}: ${v.title}`}><SocialIcon network="youtube" /> {d.film.watchOnYoutube}</a>
             </p>
           </div>
         </li>

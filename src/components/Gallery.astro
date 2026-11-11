@@ -66,7 +66,7 @@ const items = await Promise.all(
               <span class="cap-t">{g.title}</span>
               <span class="cap-row">
                 <a href={g.albumUrl} target="_blank" rel="noopener">{g.event}</a>
-                <a class="cap-link" href={g.photoUrl} target="_blank" rel="noopener"><SocialIcon network="flickr" /> {d.gallery.seeOnFlickr}</a>
+                <a class="cap-link" href={g.photoUrl} target="_blank" rel="noopener" aria-label={`${d.gallery.seeOnFlickr}: ${g.title}`}><SocialIcon network="flickr" /> {d.gallery.seeOnFlickr}</a>
               </span>
             </figcaption>
           </figure>

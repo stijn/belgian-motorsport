@@ -42,7 +42,7 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
                   <a class="cap-t album-title" href={a.url} target="_blank" rel="noopener">{a.title}</a>
                   <span class="cap-row">
                     <span>{a.photos ? fill(d.events.photos, { n: a.photos }) : d.events.album}</span>
-                    <a class="cap-link" href={a.url} target="_blank" rel="noopener"><SocialIcon network="flickr" /> {d.gallery.seeOnFlickr}</a>
+                    <a class="cap-link" href={a.url} target="_blank" rel="noopener" aria-label={`${d.gallery.seeOnFlickr}: ${a.title}`}><SocialIcon network="flickr" /> {d.gallery.seeOnFlickr}</a>
                   </span>
                 </span>
               </div>

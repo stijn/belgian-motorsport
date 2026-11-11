@@ -13,6 +13,17 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.6.2 (2026-11-11)
+
+- Header: black frosted glass once the page scrolls (nearly opaque, blurred behind), and the solid
+  state is set at once on a page that opens already scrolled (an anchor, a language switch, back),
+  where the lighter hero shade used to stay and let the content show through.
+- Red words in headlines use a text shade of the red (`--red-text`, 5:1 on the backgrounds): AAA again
+  for large text; surfaces, lines and icons keep the brand red. The contrast test checks it.
+- "See on Flickr" and "Watch on YouTube" links carry the item's title in their accessible name, so
+  each link's purpose stands on its own (WCAG 2.4.9).
+- Cloudflare: minimum TLS 1.2 and HSTS (6 months, no subdomains) on belgian-motorsport.com.
+
 ## 1.6.1 (2026-11-11)
 
 - The header no longer flashes on the first scroll: its hero shade and its dark bar are two layers that

@@ -94,10 +94,11 @@ const languages = langs
     z-index: -1;
     transition: opacity 0.35s;
   }
+  /* Black frosted glass: nearly opaque, with what's behind blurred and a touch desaturated. */
   .site-header::before {
-    background: rgb(11 11 12 / 0.92);
-    -webkit-backdrop-filter: blur(14px);
-    backdrop-filter: blur(14px);
+    background: rgb(8 8 9 / 0.94);
+    -webkit-backdrop-filter: blur(20px) saturate(0.8);
+    backdrop-filter: blur(20px) saturate(0.8);
   }
   /* Over the hero the bar floats on a soft shade (::after) until the page scrolls, then the dark bar
      (::before) fades in over it: two layers crossfading, because a gradient can't animate into a colour. */

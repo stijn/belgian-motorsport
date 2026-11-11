@@ -5,9 +5,15 @@ const btn = document.querySelector<HTMLButtonElement>('[data-menu-btn]');
 const menu = document.querySelector<HTMLElement>('[data-menu]');
 const lang = document.querySelector<HTMLDetailsElement>('[data-lang]');
 
+// Solid once the page is past the top. Set right away, again after the first frame, on load and on
+// show: a page that opens at an anchor (a language switch, "back") is scrolled before any scroll event.
 const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 24);
+onScroll();
 requestAnimationFrame(onScroll);
 window.addEventListener('scroll', onScroll, { passive: true });
+window.addEventListener('load', onScroll);
+window.addEventListener('pageshow', onScroll);
+window.addEventListener('hashchange', onScroll);
 
 const heroLogo = document.querySelector('[data-hero-logo]');
 if (header && heroLogo && 'IntersectionObserver' in window) {

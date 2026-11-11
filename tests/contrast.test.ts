@@ -60,9 +60,14 @@ describe('AAA contrast, large bold text on the red (4.5:1)', () => {
 });
 
 describe('non-text contrast (3:1)', () => {
-  // Red words in headlines are large bold text: AA for large text (3:1); the brand red sits just under AAA's 4.5:1.
-  it('red icons, lines and headline words on bg', () => expect(ratio(red, bg)).toBeGreaterThanOrEqual(3));
+  it('red icons and lines on bg', () => expect(ratio(red, bg)).toBeGreaterThanOrEqual(3));
   it('red icons and lines on bg-2', () => expect(ratio(red, bg2)).toBeGreaterThanOrEqual(3));
+});
+
+describe('AAA contrast, red words in headlines (large bold text, 4.5:1)', () => {
+  const redText = token('red-text');
+  it('red-text on bg', () => expect(ratio(redText, bg)).toBeGreaterThanOrEqual(4.5));
+  it('red-text on bg-2', () => expect(ratio(redText, bg2)).toBeGreaterThanOrEqual(4.5));
 });
 
 describe('one red', () => {
