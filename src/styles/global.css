@@ -399,26 +399,12 @@ button {
   font-variant-numeric: tabular-nums;
 }
 
-/* The preview bar on the GitHub Pages demo. */
-.demo-bar {
-  position: fixed;
-  inset-inline: 0;
-  bottom: 0;
-  z-index: 95;
-  margin: 0;
-  padding: 0.45rem var(--gutter) calc(0.45rem + env(safe-area-inset-bottom));
-  background: #fdda24;
-  color: #111;
-  font-size: 0.9rem;
-  text-align: center;
-}
-
 /* Offline note ----------------------------------------------------------- */
 
 .offline-note {
   position: fixed;
   left: 50%;
-  bottom: 3.25rem;
+  bottom: 1rem;
   transform: translateX(-50%);
   z-index: 90;
   padding: 0.6rem 1rem;

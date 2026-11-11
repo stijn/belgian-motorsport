@@ -3,5 +3,5 @@
 export const base = import.meta.env.BASE_URL.replace(/\/$/, '');
 /** `href('/privacy/')` → '/privacy/' live, '/belgian-motorsport/privacy/' on the demo. */
 export const href = (path: string) => (path.startsWith('/') ? `${base}${path}` : path);
-/** True for the GitHub Pages demo build: noindex, a preview bar, and the form switched off. */
+/** True for the GitHub Pages demo build: noindex, and the form switched off. */
 export const demo = import.meta.env.PUBLIC_DEMO === '1';

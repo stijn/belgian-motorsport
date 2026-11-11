@@ -16,7 +16,7 @@
 First release, replacing the WordPress site.
 
 - A demo on GitHub Pages, https://stijn.github.io/belgian-motorsport/ (`.github/workflows/pages.yml`):
-  the same build under a base path, with a preview bar, noindex and the form switched off. The repo
+  the same build under a base path, with noindex and the form switched off. The repo
   is public for it. `npm run deploy:demo` puts the same demo on workers.dev when the Worker itself
   needs showing. The approved site goes to Cloudflare with the domain, from the same code.
 - Astro 7 static site on Cloudflare Workers (static assets), with one Worker route for the contact

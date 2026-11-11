@@ -69,8 +69,7 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 ## Deploys
 
 **Demo:** https://stijn.github.io/belgian-motorsport/, built by `.github/workflows/pages.yml` on every
-push to `main` with `SITE`, `BASE` and `PUBLIC_DEMO=1`: a preview bar, `noindex`, and the contact form
-switched off (GitHub Pages has no server side). `npm run deploy:demo` can put the same demo on
+push to `main` with `SITE`, `BASE` and `PUBLIC_DEMO=1`: `noindex`, and the contact form switched off (GitHub Pages has no server side). `npm run deploy:demo` can put the same demo on
 workers.dev, where the Worker runs too.
 
 **Live:** Cloudflare Workers Builds watches `main`: build command `npm run build`, deploy command
