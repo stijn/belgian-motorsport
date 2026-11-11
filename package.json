@@ -1,7 +1,7 @@
 {
   "name": "belgian-motorsport",
   "private": true,
-  "version": "1.4.1",
+  "version": "1.5.0",
   "type": "module",
   "description": "Belgian Motorsport: portfolio and business card of a Belgian motorsport photographer and filmmaker. Static Astro site on Cloudflare Workers, with one small Worker for the contact form.",
   "engines": {
@@ -16,7 +16,8 @@
     "sync": "node tools/sync.mjs",
     "icons": "node tools/icons.mjs",
     "cards": "node tools/share-cards.mjs",
-    "deploy": "astro build && wrangler deploy",
+    "seo": "node tools/seo-check.mjs",
+    "deploy": "astro build && node tools/seo-check.mjs && wrangler deploy",
     "deploy:demo": "PUBLIC_DEMO=1 SITE=https://belgian-motorsport-demo.stijn-vogels.workers.dev astro build && wrangler deploy --env demo"
   },
   "dependencies": {

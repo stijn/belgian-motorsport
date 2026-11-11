@@ -33,7 +33,7 @@ const items = await Promise.all(
     }),
 );
 ---
-<section id="work" class="section work">
+<section id="photos" class="section work">
   <div class="wrap">
     <SectionHead icon="camera" eyebrow={d.gallery.eyebrow} heading={d.gallery.heading} lead={d.gallery.lead} />
 
@@ -225,7 +225,7 @@ const items = await Promise.all(
     object-fit: contain;
     box-shadow: 0 30px 80px rgb(0 0 0 / 0.6);
   }
-  .js-motion .lb-stage img.lb-switch {
+  :global(.js-motion) .lb-stage img.lb-switch {
     animation: lb-img 0.45s var(--ease);
   }
   @keyframes lb-img {

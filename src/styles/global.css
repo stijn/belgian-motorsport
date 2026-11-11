@@ -17,6 +17,8 @@
      running text (on this dark it would read at 3.9:1). A red word in a headline is white on a red
      plate; bold text on it is "large" for WCAG, where white on this red is 5:1. */
   --red: #e10600;
+  /* Black, yellow, red: the Belgian tricolour, a line at the top of the page and the footer's finish line. */
+  --tricolour: linear-gradient(90deg, #000 0 33.3%, #fdda24 33.3% 66.6%, var(--red) 66.6%);
   /* The hero's text panel over a photo: dark enough that even a white photo behind it keeps
      --text-2 above 7:1 (tests/contrast.test.ts checks the worst case). */
   --scrim: rgb(11 11 12 / 0.9);
@@ -104,15 +106,11 @@ a:hover {
   color: #fff;
 }
 
-/* The one red word in a headline (src/lib/accent.ts): a plate, like a race number. */
+/* The one red word in a headline (src/lib/accent.ts): the brand red as text. Headlines are large,
+   bold type; the red reads at 4:1 on the background (WCAG AA for large text; AAA would need 4.5:1). */
 .accent {
   font-style: normal;
-  color: #fff;
-  background: var(--red);
-  padding: 0 0.14em;
-  margin: 0 -0.02em;
-  box-decoration-break: clone;
-  -webkit-box-decoration-break: clone;
+  color: var(--red);
 }
 
 h1,
@@ -535,6 +533,18 @@ button {
   transform: translate(-50%, 0);
 }
 
+/* At the top of the page the tip opens below, where the browser's own bar can't cover it. */
+[data-tip].tip-below::after {
+  bottom: auto;
+  top: calc(100% + 0.5rem);
+  transform: translate(-50%, -4px);
+}
+
+[data-tip].tip-below:hover::after,
+[data-tip].tip-below:focus-visible::after {
+  transform: translate(-50%, 0);
+}
+
 [data-tip].tip-left::after {
   left: auto;
   right: 0;
@@ -681,4 +691,17 @@ main {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+/* The tricolour along the top edge, above the header; a hairline under it so the black third reads on dark. */
+.tricolour {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 110;
+  background: var(--tricolour);
+  box-shadow: 0 1px 0 rgb(255 255 255 / 0.14);
+  pointer-events: none;
 }

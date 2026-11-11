@@ -1,4 +1,4 @@
-// Headings carry one accent written *like this*; it becomes <em class="accent"> in red.
+// Headings carry one accent written *like this*; it becomes <em class="accent">, red text.
 // Everything else in the string is escaped, so the dictionaries can't inject markup.
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
 

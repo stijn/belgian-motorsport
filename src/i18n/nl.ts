@@ -152,7 +152,7 @@ export const nl: Dict = {
     sections: [
       {
         h: 'Het contactformulier',
-        p: 'Wat je in het formulier typt (je naam, je e-mailadres en je bericht) wordt één keer per e-mail naar mijn inbox gestuurd, zodat ik kan antwoorden. Het wordt niet in een database bewaard en met niemand gedeeld. Om spam buiten te houden beperkt Cloudflare het aantal berichten en kan het formulier Cloudflare Turnstile gebruiken, dat zonder puzzel nagaat of een aanvraag van een browser komt.',
+        p: 'Wat je in het formulier typt (je naam, je e-mailadres en je bericht) wordt één keer per e-mail naar mijn inbox gestuurd, zodat ik kan antwoorden. Resend, de e-maildienst die het bezorgt, houdt 30 dagen een kopie bij op zijn servers in de Verenigde Staten, onder de AVG. Het wordt niet in een database bewaard en met niemand gedeeld. Om spam buiten te houden beperkt Cloudflare het aantal berichten en kan het formulier Cloudflare Turnstile gebruiken, dat zonder puzzel nagaat of een aanvraag van een browser komt.',
       },
       {
         h: 'Films',

@@ -56,11 +56,12 @@ describe('AAA contrast, normal text (7:1)', () => {
 });
 
 describe('AAA contrast, large bold text on the red (4.5:1)', () => {
-  it('white on the brand red: buttons, the tagline plate, red words in headlines, menu hover', () => expect(ratio('#ffffff', red)).toBeGreaterThanOrEqual(4.5));
+  it('white on the brand red: buttons, the tagline plate, menu hover', () => expect(ratio('#ffffff', red)).toBeGreaterThanOrEqual(4.5));
 });
 
 describe('non-text contrast (3:1)', () => {
-  it('red icons and lines on bg', () => expect(ratio(red, bg)).toBeGreaterThanOrEqual(3));
+  // Red words in headlines are large bold text: AA for large text (3:1); the brand red sits just under AAA's 4.5:1.
+  it('red icons, lines and headline words on bg', () => expect(ratio(red, bg)).toBeGreaterThanOrEqual(3));
   it('red icons and lines on bg-2', () => expect(ratio(red, bg2)).toBeGreaterThanOrEqual(3));
 });
 

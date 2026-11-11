@@ -1,6 +1,6 @@
 // Paths that work wherever the site is served from: at the root of the real domain, or under
 // /belgian-motorsport/ on the GitHub Pages demo (astro.config.mjs reads SITE and BASE), and in any
-// of the languages (English at the root, the others under /nl/, /fr/, /de/, /it/).
+// of the languages (English at the root, the others under /nl/, /fr/, /de/, /it/, /es/).
 import { defaultLang, prefix, type Lang } from '../i18n';
 
 export const base = import.meta.env.BASE_URL.replace(/\/$/, '');

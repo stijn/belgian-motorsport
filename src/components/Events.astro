@@ -80,7 +80,7 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
     transform-origin: left;
     transition: transform 1.2s var(--ease) 0.2s;
   }
-  .js-motion .year-label:not(.in)::after {
+  :global(.js-motion) .year-label:not(.in)::after {
     transform: scaleX(0);
   }
   .row {

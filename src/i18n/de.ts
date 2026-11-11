@@ -152,7 +152,7 @@ export const de: Dict = {
     sections: [
       {
         h: 'Das Kontaktformular',
-        p: 'Was ihr ins Formular tippt (Name, E-Mail-Adresse und Nachricht), wird einmal per E-Mail in mein Postfach geschickt, damit ich antworten kann. Es wird in keiner Datenbank gespeichert und mit niemandem geteilt. Gegen Spam begrenzt Cloudflare die Zahl der Nachrichten, und das Formular kann Cloudflare Turnstile nutzen, das ohne Rätsel prüft, ob eine Anfrage von einem Browser kommt.',
+        p: 'Was ihr ins Formular tippt (Name, E-Mail-Adresse und Nachricht), wird einmal per E-Mail in mein Postfach geschickt, damit ich antworten kann. Resend, der E-Mail-Dienst, der sie zustellt, behält 30 Tage lang eine Kopie auf seinen Servern in den USA, nach den Regeln der DSGVO. Es wird in keiner Datenbank gespeichert und mit niemandem geteilt. Gegen Spam begrenzt Cloudflare die Zahl der Nachrichten, und das Formular kann Cloudflare Turnstile nutzen, das ohne Rätsel prüft, ob eine Anfrage von einem Browser kommt.',
       },
       {
         h: 'Filme',

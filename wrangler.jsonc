@@ -14,8 +14,8 @@
     // Only these paths run the Worker; everything else is served straight from dist/.
     "run_worker_first": ["/api/*"]
   },
-  // Cloudflare Email Sending: the domain must be onboarded first
-  // (`npx wrangler email sending enable belgian-motorsport.com`). See docs/go-live.md.
+  // The form sends through Resend when the RESEND_API_KEY secret is set (docs/go-live.md, step 4).
+  // Without it, Cloudflare Email Sending (this binding; needs the Workers Paid plan and an onboarded domain).
   "send_email": [{ "name": "EMAIL" }],
   // At most 5 contact messages a minute from one address.
   "ratelimits": [{ "name": "CONTACT_LIMIT", "namespace_id": "1001", "simple": { "limit": 5, "period": 60 } }],
@@ -27,6 +27,7 @@
   },
   // Secrets (set with `npx wrangler secret put NAME`, never in this file):
   //   CONTACT_TO        the address that receives the form (his address; it never appears in the site)
+  //   RESEND_API_KEY    a Resend key (Sending access, this domain only); the form sends through Resend
   //   TURNSTILE_SECRET  optional; switches on Cloudflare Turnstile checks
   "observability": { "enabled": true },
   // Zone routes rather than a custom domain: they sit beside the zone's existing DNS records,

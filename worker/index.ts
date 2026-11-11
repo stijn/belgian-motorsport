@@ -1,7 +1,7 @@
-// The one piece of server code: POST /api/contact sends the form on by email through Cloudflare's
-// Email Sending binding. Everything else on the site is a static file in dist/ (wrangler.jsonc only
+// The one piece of server code: POST /api/contact sends the form on by email, through Resend when
+// the RESEND_API_KEY secret is set, else through Cloudflare's Email Sending binding. Everything else on the site is a static file in dist/ (wrangler.jsonc only
 // runs this Worker for /api/*). His address is the CONTACT_TO secret: it never appears in the site.
-import { buildEmail, check, readInput, verifyTurnstile } from './contact';
+import { buildEmail, check, readInput, sendWithResend, verifyTurnstile } from './contact';
 
 export interface Env {
   ASSETS: Fetcher;
@@ -15,6 +15,8 @@ export interface Env {
   /** Secrets */
   CONTACT_TO?: string;
   TURNSTILE_SECRET?: string;
+  /** Set, the form sends through Resend (docs/go-live.md, step 4) instead of the EMAIL binding. */
+  RESEND_API_KEY?: string;
 }
 
 const json = (body: unknown, status = 200, extra: HeadersInit = {}) =>
@@ -56,9 +58,9 @@ async function contact(request: Request, env: Env, ctx: ExecutionContext): Promi
   const answer = (ok: boolean, error: string | undefined, status: number) => {
     if (asJson) return json(ok ? { ok } : { ok, error }, status, corsHeaders);
     // Without JavaScript the form posts the usual way: send people on to a page.
-    // Back to the page's own language: the referer path starts with /nl/, /fr/, /de/ or /it/.
+    // Back to the page's own language: the referer path starts with /nl/, /fr/, /de/, /it/ or /es/.
     const ref = request.headers.get('referer') ?? '';
-    const prefix = ref.match(/^https?:\/\/[^/]+(\/(?:nl|fr|de|it))\//)?.[1] ?? '';
+    const prefix = ref.match(/^https?:\/\/[^/]+(\/(?:nl|fr|de|it|es))\//)?.[1] ?? '';
     const to = ok ? `${prefix}/thanks/` : `${prefix}/contact/?error=${encodeURIComponent(error ?? '')}`;
     return Response.redirect(new URL(to, self).href, 303);
   };
@@ -96,17 +98,17 @@ async function contact(request: Request, env: Env, ctx: ExecutionContext): Promi
   });
 
   try {
-    const sent = await env.EMAIL.send(mail);
+    const sent = env.RESEND_API_KEY ? await sendWithResend(env.RESEND_API_KEY, mail) : await env.EMAIL.send(mail);
     ctx.waitUntil(Promise.resolve(console.log(`contact: sent ${sent.messageId}`)));
     return answer(true, undefined, 200);
   } catch (e) {
     const err = e as { code?: string; message?: string };
     console.error('contact: send failed', err.code, err.message);
-    // Until the domain is onboarded to Email Sending (docs/go-live.md), say so instead of "try again":
-    // the binding refuses the sender (or sending as a whole) with a code or message about it.
+    // Until the sending domain is verified (docs/go-live.md, step 4), say so instead of "try again":
+    // Resend and the binding both refuse the sender with a code or message about it.
     const text = `${err.code ?? ''} ${err.message ?? ''}`;
     if (/SENDER|VERIF|DOMAIN|NOT_ENABLED|not enabled|onboard/i.test(text)) {
-      return answer(false, 'The form goes live together with the domain. Until then, reach me on Instagram or Facebook.', 503);
+      return answer(false, 'The form isn’t connected yet. Until then, reach me on Instagram or Facebook.', 503);
     }
     return answer(false, 'The message couldn’t be sent right now. Please try again in a moment.', 502);
   }

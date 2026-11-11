@@ -50,7 +50,7 @@ const languages = langs
     <div class="right">
       {/* Desktop language switcher: a native disclosure, keyboard-friendly without JS. */}
       <details class="lang" data-lang>
-        <summary data-tip={d.nav.languages}>
+        <summary class="tip-below" data-tip={d.nav.languages}>
           <Fa icon={faLanguage} /><span class="visually-hidden">{d.nav.languages}: </span><span>{d.name}</span>
         </summary>
         <ul class="lang-list">
@@ -264,7 +264,7 @@ const languages = langs
     box-shadow: 0 16px 40px rgb(0 0 0 / 0.5);
     z-index: 5;
   }
-  .js-motion .lang[open] .lang-list {
+  :global(.js-motion) .lang[open] .lang-list {
     animation: drop 0.25s var(--ease);
   }
   @keyframes drop {

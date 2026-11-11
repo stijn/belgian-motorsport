@@ -4,7 +4,7 @@
 // honeypot field, a minimum time to fill in the form, a rate limit, and Turnstile when configured.
 import Fa from './Fa.astro';
 import LineMd from './LineMd.astro';
-import { faFlagCheckered, faLock, faEnvelopeOpenText } from '@fortawesome/free-solid-svg-icons';
+import { faPaperPlane, faLock, faShieldHalved } from '@fortawesome/free-solid-svg-icons';
 import { contact } from '../data/site';
 import { href } from '../lib/url';
 import { t, type Lang } from '../i18n';
@@ -50,11 +50,11 @@ const turnstile = contact.turnstileSiteKey;
   <input type="hidden" name="started" value="" />
   {turnstile && <div class="cf-turnstile" data-sitekey={turnstile} data-theme="dark" data-size="flexible"></div>}
   <div class="actions">
-    <button class="btn btn-red" type="submit"><Fa icon={faFlagCheckered} class="flag" />{f.send}</button>
+    <button class="btn btn-red" type="submit"><Fa icon={faPaperPlane} class="plane" />{f.send}</button>
     <p class="status" role="status" aria-live="polite" data-status></p>
   </div>
   <p class="privacy">
-    <span class="pv"><Fa icon={faLock} /> <Fa icon={faEnvelopeOpenText} /></span>
+    <span class="pv"><Fa icon={faLock} /> <Fa icon={faShieldHalved} /></span>
     <span>{f.privacy} <a href={href('/privacy/', lang)}>{f.privacyLink}</a>.</span>
   </p>
   <template data-status-icons>
@@ -104,17 +104,19 @@ const turnstile = contact.turnstileSiteKey;
     align-items: center;
     gap: var(--s3) var(--s4);
   }
-  .btn .flag {
-    font-size: 1.1em;
+  /* The plane takes off on hover: a nudge up and to the right, then back. */
+  .btn .plane {
+    font-size: 1.05em;
     transition: transform 0.3s var(--ease);
   }
-  .js-motion .btn:hover .flag {
-    animation: flag-wave 0.6s var(--ease) infinite;
+  :global(.js-motion) .btn:hover .plane,
+  :global(.js-motion) .btn:focus-visible .plane {
+    animation: take-off 0.7s var(--ease);
   }
-  @keyframes flag-wave {
-    0%, 100% { transform: rotate(0); }
-    30% { transform: rotate(-12deg); }
-    70% { transform: rotate(8deg); }
+  @keyframes take-off {
+    0% { transform: none; }
+    40% { transform: translate(3px, -4px) rotate(-12deg); }
+    100% { transform: none; }
   }
   .status {
     min-height: 1.5em;

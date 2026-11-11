@@ -112,3 +112,21 @@ export async function verifyTurnstile(secret: string, token: unknown, ip?: strin
   const data = (await res.json().catch(() => ({}))) as { success?: boolean };
   return data.success === true;
 }
+
+/** The same message in the shape Resend's API takes (https://resend.com/docs/api-reference/emails/send-email). */
+export function toResend(mail: Outgoing) {
+  const addr = (a: { email: string; name: string }) => (a.name ? `${headerSafe(a.name)} <${a.email}>` : a.email);
+  return { from: addr(mail.from), to: [mail.to], reply_to: addr(mail.replyTo), subject: mail.subject, text: mail.text, html: mail.html };
+}
+
+/** Sends through Resend. Throws with Resend's error name and message, the way the binding does. */
+export async function sendWithResend(apiKey: string, mail: Outgoing): Promise<{ messageId: string }> {
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { authorization: `Bearer ${apiKey}`, 'content-type': 'application/json' },
+    body: JSON.stringify(toResend(mail)),
+  });
+  const body = (await res.json().catch(() => ({}))) as { id?: string; name?: string; message?: string };
+  if (!res.ok || !body.id) throw Object.assign(new Error(body.message ?? `Resend answered ${res.status}`), { code: body.name ?? String(res.status) });
+  return { messageId: body.id };
+}

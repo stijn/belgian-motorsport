@@ -1,15 +1,16 @@
-// Five languages. English lives at the root, the others under /nl/, /fr/, /de/, /it/.
+// Six languages. English lives at the root, the others under /nl/, /fr/, /de/, /it/, /es/.
 import { en, type Dict } from './en';
 import { nl } from './nl';
 import { fr } from './fr';
 import { de } from './de';
 import { it } from './it';
+import { es } from './es';
 
-export const langs = ['en', 'nl', 'fr', 'de', 'it'] as const;
+export const langs = ['en', 'nl', 'fr', 'de', 'it', 'es'] as const;
 export type Lang = (typeof langs)[number];
 export const defaultLang: Lang = 'en';
 
-const dicts: Record<Lang, Dict> = { en, nl, fr, de, it };
+const dicts: Record<Lang, Dict> = { en, nl, fr, de, it, es };
 
 export const t = (lang: Lang): Dict => dicts[lang];
 

@@ -66,7 +66,7 @@ const org = {
   address: { '@type': 'PostalAddress', addressCountry: 'BE' },
   knowsAbout: ['Motorsport photography', 'Motorsport videography', 'Endurance racing', 'Historic racing', 'Rallying', 'Supercars'],
   sameAs: socials.map((s) => s.url),
-  contactPoint: { '@type': 'ContactPoint', contactType: 'bookings', url: `${site.url}/#contact`, availableLanguage: ['en', 'nl', 'fr', 'de', 'it'] },
+  contactPoint: { '@type': 'ContactPoint', contactType: 'bookings', url: `${site.url}/#contact`, availableLanguage: [...langs] },
 };
 const website = {
   '@context': 'https://schema.org',
@@ -138,6 +138,7 @@ const website = {
     <slot name="head" />
   </head>
   <body>
+    <div class="tricolour" aria-hidden="true"></div>
     <a class="skip" href="#main">{d.nav.skip}</a>
     <Header lang={lang} path={path} overHero={overHero} />
     <main id="main" tabindex="-1">

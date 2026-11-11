@@ -60,7 +60,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     </h1>
     <p class="sub hv">{d.hero.sub}</p>
     <div class="cta hv">
-      <a class="btn btn-red" href={href('/#work', lang)} data-replay><LineMd name="camera" />{d.hero.seePhotos}</a>
+      <a class="btn btn-red" href={href('/#photos', lang)} data-replay><LineMd name="camera" />{d.hero.seePhotos}</a>
       <a class="btn btn-ghost" href={href('/#film', lang)} data-replay><LineMd name="play" />{d.hero.watchFilms}</a>
     </div>
     {/* One bar per photo: it fills while that photo shows, and jumps to it when pressed. */}
@@ -120,10 +120,10 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     z-index: 1;
   }
   /* Ken Burns: a slow drift into the car for the length of the slide, held while the next fades in. */
-  .js-motion .slide.active :global(img) {
+  :global(.js-motion) .slide.active :global(img) {
     animation: kenburns calc(var(--interval) + 1.2s) linear forwards;
   }
-  .js-motion .slide.leaving :global(img) {
+  :global(.js-motion) .slide.leaving :global(img) {
     transform: scale(1.14);
   }
   @keyframes kenburns {
@@ -228,7 +228,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
   .bar.active .fill {
     width: 100%;
   }
-  .js-motion .bar.active .fill {
+  :global(.js-motion) .bar.active .fill {
     animation: fill var(--interval) linear forwards;
   }
   @keyframes fill {
@@ -262,13 +262,13 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     50% { transform: translateY(6px); }
   }
   /* The entrance moves, it never hides: the words are the largest contentful paint. */
-  .js-motion .hv {
+  :global(.js-motion) .hv {
     animation: rise 0.9s var(--ease) both;
   }
-  .js-motion .hv:nth-child(2) { animation-delay: 0.1s; }
-  .js-motion .hv:nth-child(3) { animation-delay: 0.2s; }
-  .js-motion .hv:nth-child(4) { animation-delay: 0.3s; }
-  .js-motion .hv:nth-child(5) { animation-delay: 0.4s; }
+  :global(.js-motion) .hv:nth-child(2) { animation-delay: 0.1s; }
+  :global(.js-motion) .hv:nth-child(3) { animation-delay: 0.2s; }
+  :global(.js-motion) .hv:nth-child(4) { animation-delay: 0.3s; }
+  :global(.js-motion) .hv:nth-child(5) { animation-delay: 0.4s; }
   @keyframes rise {
     from { transform: translateY(20px); }
     to { transform: none; }

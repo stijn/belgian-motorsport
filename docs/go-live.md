@@ -61,30 +61,34 @@ redirect rules.
 
 ## 4. Email: the contact form
 
-1. Onboard the domain to Email Sending. It needs the **Workers Paid** plan (USD 5 a month for the
-   account; the dashboard says so on Email Sending → Get started). Until then the Worker answers the
-   form with "The form goes live together with the domain…" and points at Instagram and Facebook.
+The form sends through **Resend** (free plan: 3,000 messages a month, 100 a day, data kept 30 days,
+servers in the US, GDPR DPA signed on sign-up; the privacy page says so). Cloudflare's own Email
+Sending would do the same without a third party, but needs the Workers Paid plan (USD 5 a month);
+the Worker still supports it: without `RESEND_API_KEY` it uses the `EMAIL` binding.
+
+1. Create a Resend account (resend.com, "Sign up", with his or Stijn's Google account). Nothing to pay.
+2. Domains → Add domain → `belgian-motorsport.com`, region Europe (Ireland). Resend shows three DNS
+   records: a `TXT resend._domainkey` (DKIM), and for the `send` subdomain an `MX` and a `TXT`
+   (SPF, `v=spf1 include:amazonses.com ~all`). Add them in Cloudflare → belgian-motorsport.com → DNS,
+   all **DNS only** (grey cloud). They live on their own names, so Google's SPF on `@` stays as it is.
+   Optional but good: `TXT _dmarc` with `v=DMARC1; p=none;`. Then "Verify" in Resend.
+3. API keys → Create: name `belgian-motorsport worker`, permission **Sending access**, domain
+   `belgian-motorsport.com` only. Copy it once, then on the Mac, in the project:
    ```bash
-   npx wrangler email sending enable belgian-motorsport.com
-   npx wrangler email sending dns get belgian-motorsport.com
+   npx wrangler secret put RESEND_API_KEY
    ```
-   This adds DKIM records and wants an SPF include. The zone already has Google's SPF, and a domain may
-   have only **one** SPF record: merge them into one `TXT @` record, e.g.
-   `v=spf1 include:_spf.google.com include:<the host from "dns get"> ~all`. Delete any duplicate.
-2. Set the secret that receives the form (prompted, never shown):
+   paste the key, Enter. (Same for the demo Worker with `--env demo`, if the demo form should send.)
+4. The address that receives the form, if not set yet (it is, since 2026-11-11):
    ```bash
    npx wrangler secret put CONTACT_TO
    ```
-3. Optional, recommended once the form sees spam: Turnstile. Cloudflare → Turnstile → Add widget for
-   `belgian-motorsport.com` (Managed, invisible). Then
-   `npx wrangler secret put TURNSTILE_SECRET`, and in the Worker's **Settings → Build → Variables**
-   add `PUBLIC_TURNSTILE_SITE_KEY` with the site key, and redeploy. Without it the form still has the
-   honeypot, the 3-second rule and the 5-a-minute rate limit.
-4. Test from a phone off wifi: send a message, check it arrives, hit Reply and check it goes to the
-   sender. The Worker's logs are in Workers & Pages → belgian-motorsport → Logs.
-
-Local test with real sending: `"send_email": [{ "name": "EMAIL", "remote": true }]` in
-`wrangler.jsonc` and `npm run preview`; remove `remote` again before committing.
+5. Test from a phone off wifi: send a message, check it arrives in his inbox, hit Reply and check it
+   goes to the sender. Resend → Emails shows each message and its delivery status; the Worker's logs
+   are in Workers & Pages → belgian-motorsport → Logs.
+6. Optional, once the form sees spam: Turnstile. Cloudflare → Turnstile → Add widget for
+   `belgian-motorsport.com` (Managed, invisible). Then `npx wrangler secret put TURNSTILE_SECRET`, and
+   `PUBLIC_TURNSTILE_SITE_KEY` with the site key at build time, and redeploy. Without it the form still
+   has the honeypot, the 3-second rule and the 5-a-minute rate limit.
 
 ## 5. Search
 
@@ -124,7 +128,8 @@ Done:
 
 Open:
 
-- Email Sending (Workers Paid, then step 4 above). The form stays a friendly 503 until then.
+- Email: a Resend account, the domain verified, `RESEND_API_KEY` set (step 4). The form stays a
+  friendly 503 until then.
 - Workers Builds (step 2): not connected yet, so deploys are `npm run deploy` from a laptop with
   Wrangler logged in.
 - The `A` records for `@` and `www` in the main zone still carry Dreamhost's IP (67.205.1.0). The

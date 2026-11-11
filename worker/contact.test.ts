@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildEmail, check, readInput } from './contact';
+import { buildEmail, check, readInput, toResend } from './contact';
 
 const good = { name: 'Ann Example', email: 'ann@example.com', message: 'Could you shoot our car at Zolder next month?', started: String(Date.now() - 10_000) };
 
@@ -65,6 +65,16 @@ describe('buildEmail', () => {
     expect(mail.replyTo.name).not.toMatch(/[\r\n]/);
     expect(mail.html).toContain('&lt;script&gt;');
     expect(mail.html).not.toContain('<script>');
+  });
+});
+
+describe('toResend', () => {
+  it('puts the names and addresses in Resend’s shape, reply-to on the sender', () => {
+    const r = check(good);
+    if (!r.ok) throw new Error('expected ok');
+    const body = toResend(buildEmail(r.message, { from: 'contact@belgian-motorsport.com', fromName: 'Website', to: 'him@example.com', site: 'belgian-motorsport.com' }));
+    expect(body).toMatchObject({ from: 'Website <contact@belgian-motorsport.com>', to: ['him@example.com'], reply_to: 'Ann Example <ann@example.com>', subject: 'Website message from Ann Example' });
+    expect(body.text).toContain(good.message);
   });
 });
 

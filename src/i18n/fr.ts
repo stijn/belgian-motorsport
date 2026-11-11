@@ -152,7 +152,7 @@ export const fr: Dict = {
     sections: [
       {
         h: 'Le formulaire de contact',
-        p: 'Ce que vous tapez dans le formulaire (votre nom, votre adresse e-mail et votre message) est envoyé une fois, par e-mail, dans ma boîte, pour que je puisse vous répondre. Rien n’est stocké dans une base de données ni partagé avec qui que ce soit. Contre le spam, Cloudflare limite le nombre d’envois et le formulaire peut utiliser Cloudflare Turnstile, qui vérifie sans puzzle qu’une requête vient d’un navigateur.',
+        p: 'Ce que vous tapez dans le formulaire (votre nom, votre adresse e-mail et votre message) est envoyé une fois, par e-mail, dans ma boîte, pour que je puisse vous répondre. Resend, le service qui achemine l’e-mail, en garde une copie pendant 30 jours sur ses serveurs aux États-Unis, dans le cadre du RGPD. Rien n’est stocké dans une base de données ni partagé avec qui que ce soit. Contre le spam, Cloudflare limite le nombre d’envois et le formulaire peut utiliser Cloudflare Turnstile, qui vérifie sans puzzle qu’une requête vient d’un navigateur.',
       },
       {
         h: 'Films',

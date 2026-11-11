@@ -2,8 +2,8 @@
 
 ## Next
 
-- Email Sending for the contact form: Workers Paid, onboard the domain, merge SPF
-  ([docs/go-live.md](docs/go-live.md), step 4). Until then the form answers with a friendly notice.
+- Email for the contact form: a Resend account, the domain verified there, the `RESEND_API_KEY`
+  secret ([docs/go-live.md](docs/go-live.md), step 4). Until then the form answers with a friendly notice.
 - Workers Builds, so a push to `main` deploys the live site (today: `npm run deploy` from a laptop).
 - After go-live: Search Console, `AAAA 100::` instead of the Dreamhost IPs, `blog.` subdomain's fate,
   cancel Dreamhost hosting.
@@ -11,8 +11,28 @@
 - A light theme, if he wants one: the colours are tokens in `src/styles/global.css`.
 - Per-event pages (one page per album with its photos and films), if the one-pager starts to feel
   too small. Not before go-live.
-- His portrait in About, when he sends one (replace the placeholder frame).
 - Prints and licensing: a short page with prices, when he has decided them.
+
+## 1.5.0 (2026-11-11)
+
+- The contact form sends through Resend (free, a key in a secret); Cloudflare Email Sending stays as
+  the fallback. The privacy page names Resend and what it keeps.
+- Spanish, the sixth language (`/es/`), in the menu, the sitemap and every hreflang set.
+- A thin Belgian tricolour along the top edge of every page, from the same token as the footer's.
+- Contact: a paper plane on the send button (it takes off on hover); a lock and a shield next to the
+  privacy note.
+- Hero: the bars now really fill from left to right while a photo shows, and the photos drift. Astro had
+  scoped `.js-motion` to each component, so none of the component animations (Ken Burns, bar fill,
+  the About drift, the footer car, the year lines in Events) ever ran. Fixed with `:global()`.
+- The language menu's tooltip opens below, where the browser's own bar can't hide it.
+- The numbers in order of weight: years, subscribers, video views, photo views, films, photos.
+- The red word in a headline is red text again, not white on a plate (4:1 on the background: AA for
+  large text, just under AAA's 4.5:1).
+- His three portraits in About, cross-fading, the pink "13 PRESS" jersey first.
+- The photos section's anchor is `#photos` (was `#work`), matching the menu word.
+- `npm run seo`: checks every built page's title and description length, canonical, the full and
+  reciprocal hreflang set (every target exists), Open Graph and Twitter fields and that the card images
+  exist. CI and the Pages build run it; so does `npm run deploy`.
 
 ## 1.4.1 (2026-11-11)
 

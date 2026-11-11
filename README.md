@@ -20,7 +20,7 @@ for the move from Dreamhost to Cloudflare.
 | Design tokens and shared styles | `src/styles/global.css` |
 | Page shell, metadata, JSON-LD | `src/layouts/Base.astro` |
 | Sections of the home page | `src/components/` |
-| Pages | `src/views/` (one per page) rendered by `src/pages/` at the root (English) and `src/pages/[lang]/` (nl, fr, de, it); `404` and the manifest |
+| Pages | `src/views/` (one per page) rendered by `src/pages/` at the root (English) and `src/pages/[lang]/` (nl, fr, de, it, es); `404` and the manifest |
 | Contact form server side | `worker/index.ts`, `worker/contact.ts` (+ tests) |
 | Security and caching headers, redirects, service worker, icons, share image | `public/` |
 | Scripts that build things | `tools/sync.mjs` (films, albums), `tools/icons.mjs` (icons), `tools/share-cards.mjs` (share cards) |
@@ -46,7 +46,7 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 
 ## How it works
 
-- **Languages.** English lives at the root, the others under `/nl/`, `/fr/`, `/de/`, `/it/`. Each page
+- **Languages.** English lives at the root, the others under `/nl/`, `/fr/`, `/de/`, `/it/`, `/es/`. Each page
   links its siblings with `hreflang` (plain language codes, `x-default` on English). Proper names, the
   tagline and photo captions stay as they are.
 - **Static first.** Every page is HTML built ahead of time. Cloudflare serves `dist/` as static assets;
@@ -82,7 +82,8 @@ workers.dev, where the Worker runs too.
 **Live:** https://belgian-motorsport.com, the Worker in `wrangler.jsonc`: `npm run deploy` (build,
 then `wrangler deploy`) from a machine with Wrangler logged in. Workers Builds can take that over
 (build command `npm run build`, deploy command `npx wrangler deploy`; see docs/go-live.md). GitHub Actions (`.github/workflows/ci.yml`) runs the checks, tests and a build
-on every push and pull request. Releases: bump `version` in `package.json`, add the section to
+on every push and pull request, then `npm run seo` (title and description lengths, canonical,
+hreflang sets, Open Graph) on the built pages. Releases: bump `version` in `package.json`, add the section to
 `roadmap.md`, tag `vX.Y.Z`.
 
 ## Rights

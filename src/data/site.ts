@@ -71,11 +71,12 @@ export const stats = {
   asOf: '2026-11-11',
   since: 2006,
   items: [
+    // In order of weight: on a phone only the first ones show without scrolling.
     { key: 'subscribers', value: '125K', icon: 'account' },
     { key: 'views', value: '62M', icon: 'play' },
+    { key: 'photoViews', value: '5.7M', icon: 'image' },
     { key: 'films', value: '2,750', icon: 'youtube' },
     { key: 'photos', value: '9,500', icon: 'camera' },
-    { key: 'photoViews', value: '5.7M', icon: 'image' },
   ],
   /** Albums on Flickr (the Events section shows the newest; `npm run sync` prints the current total). */
   albums: '430',
@@ -86,7 +87,7 @@ export const serviceIcons = ['flag', 'users', 'car', 'video'] as const;
 
 /** The sections of the home page, with their line-md icons. Labels come from src/i18n/ (nav.*). */
 export const sections = [
-  { id: 'work', key: 'photos', icon: 'camera' },
+  { id: 'photos', key: 'photos', icon: 'camera' },
   { id: 'film', key: 'film', icon: 'play' },
   { id: 'events', key: 'events', icon: 'calendar' },
   { id: 'about', key: 'about', icon: 'account' },

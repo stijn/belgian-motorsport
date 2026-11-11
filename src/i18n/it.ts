@@ -152,7 +152,7 @@ export const it: Dict = {
     sections: [
       {
         h: 'Il modulo di contatto',
-        p: 'Quello che scrivete nel modulo (nome, indirizzo e-mail e messaggio) viene inviato una volta, per e-mail, nella mia casella di posta, perché io possa rispondervi. Non viene salvato in un database e non viene condiviso con nessuno. Contro lo spam, Cloudflare limita il numero di invii e il modulo può usare Cloudflare Turnstile, che verifica senza enigmi che una richiesta arrivi da un browser.',
+        p: 'Quello che scrivete nel modulo (nome, indirizzo e-mail e messaggio) viene inviato una volta, per e-mail, nella mia casella di posta, perché io possa rispondervi. Resend, il servizio che recapita l’e-mail, ne conserva una copia per 30 giorni sui suoi server negli Stati Uniti, nel rispetto del GDPR. Non viene salvato in un database e non viene condiviso con nessuno. Contro lo spam, Cloudflare limita il numero di invii e il modulo può usare Cloudflare Turnstile, che verifica senza enigmi che una richiesta arrivi da un browser.',
       },
       {
         h: 'Film',

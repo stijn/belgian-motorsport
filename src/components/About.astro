@@ -175,7 +175,7 @@ const portraits = Object.keys(found)
   .shot.active {
     opacity: 1;
   }
-  .js-motion .shot.active :global(img) {
+  :global(.js-motion) .shot.active :global(img) {
     animation: drift 6.2s linear forwards;
   }
   @keyframes drift {

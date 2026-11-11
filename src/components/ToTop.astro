@@ -54,7 +54,7 @@ const d = t(Astro.props.lang);
     font-size: 1.15rem;
     transform-origin: left bottom;
   }
-  .js-motion .to-top:hover .flag {
+  :global(.js-motion) .to-top:hover .flag {
     animation: wave 0.7s var(--ease) infinite;
   }
   @keyframes wave {

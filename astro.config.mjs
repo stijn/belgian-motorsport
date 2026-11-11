@@ -15,7 +15,7 @@ export default defineConfig({
   trailingSlash: 'always',
   i18n: {
     defaultLocale: 'en',
-    locales: ['en', 'nl', 'fr', 'de', 'it'],
+    locales: ['en', 'nl', 'fr', 'de', 'it', 'es'],
     routing: { prefixDefaultLocale: false },
   },
   // The stylesheet goes inside each page: the first paint needs one download instead of two.
@@ -28,7 +28,7 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      i18n: { defaultLocale: 'en', locales: { en: 'en', nl: 'nl', fr: 'fr', de: 'de', it: 'it' } },
+      i18n: { defaultLocale: 'en', locales: { en: 'en', nl: 'nl', fr: 'fr', de: 'de', it: 'it', es: 'es' } },
       filter: (page) => !/\/(404|thanks)\/?$/.test(page) && !/\.webmanifest$/.test(page),
       changefreq: 'monthly',
       lastmod: new Date(),

@@ -152,7 +152,7 @@ export const en = {
     sections: [
       {
         h: 'The contact form',
-        p: 'What you type in the form (your name, your email address and your message) is sent once, by email, to my inbox, so I can answer you. It isn’t stored in a database and isn’t shared with anyone else. To keep spam out, the form is rate-limited by Cloudflare and may use Cloudflare Turnstile, which checks that a request comes from a browser without showing a puzzle.',
+        p: 'What you type in the form (your name, your email address and your message) is sent once, by email, to my inbox, so I can answer you. Resend, the email service that carries it, keeps a copy for 30 days on its servers in the United States, under the GDPR. It isn’t stored in a database and isn’t shared with anyone else. To keep spam out, the form is rate-limited by Cloudflare and may use Cloudflare Turnstile, which checks that a request comes from a browser without showing a puzzle.',
       },
       {
         h: 'Films',

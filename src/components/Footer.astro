@@ -179,7 +179,7 @@ const [before, after] = d.footer.rightsText.split('{link}');
   .stripe {
     position: relative;
     height: 6px;
-    background: linear-gradient(90deg, #000 0 33.3%, #fdda24 33.3% 66.6%, var(--red) 66.6%);
+    background: var(--tricolour);
   }
   .car {
     position: absolute;
@@ -188,7 +188,7 @@ const [before, after] = d.footer.rightsText.split('{link}');
     opacity: 0;
     pointer-events: none;
   }
-  .js-motion .site-footer.racing .car {
+  :global(.js-motion) .site-footer.racing .car {
     animation: race 1.6s cubic-bezier(0.3, 0, 0.2, 1) forwards;
   }
   @keyframes race {
