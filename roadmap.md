@@ -13,6 +13,11 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.5.4 (2026-11-11)
+
+- Tooltips as on the Tofo site: a dark card with a thin border and plain light text, no shadow (the
+  header's text halo was being inherited).
+
 ## 1.5.3 (2026-11-11)
 
 - About: the portraits drift further (scale 1 to 1.18 over nine seconds) and no longer snap back while
