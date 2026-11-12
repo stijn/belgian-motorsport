@@ -10,6 +10,14 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.10.5 (2026-11-12)
+
+- Structured data without warnings in Google's Rich Results Test. The videos carry the full upload
+  timestamp with its time zone and a one-line description (the first paragraph of the YouTube
+  description, stored by `npm run sync`). The organisation is an `Organization` located in Belgium,
+  no longer also a `ProfessionalService`: that type is for a business at an address, and the test
+  asked for a street, a phone number and a price range the site deliberately does not give.
+
 ## 1.10.4 (2026-11-12)
 
 - The GitHub Pages demo is gone: the workflow, the Pages site, the `github-pages` environment and the

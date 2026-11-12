@@ -27,7 +27,7 @@ const list = videos
 const youtube = socials.find((s) => s.key === 'youtube')!;
 const subs = stats.items.find((s) => s.key === 'subscribers')!.value;
 const films = stats.items.find((s) => s.key === 'films')!.value;
-const fmt = new Intl.DateTimeFormat(d.htmlLang, { day: 'numeric', month: 'short', year: 'numeric' });
+const fmt = new Intl.DateTimeFormat(d.htmlLang, { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 ---
 <section id="film" class="section film">
   <div class="wrap">

@@ -41,7 +41,10 @@ async function youtube() {
   for (const e of entries.slice(0, MAX_VIDEOS)) {
     const id = tag(e, 'yt:videoId');
     const title = decode(tag(e, 'title'));
-    const published = tag(e, 'published').slice(0, 10);
+    // The full timestamp with its zone: the VideoObject's uploadDate wants one.
+    const published = tag(e, 'published');
+    // The first paragraph of his YouTube description (event, date, series), one line, for the VideoObject.
+    const description = decode(tag(e, 'media:description')).split(/\n\s*\n/)[0].replace(/\s*\n\s*/g, ', ').trim().slice(0, 200);
     const views = Number(e.match(/<media:statistics views="(\d+)"/)?.[1] ?? 0);
     // The largest thumbnail YouTube has for it; older uploads only have hqdefault.
     let got = false;
@@ -56,10 +59,10 @@ async function youtube() {
       } catch {}
     }
     if (!got) console.warn(`no thumbnail for ${id}`);
-    videos.push({ id, title, published, views });
+    videos.push({ id, title, published, description, views });
   }
   await writeFile(join(root, 'src/data/videos.json'), JSON.stringify(videos, null, 2) + '\n');
-  console.log(`YouTube: ${videos.length} films, newest ${videos[0]?.published} "${videos[0]?.title}"`);
+  console.log(`YouTube: ${videos.length} films, newest ${videos[0]?.published.slice(0, 10)} "${videos[0]?.title}"`);
 }
 
 /** Flickr's page data is wrapped as {data, exportMetaType} at every level. */

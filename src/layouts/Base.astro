@@ -53,7 +53,7 @@ const alternates = langs.map((l) => ({ lang: l, hreflang: t(l).htmlLang, url: ne
 
 const org = {
   '@context': 'https://schema.org',
-  '@type': ['Organization', 'ProfessionalService'],
+  '@type': 'Organization',
   '@id': `${site.url}/#org`,
   name: site.name,
   alternateName: 'BM',
@@ -64,7 +64,7 @@ const org = {
   image: ogImage,
   foundingDate: String(stats.since),
   areaServed: ['Belgium', 'Europe'],
-  address: { '@type': 'PostalAddress', addressCountry: 'BE' },
+  location: { '@type': 'Country', name: 'Belgium' },
   knowsAbout: ['Motorsport photography', 'Motorsport videography', 'Endurance racing', 'Historic racing', 'Rallying', 'Supercars'],
   sameAs: socials.map((s) => s.url),
   contactPoint: { '@type': 'ContactPoint', contactType: 'bookings', url: `${site.url}/#contact`, availableLanguage: [...langs] },
