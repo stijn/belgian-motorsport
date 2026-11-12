@@ -1,7 +1,7 @@
 {
   "name": "belgian-motorsport",
   "private": true,
-  "version": "1.10.0",
+  "version": "1.10.1",
   "type": "module",
   "description": "Belgian Motorsport: portfolio and business card of a Belgian motorsport photographer and filmmaker. Static Astro site on Cloudflare Workers, with one small Worker for the contact form.",
   "engines": {

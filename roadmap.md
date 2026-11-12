@@ -10,6 +10,13 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.10.1 (2026-11-12)
+
+- The car on the lines is a late-nineties Ferrari Formula 1 in side view, always red, gold rims: the
+  one we grew up watching. The two grey silhouettes are gone.
+- The short red line before a section's icon is a plain red line again: no chequered flag on hover, no
+  draw-in.
+
 ## 1.10.0 (2026-11-12)
 
 - Delights you can meet without hovering: on the long divider lines of the text-heavy parts (the

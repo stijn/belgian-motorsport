@@ -1,6 +1,6 @@
 // The cars on the divider lines (Drive.astro): while a line is on screen, a car crosses it a few
-// seconds after it appears and then every quarter of a minute or so, in a random size, speed and
-// colour. Nothing runs with motion reduced or in a hidden tab.
+// seconds after it appears and then every quarter of a minute or so, at a random speed. Nothing runs
+// with motion reduced or in a hidden tab.
 const motion = document.documentElement.classList.contains('js-motion');
 const tracks = [...document.querySelectorAll<HTMLElement>('[data-track]')];
 
@@ -12,9 +12,7 @@ if (motion && tracks.length && 'IntersectionObserver' in window) {
     const car = track.querySelector<HTMLElement>('[data-drive]');
     if (!car) return;
     car.style.setProperty('--w', `${track.offsetWidth}px`);
-    car.style.setProperty('--t', `${rand(2.2, 3.6).toFixed(2)}s`);
-    car.classList.toggle('alt', Math.random() < 0.5);
-    car.classList.toggle('red', Math.random() < 0.15);
+    car.style.setProperty('--t', `${rand(2.0, 3.2).toFixed(2)}s`);
     car.classList.remove('go');
     void car.offsetWidth;
     car.classList.add('go');

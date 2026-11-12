@@ -195,17 +195,6 @@ button {
   width: 2rem;
   height: 2px;
   background: var(--red);
-  transform-origin: left;
-  transition: transform 0.8s var(--ease) 0.15s;
-}
-
-/* Hovering a section head turns the line into a chequered flag. */
-.section-head:hover .eyebrow::before {
-  background: repeating-linear-gradient(90deg, var(--text) 0 4px, var(--bg) 4px 8px);
-}
-
-.js-motion .eyebrow.rv:not(.in)::before {
-  transform: scaleX(0);
 }
 
 .h2 {
@@ -838,33 +827,23 @@ html:not(.js-motion) .slides-ctl .pp {
   position: absolute;
   left: 0;
   top: 50%;
-  width: 40px;
-  height: 13px;
-  color: var(--text-3);
+  width: 64px;
+  height: 18px;
+  color: var(--red);
   opacity: 0;
-  transform: translate(-48px, -50%);
+  transform: translate(-72px, -50%);
   pointer-events: none;
   will-change: transform;
 }
 .drive svg {
   display: block;
 }
-.drive .car-b,
-.drive.alt .car-a {
-  display: none;
-}
-.drive.alt .car-b {
-  display: block;
-}
-.drive.red {
-  color: var(--red);
-}
 .js-motion .drive.go {
   animation: drive var(--t, 2.8s) cubic-bezier(0.35, 0, 0.25, 1) forwards;
 }
 @keyframes drive {
-  0% { opacity: 0; transform: translate(-48px, -50%); }
+  0% { opacity: 0; transform: translate(-72px, -50%); }
   6% { opacity: 1; }
   94% { opacity: 1; }
-  100% { opacity: 0; transform: translate(calc(var(--w, 100vw) + 48px), -50%); }
+  100% { opacity: 0; transform: translate(calc(var(--w, 100vw) + 72px), -50%); }
 }

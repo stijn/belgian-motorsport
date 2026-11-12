@@ -1,7 +1,8 @@
 ---
 // A divider line with a small car that drives along it now and then while the line is on screen
-// (src/scripts/drive.ts): the site's version of the fishes on the Tofo dive club site. Two
-// silhouettes, a GT and a rally hatch, now and then a red one. Decorative; still with motion reduced.
+// (src/scripts/drive.ts): the site's version of the fishes on the Tofo dive club site. The car is a
+// late-nineties Ferrari Formula 1 in side view, the one we grew up watching: low front wing, high
+// airbox, tall rear wing, gold rims. Decorative; still with motion reduced.
 interface Props {
   class?: string;
 }
@@ -9,15 +10,23 @@ const { class: cls } = Astro.props;
 ---
 <span class:list={['track', cls]} aria-hidden="true" data-track>
   <span class="drive" data-drive>
-    <svg viewBox="0 0 48 16" width="40" height="13" focusable="false">
-      <g class="car-a">
-        <path fill="currentColor" d="M3 12.5 5 8.5h10l5-4.5h11l6 4.5 7 1 1 3z" />
-      </g>
-      <g class="car-b">
-        <path fill="currentColor" d="M3 12.5 5.5 7.5h4.5l4-4.5h13l4 4.5 12 1 1 4z" />
-      </g>
-      <circle cx="12" cy="12.5" r="2.6" fill="var(--bg)" stroke="currentColor" stroke-width="1.8" />
-      <circle cx="36" cy="12.5" r="2.6" fill="var(--bg)" stroke="currentColor" stroke-width="1.8" />
+    <svg viewBox="0 0 64 18" width="64" height="18" focusable="false">
+      {/* front wing and its endplate */}
+      <path fill="currentColor" d="M1.5 13.8h11.5v1.5H1.5z" />
+      <path fill="currentColor" d="M1 11.6h1.6v3.9H1z" />
+      {/* nose, cockpit, airbox, engine cover and sidepod */}
+      <path fill="currentColor" d="M7 13.8l5.5-1.3 7.5-2.1 5-.9 2.4-3 1.6-.3h4.5l1.5-1.6 3-.2 2 1.2 3 1.4 5 1.6 6 .6 1 .6v4H7z" />
+      {/* rear wing: plane, strut, endplate */}
+      <path fill="currentColor" d="M44 3.4h14v1.6H44z" />
+      <path fill="currentColor" d="M50.5 5h1.3v4.4h-1.3z" />
+      <path fill="currentColor" d="M57.2 2.4h1.7v9.2h-1.7z" />
+      {/* helmet */}
+      <circle cx="30.2" cy="7.2" r="1.6" fill="#f3f2ef" />
+      {/* wheels: dark tyres, gold rims */}
+      <circle cx="15.5" cy="13" r="4" fill="#232326" stroke="#4a4a4e" stroke-width="1" />
+      <circle cx="15.5" cy="13" r="1.9" fill="#c9a24a" />
+      <circle cx="49" cy="12.6" r="4.4" fill="#232326" stroke="#4a4a4e" stroke-width="1" />
+      <circle cx="49" cy="12.6" r="2.1" fill="#c9a24a" />
     </svg>
   </span>
 </span>
