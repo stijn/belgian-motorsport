@@ -3,8 +3,7 @@
 ## Next
 
 - Workers Builds, so a push to `main` deploys the live site (today: `npm run deploy` from a laptop).
-- After go-live: Search Console; approve Dreamhost's transfer emails (both registrations are on their
-  way to Cloudflare Registrar); delete the `blog.` site at Dreamhost and cancel the hosting plan.
+- After go-live: Search Console; delete the `blog.` site at Dreamhost and cancel the hosting plan.
 - Turnstile on the contact form, once real spam shows up.
 - A light theme, if he wants one: the colours are tokens in `src/styles/global.css`.
 - Per-event pages (one page per album with its photos and films), if the one-pager starts to feel
