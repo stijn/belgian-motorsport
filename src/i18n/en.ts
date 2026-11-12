@@ -6,7 +6,7 @@ export const en = {
   htmlLang: 'en',
   ogLocale: 'en_BE',
   meta: {
-    title: 'Belgian Motorsport | Motorsport photography & film, Belgium',
+    title: 'Belgian Motorsport | Racing photography & film from Belgium',
     description:
       'Motorsport photographer and filmmaker from Belgium: race cars, rally cars and supercars at Spa, Zolder, the Nürburgring and on the rally stages, since 2006.',
     cardHome: 'A BMW M1 Procar at speed with flames from the exhaust, the red BM logo, and the words “Belgian Motorsport, Passionate about cars”.',

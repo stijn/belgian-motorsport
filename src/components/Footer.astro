@@ -1,7 +1,7 @@
 ---
 // Four columns: who, the four places his work lives (the old footer's labels, each in its brand colour,
 // opening in a new window), this page, and rights with the credits Font Awesome's licence asks for.
-// A small delight: hover the logo and a car races along the tricolour.
+// A small delight: hover the logo and the racing-car emoji races along the tricolour.
 import { Image } from 'astro:assets';
 import logo from '../assets/bm-logo.png';
 import SocialIcon from './SocialIcon.astro';
@@ -54,13 +54,9 @@ const [before, after] = d.footer.rightsText.split('{link}');
     </div>
   </div>
   <div class="stripe" aria-hidden="true">
-    {/* A simple car silhouette, drawn by hand: it races the stripe when the logo is hovered. */}
-    <svg class="car" viewBox="0 0 64 24" width="64" height="24" aria-hidden="true">
-      <path d="M4 16h4l5-7h18l9 6h14a6 6 0 0 1 6 5v0H4z" fill="#f3f2ef"/>
-      <path d="M14 10l-3 5h8v-5zM21 10v5h9l-6-5z" fill="#0b0b0c"/>
-      <circle cx="16" cy="19" r="4" fill="#0b0b0c" stroke="#f3f2ef" stroke-width="1.5"/>
-      <circle cx="46" cy="19" r="4" fill="#0b0b0c" stroke="#f3f2ef" stroke-width="1.5"/>
-    </svg>
+    {/* The racing-car emoji, the same car as on the divider lines (Drive.astro), mirrored to face the
+        way it drives: it races the stripe when the logo is hovered. */}
+    <span class="car"><span class="emoji">🏎️</span></span>
   </div>
 </footer>
 
@@ -184,9 +180,15 @@ const [before, after] = d.footer.rightsText.split('{link}');
   .car {
     position: absolute;
     left: -80px;
-    bottom: 4px;
+    bottom: 3px;
+    font-size: 28px;
+    line-height: 1;
     opacity: 0;
     pointer-events: none;
+  }
+  .car .emoji {
+    display: block;
+    transform: scaleX(-1);
   }
   :global(.js-motion) .site-footer.racing .car {
     animation: race 1.6s cubic-bezier(0.3, 0, 0.2, 1) forwards;

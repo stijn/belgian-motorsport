@@ -10,6 +10,12 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.10.3 (2026-11-12)
+
+- Meta titles no longer repeat a word (English, German, Italian): "Racing photography & film from Belgium", "Rennsportfotografie und Film, Belgien", "Foto e film di automobilismo, Belgio".
+- The hero H1 has a space between the name and the tagline, so screen readers no longer read "MotorsportPassionate" as one word.
+- The footer's hover delight uses the same mirrored racing-car emoji as the divider lines; the hand-drawn grey car is gone.
+
 ## 1.10.2 (2026-11-12)
 
 - The car on the lines is the racing-car emoji of the visitor's device, mirrored so it faces the way

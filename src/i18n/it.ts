@@ -6,7 +6,7 @@ export const it: Dict = {
   htmlLang: 'it',
   ogLocale: 'it_IT',
   meta: {
-    title: 'Belgian Motorsport | Foto e film di motorsport, Belgio',
+    title: 'Belgian Motorsport | Foto e film di automobilismo, Belgio',
     description:
       'Fotografo e filmmaker di motorsport dal Belgio: auto da corsa, da rally e supercar a Spa, Zolder, al Nürburgring e sulle prove speciali, dal 2006.',
     cardHome: 'Una BMW M1 Procar lanciata, fiamme dallo scarico, il logo rosso BM e le parole “Belgian Motorsport, Passionate about cars”.',
