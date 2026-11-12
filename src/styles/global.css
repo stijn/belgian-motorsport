@@ -827,16 +827,17 @@ html:not(.js-motion) .slides-ctl .pp {
   position: absolute;
   left: 0;
   top: 50%;
-  width: 64px;
-  height: 18px;
-  color: var(--red);
+  font-size: 26px;
+  line-height: 1;
   opacity: 0;
   transform: translate(-72px, -50%);
   pointer-events: none;
   will-change: transform;
 }
-.drive svg {
+/* Every emoji set draws the racing car nose to the left; it drives to the right. */
+.drive .car {
   display: block;
+  transform: scaleX(-1);
 }
 .js-motion .drive.go {
   animation: drive var(--t, 2.8s) cubic-bezier(0.35, 0, 0.25, 1) forwards;

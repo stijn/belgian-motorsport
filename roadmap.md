@@ -10,6 +10,11 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.10.2 (2026-11-12)
+
+- The car on the lines is the racing-car emoji of the visitor's device, mirrored so it faces the way
+  it drives. The hand-drawn one faced backwards and looked it.
+
 ## 1.10.1 (2026-11-12)
 
 - The car on the lines is a late-nineties Ferrari Formula 1 in side view, always red, gold rims: the
