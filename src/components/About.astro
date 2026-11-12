@@ -8,6 +8,7 @@ import Fa from './Fa.astro';
 import SocialIcon from './SocialIcon.astro';
 import SectionHead from './SectionHead.astro';
 import SlidesControl from './SlidesControl.astro';
+import { blurStyle } from '../lib/lqip';
 import { faCamera, faFlagCheckered, faUsers, faCar, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { socials, serviceIcons } from '../data/site';
 import { fill, t, type Lang } from '../i18n';
@@ -22,7 +23,7 @@ const services = d.about.services.map((s, i) => ({ ...s, icon: icons[serviceIcon
 const found = import.meta.glob<{ default: ImageMetadata }>('../assets/portrait/*.{jpg,jpeg,png}', { eager: true });
 const portraits = Object.keys(found)
   .sort()
-  .map((k) => found[k]!.default);
+  .map((k) => ({ img: found[k]!.default, blur: blurStyle(`portrait/${k.split('/').pop()}`) }));
 ---
 <section id="about" class="section about">
   <div class="wrap">
@@ -38,8 +39,8 @@ const portraits = Object.keys(found)
           <div class="portrait-wrap rv" data-portraits>
             <figure class="portrait photos">
               {portraits.map((p, i) => (
-                <span class:list={['shot', { active: i === 0 }]} data-portrait>
-                  <Picture src={p} width={960} height={640} alt={i === 0 ? d.about.portraitAlt : ''} widths={[480, 720, 960]} sizes="(min-width: 900px) 40vw, 100vw" formats={['avif', 'webp']} quality={66} loading="lazy" />
+                <span class:list={['shot', { active: i === 0 }]} style={p.blur} data-portrait>
+                  <Picture src={p.img} width={960} height={640} alt={i === 0 ? d.about.portraitAlt : ''} widths={[480, 720, 960]} sizes="(min-width: 900px) 40vw, 100vw" formats={['avif', 'webp']} quality={66} loading="lazy" />
                 </span>
               ))}
             </figure>
@@ -180,6 +181,8 @@ const portraits = Object.keys(found)
   .shot {
     opacity: 0;
     transition: opacity 1.4s ease-in-out;
+    background-size: cover;
+    background-position: center;
   }
   .shot.active {
     opacity: 1;

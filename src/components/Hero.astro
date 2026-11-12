@@ -8,6 +8,7 @@ import LineMd from './LineMd.astro';
 import SlidesControl from './SlidesControl.astro';
 import { site } from '../data/site';
 import { href } from '../lib/url';
+import { blurStyle } from '../lib/lqip';
 import { t, type Lang } from '../i18n';
 import porsche from '../assets/hero/porsche-911-rsr-spa.jpg';
 import bmw from '../assets/hero/bmw-m1-procar.jpg';
@@ -21,9 +22,9 @@ const d = t(lang);
 
 // `focus` is where the car is: the zoom drifts into that point, and the photo is cropped around it.
 const slides = [
-  { src: porsche, alt: 'A yellow Porsche 911 RSR on the kerbs of the Raidillon at Spa-Francorchamps, the track empty behind it.', focus: '76% 38%' },
-  { src: bmw, alt: 'A white and red BMW M1 Procar panning past at speed, flames from the exhaust.', focus: '48% 62%' },
-  { src: aston, alt: 'A green and yellow Aston Martin DBR9 head-on through a corner.', focus: '48% 55%' },
+  { src: porsche, file: 'porsche-911-rsr-spa.jpg', alt: 'A yellow Porsche 911 RSR on the kerbs of the Raidillon at Spa-Francorchamps, the track empty behind it.', focus: '76% 38%' },
+  { src: bmw, file: 'bmw-m1-procar.jpg', alt: 'A white and red BMW M1 Procar panning past at speed, flames from the exhaust.', focus: '48% 62%' },
+  { src: aston, file: 'aston-martin-dbr9.jpg', alt: 'A green and yellow Aston Martin DBR9 head-on through a corner.', focus: '48% 55%' },
 ];
 const widths = [640, 960, 1280, 1600, 1920];
 const sizes = '100vw';
@@ -36,7 +37,7 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
 <section class="hero" aria-label={site.name} data-hero data-interval="6000">
   <div class="slides" aria-hidden="true">
     {slides.map((s, i) => (
-      <div class:list={['slide', { active: i === 0 }]} style={`--focus:${s.focus}`} data-slide>
+      <div class:list={['slide', { active: i === 0 }]} style={`--focus:${s.focus};${blurStyle(`hero/${s.file}`) ?? ''}`} data-slide>
         <Picture
           src={s.src}
           alt={i === 0 ? s.alt : ''}
@@ -106,6 +107,9 @@ const first = await getImage({ src: slides[0]!.src, widths, format: 'avif', qual
     will-change: transform;
   }
   .slide {
+    /* The blurred thumbnail sits behind the photo, cropped to the same point. */
+    background-size: cover;
+    background-position: var(--focus, center);
     opacity: 0;
     transition: opacity 1.2s var(--ease);
   }

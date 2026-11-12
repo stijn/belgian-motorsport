@@ -10,6 +10,14 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.9.0 (2026-11-12)
+
+- Something at once on a slow connection: every photo box (hero, gallery, events, films, portraits)
+  carries a 20 px blurred thumbnail of its photo in the page, and the real photo fades in over it. The
+  thumbnails are made by `tools/lqip.mjs` before each build (about 10 KB per page). AVIF and WebP cannot
+  render progressively the way JPEG did; this is the modern equivalent. The JPEG copies stay as the
+  last-resort fallback for browsers without AVIF or WebP.
+
 ## 1.8.3 (2026-11-12)
 
 - Offline, every language: after half a minute on a page (and only on a good connection, once per

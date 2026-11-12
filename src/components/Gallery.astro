@@ -11,6 +11,7 @@ import SocialIcon from './SocialIcon.astro';
 import SectionHead from './SectionHead.astro';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
 import gallery from '../data/gallery.json';
+import { blurStyle } from '../lib/lqip';
 import { accounts, socials } from '../data/site';
 import { t, type Lang } from '../i18n';
 
@@ -44,6 +45,7 @@ const items = await Promise.all(
             <button
               type="button"
               class="open ph"
+              style={blurStyle(`gallery/${g.file}`)}
               data-lightbox
               data-full={g.full}
               data-alt={g.alt}

@@ -7,6 +7,7 @@ import LineMd from './LineMd.astro';
 import SocialIcon from './SocialIcon.astro';
 import SectionHead from './SectionHead.astro';
 import albums from '../data/albums.json';
+import { blurStyle } from '../lib/lqip';
 import { socials, stats } from '../data/site';
 import { fill, t, type Lang } from '../i18n';
 
@@ -35,7 +36,7 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
           {albums.map((a) => (
             <li class="rv">
               <div class="album">
-                <a class="cover ph" href={a.url} target="_blank" rel="noopener" aria-label={a.title}>
+                <a class="cover ph" style={blurStyle(`albums/${a.cover}`)} href={a.url} target="_blank" rel="noopener" aria-label={a.title}>
                   <Picture src={a.img!} alt="" widths={[320, 480, 640]} sizes="(min-width: 900px) 300px, (min-width: 500px) 45vw, 100vw" formats={['avif', 'webp']} quality={62} loading="lazy" />
                 </a>
                 <span class="cap">
