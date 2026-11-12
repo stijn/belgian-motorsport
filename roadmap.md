@@ -10,6 +10,13 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.8.3 (2026-11-12)
+
+- Offline, every language: after half a minute on a page (and only on a good connection, once per
+  visit) the home, contact and privacy pages of all six languages are saved in the background. They
+  share every photo, script and font with the page already open, so that costs about half a megabyte
+  of HTML in all, and the site then opens offline in any language.
+
 ## 1.8.2 (2026-11-12)
 
 - Hero photos at AVIF quality 55 (was 60): a fifth smaller, no visible change under the halo and the

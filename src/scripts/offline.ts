@@ -23,18 +23,27 @@ if ('serviceWorker' in navigator && update) {
   });
 }
 
+// A connection that can take extra downloads: online, no data saving, not a slow network.
+const goodConnection = () => {
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+  return navigator.onLine && !conn?.saveData && !(conn?.effectiveType && conn.effectiveType !== '4g');
+};
+/** True the first time per visit for this key, so each stage runs once. */
+const once = (key: string) => {
+  try {
+    if (sessionStorage.getItem(key)) return false;
+    sessionStorage.setItem(key, '1');
+  } catch {
+    /* storage off: run anyway */
+  }
+  return true;
+};
+
 // Once per visit, on a connection that can take it: load the photos further down the page (so the
 // worker saves them), the full-size photos of the lightbox, and this language's other pages. After
 // that the whole site opens with no connection, which is the usual state at the track.
 const warm = (reg: ServiceWorkerRegistration) => {
-  const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
-  if (!navigator.onLine || conn?.saveData || (conn?.effectiveType && conn.effectiveType !== '4g')) return;
-  try {
-    if (sessionStorage.getItem('bm-warm')) return;
-    sessionStorage.setItem('bm-warm', '1');
-  } catch {
-    /* storage off: warm anyway */
-  }
+  if (!goodConnection() || !once('bm-warm')) return;
   const run = () => {
     document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]').forEach((img) => (img.loading = 'eager'));
     const files = [...document.querySelectorAll<HTMLElement>('[data-full]')].map((el) => el.dataset.full!).filter(Boolean);
@@ -51,6 +60,38 @@ const warm = (reg: ServiceWorkerRegistration) => {
   else setTimeout(run, 3000);
 };
 
+// After half a minute on the page, when the photos in view have long arrived: the home, contact and
+// privacy pages of every language (their photos, scripts and fonts are the same files, already
+// saved), so the site opens offline in any language. The list comes from the page's own hreflang
+// links, which name this page in every language; the other two pages sit beside each of them.
+const warmLanguages = (reg: ServiceWorkerRegistration) => {
+  const run = () => {
+    if (document.visibilityState !== 'visible') {
+      document.addEventListener('visibilitychange', run, { once: true });
+      return;
+    }
+    if (!goodConnection() || !once('bm-warm-langs')) return;
+    const lang = document.documentElement.lang.split('-')[0];
+    const here = location.pathname;
+    const prefix = lang === 'en' ? '' : `/${lang}`;
+    const rel = here.startsWith(prefix + '/') ? here.slice(prefix.length) : here; // e.g. /contact/
+    const alternates = [...document.querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]')]
+      .filter((l) => l.hreflang !== 'x-default')
+      .map((l) => new URL(l.href))
+      .filter((u) => u.origin === location.origin && u.pathname.endsWith(rel));
+    const pages = new Set<string>();
+    for (const u of alternates) {
+      const altPrefix = u.pathname.slice(0, u.pathname.length - rel.length);
+      for (const p of ['/', '/contact/', '/privacy/']) {
+        const path = altPrefix + p;
+        if (path !== here) pages.add(location.origin + path);
+      }
+    }
+    if (pages.size) reg.active?.postMessage({ type: 'warm', pages: [...pages], files: [] });
+  };
+  setTimeout(run, 30000);
+};
+
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
   const base = import.meta.env.BASE_URL.replace(/\/?$/, '/');
   const start = () => {
@@ -64,6 +105,7 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
         const urls = [page, ...performance.getEntriesByType('resource').map((e) => e.name)];
         reg.active?.postMessage({ type: 'cache', page, urls });
         warm(reg);
+        warmLanguages(reg);
       })
       .catch(() => {
         /* no worker (private mode, old browser): the site works as before */
