@@ -5,4 +5,5 @@ import lqip from '../data/lqip.json';
 const map = lqip as Record<string, string>;
 
 /** `blurStyle('gallery/foo.jpg')` → `background-image:url(data:...)`, or undefined when unknown. */
-export const blurStyle = (key: string): string | undefined => (map[key] ? `background-image:url(${map[key]})` : undefined);
+export const blurStyle = (key: string): string | undefined =>
+  map[key] ? `background-image:url(${map[key]});background-size:cover;background-position:center` : undefined;
