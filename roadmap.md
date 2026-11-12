@@ -10,6 +10,14 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.10.0 (2026-11-12)
+
+- Delights you can meet without hovering: on the long divider lines of the text-heavy parts (the
+  numbers strip, each year in Events, the start line of the services in About, the sections of the
+  privacy page) a small car drives by a few seconds after the line comes on screen, then every
+  quarter of a minute or so, a GT or a rally hatch, now and then a red one. The hero logo still revs on
+  hover and the footer car still races on the tricolour. Nothing moves with motion reduced.
+
 ## 1.9.0 (2026-11-12)
 
 - Something at once on a slow connection: every photo box (hero, gallery, events, films, portraits)

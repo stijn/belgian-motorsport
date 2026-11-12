@@ -1,0 +1,23 @@
+---
+// A divider line with a small car that drives along it now and then while the line is on screen
+// (src/scripts/drive.ts): the site's version of the fishes on the Tofo dive club site. Two
+// silhouettes, a GT and a rally hatch, now and then a red one. Decorative; still with motion reduced.
+interface Props {
+  class?: string;
+}
+const { class: cls } = Astro.props;
+---
+<span class:list={['track', cls]} aria-hidden="true" data-track>
+  <span class="drive" data-drive>
+    <svg viewBox="0 0 48 16" width="40" height="13" focusable="false">
+      <g class="car-a">
+        <path fill="currentColor" d="M3 12.5 5 8.5h10l5-4.5h11l6 4.5 7 1 1 3z" />
+      </g>
+      <g class="car-b">
+        <path fill="currentColor" d="M3 12.5 5.5 7.5h4.5l4-4.5h13l4 4.5 12 1 1 4z" />
+      </g>
+      <circle cx="12" cy="12.5" r="2.6" fill="var(--bg)" stroke="currentColor" stroke-width="1.8" />
+      <circle cx="36" cy="12.5" r="2.6" fill="var(--bg)" stroke="currentColor" stroke-width="1.8" />
+    </svg>
+  </span>
+</span>

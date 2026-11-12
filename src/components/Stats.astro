@@ -2,6 +2,7 @@
 // The numbers, in one strip, each with its line-md icon. They count up when the strip comes into view
 // (src/scripts/stats.ts); the values are rounded down in src/data/site.ts so they stay true for a while.
 import LineMd from './LineMd.astro';
+import Drive from './Drive.astro';
 import { stats } from '../data/site';
 import { t, type Lang } from '../i18n';
 
@@ -28,6 +29,7 @@ const items = [
       ))}
     </ul>
   </div>
+  <Drive />
 </section>
 <script>
   import '../scripts/stats';
@@ -35,8 +37,11 @@ const items = [
 
 <style>
   .stats {
-    border-block: 1px solid var(--line);
+    border-top: 1px solid var(--line);
     background: var(--bg-2);
+  }
+  .stats :global(.track) {
+    background: var(--line);
   }
   ul {
     list-style: none;

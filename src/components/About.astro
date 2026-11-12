@@ -8,6 +8,7 @@ import Fa from './Fa.astro';
 import SocialIcon from './SocialIcon.astro';
 import SectionHead from './SectionHead.astro';
 import SlidesControl from './SlidesControl.astro';
+import Drive from './Drive.astro';
 import { blurStyle } from '../lib/lqip';
 import { faCamera, faFlagCheckered, faUsers, faCar, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { socials, serviceIcons } from '../data/site';
@@ -59,6 +60,7 @@ const portraits = Object.keys(found)
 
     {/* What he can be booked for: full width, two columns on wide screens, before the social links. */}
     <h3 class="avail rv">{d.about.availableFor}</h3>
+    <Drive class="rv" />
     <ul class="services" data-stagger>
       {services.map((s) => (
         <li class="rv">
@@ -261,6 +263,18 @@ const portraits = Object.keys(found)
     align-items: start;
     padding: var(--s3) 0 var(--s3) var(--s3);
     border-top: 1px solid var(--line);
+  }
+  .services li:first-child,
+  .services li:nth-child(2) {
+    border-top: 0;
+  }
+  @media (max-width: 699px) {
+    .services li:nth-child(2) {
+      border-top: 1px solid var(--line);
+    }
+  }
+  .about :global(.track) {
+    margin-top: var(--s3);
   }
   /* The red marker grows with the hover, in step with the title's colour. */
   .services li::before {

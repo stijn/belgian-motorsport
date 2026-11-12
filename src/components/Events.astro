@@ -6,6 +6,7 @@ import type { ImageMetadata } from 'astro';
 import LineMd from './LineMd.astro';
 import SocialIcon from './SocialIcon.astro';
 import SectionHead from './SectionHead.astro';
+import Drive from './Drive.astro';
 import albums from '../data/albums.json';
 import { blurStyle } from '../lib/lqip';
 import { socials, stats } from '../data/site';
@@ -31,7 +32,7 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
 
     {byYear.map(({ year, albums }) => (
       <div class="year">
-        <h3 class="year-label rv"><span class="num">{year}</span></h3>
+        <h3 class="year-label rv"><span class="num">{year}</span><Drive class="year-line" /></h3>
         <ul class="row" data-stagger>
           {albums.map((a) => (
             <li class="rv">
@@ -73,15 +74,12 @@ const photos = stats.items.find((s) => s.key === 'photos')!.value;
     gap: var(--s3);
     margin-bottom: var(--s3);
   }
-  .year-label::after {
-    content: '';
+  .year-label :global(.year-line) {
     flex: 1;
-    height: 1px;
-    background: var(--line-2);
     transform-origin: left;
     transition: transform 1.2s var(--ease) 0.2s;
   }
-  :global(.js-motion) .year-label:not(.in)::after {
+  :global(.js-motion) .year-label:not(.in) :global(.year-line) {
     transform: scaleX(0);
   }
   .row {
