@@ -75,13 +75,14 @@ const warmLanguages = (reg: ServiceWorkerRegistration) => {
     const here = location.pathname;
     const prefix = lang === 'en' ? '' : `/${lang}`;
     const rel = here.startsWith(prefix + '/') ? here.slice(prefix.length) : here; // e.g. /contact/
+    // By path only: the links name the live site, and the demo and a local build serve the same paths.
     const alternates = [...document.querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]')]
       .filter((l) => l.hreflang !== 'x-default')
-      .map((l) => new URL(l.href))
-      .filter((u) => u.origin === location.origin && u.pathname.endsWith(rel));
+      .map((l) => new URL(l.href).pathname)
+      .filter((p) => p.endsWith(rel));
     const pages = new Set<string>();
-    for (const u of alternates) {
-      const altPrefix = u.pathname.slice(0, u.pathname.length - rel.length);
+    for (const p0 of alternates) {
+      const altPrefix = p0.slice(0, p0.length - rel.length);
       for (const p of ['/', '/contact/', '/privacy/']) {
         const path = altPrefix + p;
         if (path !== here) pages.add(location.origin + path);
