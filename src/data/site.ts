@@ -95,9 +95,9 @@ export const sections = [
 ] as const;
 
 export const contact = {
-  /** The form posts here; a Cloudflare Worker sends it on by email. His address is a secret on the
-   *  Worker. On the GitHub Pages demo (no Worker there) PUBLIC_API_ORIGIN points at the demo Worker. */
-  endpoint: `${import.meta.env.PUBLIC_API_ORIGIN ?? ''}/api/contact`,
+  /** The form posts here; the Cloudflare Worker that serves the site sends it on by email. His
+   *  address is a secret on the Worker. */
+  endpoint: '/api/contact',
   /** Cloudflare Turnstile site key. Leave empty to run without it (the honeypot and rate limit stay). */
   turnstileSiteKey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '',
 } as const;

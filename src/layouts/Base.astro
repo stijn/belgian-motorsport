@@ -15,7 +15,7 @@ import FaSprite from '../components/FaSprite.astro';
 import Footer from '../components/Footer.astro';
 import ToTop from '../components/ToTop.astro';
 import { site, socials, stats } from '../data/site';
-import { href, demo } from '../lib/url';
+import { href } from '../lib/url';
 import { langs, t, type Lang } from '../i18n';
 
 interface Props {
@@ -92,7 +92,7 @@ const website = {
         site, so the intros don't play again. public/_headers allows this script by its hash;
         tests/headers.test.ts checks the hash still matches whenever this line changes. */}
     <script is:inline>document.documentElement.className=(matchMedia('(prefers-reduced-motion: reduce)').matches?'js':'js js-motion')+(document.referrer.indexOf(location.origin+'/')==0?' js-return':'')</script>
-    {noindex || demo ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
+    {noindex ? <meta name="robots" content="noindex" /> : <meta name="robots" content="index, follow, max-image-preview:large" />}
     <link rel="canonical" href={canonical} />
     {/* Browsers that support it render the next page in the background as soon as a link is hovered
         or pressed (Chrome, Edge): a language switch or the contact page then opens at once. Pages only. */}

@@ -10,8 +10,6 @@ export interface Env {
   CONTACT_FROM: string;
   CONTACT_FROM_NAME: string;
   SITE_ORIGIN: string;
-  /** The GitHub Pages demo, allowed to post to this Worker from its own origin. */
-  DEMO_ORIGIN?: string;
   /** Secrets */
   CONTACT_TO?: string;
   TURNSTILE_SECRET?: string;
@@ -22,8 +20,8 @@ export interface Env {
 const json = (body: unknown, status = 200, extra: HeadersInit = {}) =>
   new Response(JSON.stringify(body), { status, headers: { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store', ...extra } });
 
-/** The origins that may post to the form: the live domain, wherever this Worker runs, and the demo. */
-const allowedOrigins = (request: Request, env: Env) => [env.SITE_ORIGIN, new URL(request.url).origin, env.DEMO_ORIGIN].filter(Boolean) as string[];
+/** The origins that may post to the form: the live domain and wherever this Worker runs. */
+const allowedOrigins = (request: Request, env: Env) => [env.SITE_ORIGIN, new URL(request.url).origin];
 const cors = (origin: string | null, request: Request, env: Env): HeadersInit =>
   origin && allowedOrigins(request, env).includes(origin)
     ? { 'access-control-allow-origin': origin, 'access-control-allow-methods': 'POST, OPTIONS', 'access-control-allow-headers': 'content-type, accept', 'access-control-max-age': '86400', vary: 'origin' }
@@ -47,8 +45,8 @@ async function contact(request: Request, env: Env, ctx: ExecutionContext): Promi
   if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: corsHeaders });
   if (request.method !== 'POST') return json({ ok: false, error: 'Method not allowed' }, 405, { allow: 'POST, OPTIONS' });
 
-  // Only the site's own pages may post here: the live domain, wherever this Worker is served from
-  // (workers.dev, wrangler dev), or the demo.
+  // Only the site's own pages may post here: the live domain, or wherever this Worker is served from
+  // (workers.dev, wrangler dev).
   if (origin && !allowedOrigins(request, env).includes(origin)) {
     return json({ ok: false, error: 'Forbidden' }, 403);
   }

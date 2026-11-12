@@ -75,10 +75,6 @@ The Worker's generated types come from `npx wrangler types worker/worker-configu
 
 ## Deploys
 
-**Demo:** https://stijn.github.io/belgian-motorsport/, built by `.github/workflows/pages.yml` on every
-push to `main` with `SITE`, `BASE` and `PUBLIC_DEMO=1`: `noindex`, and the contact form switched off (GitHub Pages has no server side). `npm run deploy:demo` can put the same demo on
-workers.dev, where the Worker runs too.
-
 **Live:** https://belgian-motorsport.com, the Worker in `wrangler.jsonc`: `npm run deploy` (build,
 then `wrangler deploy`) from a machine with Wrangler logged in. Workers Builds can take that over
 (build command `npm run build`, deploy command `npx wrangler deploy`; see docs/go-live.md). GitHub Actions (`.github/workflows/ci.yml`) runs the checks, tests and a build
@@ -88,7 +84,7 @@ hreflang sets, Open Graph) on the built pages. Releases: bump `version` in `pack
 
 ## Rights
 
-The repository is public so the demo can run on GitHub Pages. Photos, films and the BM logo
+The repository is public. Photos, films and the BM logo
 © Belgian Motorsport, all rights reserved: they may not be reused. The code is here to read and learn
 from, not packaged as a template. Icons by
 [Font Awesome](https://fontawesome.com) (CC BY 4.0) and [line-md](https://github.com/cyberalien/line-md)

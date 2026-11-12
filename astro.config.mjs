@@ -3,8 +3,8 @@ import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import { site } from './src/data/site.ts';
 
-// The real site lives at the root of its domain. The demo on GitHub Pages lives under
-// https://stijn.github.io/belgian-motorsport/ (set by .github/workflows/pages.yml).
+// The site lives at the root of its domain. SITE and BASE can put a build elsewhere (a preview
+// under a path, say); tools/postbuild.mjs and tools/seo-check.mjs read the same BASE.
 const SITE = process.env.SITE ?? site.url;
 const BASE = process.env.BASE ?? '/';
 

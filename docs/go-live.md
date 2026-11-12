@@ -33,8 +33,9 @@ For each of `belgian-motorsport.com` and `belgianmotorsport.com`:
 
 ## 2. Deploy the Worker from GitHub
 
-The demo is on GitHub Pages (static only). The live site is the Worker in `wrangler.jsonc`;
-`npm run deploy` from this machine works, and the step below makes GitHub deploy it instead.
+The live site is the Worker in `wrangler.jsonc`; `npm run deploy` from this machine works, and the
+step below makes GitHub deploy it instead. (The GitHub Pages demo that ran before go-live was removed
+on 2026-11-12, workflow, Pages site and demo Worker alike.)
 
 1. Workers & Pages → Create → **Import a repository** → `stijn/belgian-motorsport`.
 2. Build command `npm run build`, deploy command `npx wrangler deploy`. Node 24 comes from
@@ -78,7 +79,7 @@ the Worker still supports it: without `RESEND_API_KEY` it uses the `EMAIL` bindi
    ```bash
    npx wrangler secret put RESEND_API_KEY
    ```
-   paste the key, Enter. (Same for the demo Worker with `--env demo`, if the demo form should send.)
+   paste the key, Enter.
 4. The address that receives the form, if not set yet (it is, since 2026-11-11):
    ```bash
    npx wrangler secret put CONTACT_TO
@@ -125,7 +126,7 @@ Done:
 - `belgianmotorsport.com` zone on Cloudflare, `@` and `www` proxied, Always Use HTTPS, redirect rule
   `*://*belgianmotorsport.com/*` → `https://belgian-motorsport.com/${3}` (301, query kept).
 - Worker `belgian-motorsport` deployed from this machine (`npm run deploy`) with the two zone routes;
-  `CONTACT_TO` set on it and on the demo Worker.
+  `CONTACT_TO` set on it.
 
 Open:
 

@@ -10,6 +10,13 @@
   too small. Not before go-live.
 - Prints and licensing: a short page with prices, when he has decided them.
 
+## 1.10.4 (2026-11-12)
+
+- The GitHub Pages demo is gone: the workflow, the Pages site, the `github-pages` environment and the
+  demo Worker on workers.dev. It had failed on every push since the postbuild step (which looked for
+  the pages at the root, not under `/belgian-motorsport/`), and the live site had replaced it. With it
+  went the `PUBLIC_DEMO`, `PUBLIC_API_ORIGIN` and `DEMO_ORIGIN` flags and `npm run deploy:demo`.
+
 ## 1.10.3 (2026-11-12)
 
 - Meta titles no longer repeat a word (English, German, Italian): "Racing photography & film from Belgium", "Rennsportfotografie und Film, Belgien", "Foto e film di automobilismo, Belgio".
@@ -294,6 +301,8 @@ First release, replacing the WordPress site.
 
 ## Not planned
 
+- A public demo on GitHub Pages. It served to show the site before go-live and was removed on
+  2026-11-12; a preview is `npm run dev` or `npm run preview`.
 
 - A CMS or admin panel. The content is a handful of files; the sync script does the rest, and a
   WordPress-style backend was the problem being solved.

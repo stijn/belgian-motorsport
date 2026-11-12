@@ -35,22 +35,5 @@
   "routes": [
     { "pattern": "belgian-motorsport.com/*", "zone_name": "belgian-motorsport.com" },
     { "pattern": "www.belgian-motorsport.com/*", "zone_name": "belgian-motorsport.com" }
-  ],
-  // The demo Worker on workers.dev: the GitHub Pages demo posts its contact form here
-  // (DEMO_ORIGIN allows it). `npm run deploy:demo`; secrets with `--env demo`.
-  "env": {
-    "demo": {
-      "name": "belgian-motorsport-demo",
-      "workers_dev": true,
-      "routes": [],
-      "send_email": [{ "name": "EMAIL" }],
-      "ratelimits": [{ "name": "CONTACT_LIMIT", "namespace_id": "1002", "simple": { "limit": 5, "period": 60 } }],
-      "vars": {
-        "CONTACT_FROM": "contact@belgian-motorsport.com",
-        "CONTACT_FROM_NAME": "Belgian Motorsport website (demo)",
-        "SITE_ORIGIN": "https://belgian-motorsport-demo.stijn-vogels.workers.dev",
-        "DEMO_ORIGIN": "https://stijn.github.io"
-      }
-    }
-  }
+  ]
 }
