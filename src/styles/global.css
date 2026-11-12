@@ -830,6 +830,9 @@ html:not(.js-motion) .slides-ctl .pp {
   display: block;
   height: 1px;
   background: var(--line-2);
+  /* Clipped at the line's ends, not above or below: the car drives in from the left edge and out of
+     the right one without ever widening the page. */
+  clip-path: inset(-20px 0);
 }
 .drive {
   position: absolute;
